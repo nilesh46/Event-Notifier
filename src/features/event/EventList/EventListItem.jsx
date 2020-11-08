@@ -39,7 +39,7 @@ class EventListItem extends Component {
       <Card className={classes.root} variant="outlined">
         <Grid container spacing={1}>
           {/* Event Details */}
-          <Grid item xs={6}>
+          <Grid item sm={6}>
             <CardContent>
               <Typography
                 className={classes.title}
@@ -70,7 +70,7 @@ class EventListItem extends Component {
           </Grid>
 
           {/* Event Image */}
-          <Grid item xs={6}>
+          <Grid item sm={6}>
             <CardMedia
               className={classes.media}
               image="https://source.unsplash.com/random"
@@ -79,7 +79,7 @@ class EventListItem extends Component {
           </Grid>
 
           {/* Event Action Buttons */}
-          <Grid item xs={12}>
+          <Grid item sm={12}>
             <CardActions>
               <IconButton aria-label="add to favorites">
                 <FavoriteIcon />
