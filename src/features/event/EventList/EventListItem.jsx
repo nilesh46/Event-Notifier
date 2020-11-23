@@ -25,7 +25,8 @@ const styles = {
     marginBottom: 12,
   },
   media: {
-    height: "100%",
+    height: 0,
+    paddingTop: "56.25%",
     margin: "0.7rem",
     borderRadius: "0.7rem",
   },
@@ -39,7 +40,7 @@ class EventListItem extends Component {
       <Card className={classes.root} variant="outlined">
         <Grid container spacing={1}>
           {/* Event Details */}
-          <Grid item sm={6}>
+          <Grid item md>
             <CardContent>
               <Typography
                 className={classes.title}
@@ -70,27 +71,25 @@ class EventListItem extends Component {
           </Grid>
 
           {/* Event Image */}
-          <Grid item sm={6}>
+          <Grid item md xs={12}>
             <CardMedia
               className={classes.media}
               image="https://source.unsplash.com/random"
               title="image name"
             ></CardMedia>
           </Grid>
-
-          {/* Event Action Buttons */}
-          <Grid item sm={12}>
-            <CardActions>
-              <IconButton aria-label="add to favorites">
-                <FavoriteIcon />
-              </IconButton>
-              <IconButton aria-label="share">
-                <ShareIcon />
-              </IconButton>
-              <Button size="small">View</Button>
-            </CardActions>
-          </Grid>
         </Grid>
+
+        {/* Event Action Buttons */}
+        <CardActions>
+          <IconButton aria-label="add to favorites">
+            <FavoriteIcon />
+          </IconButton>
+          <IconButton aria-label="share">
+            <ShareIcon />
+          </IconButton>
+          <Button size="small">View</Button>
+        </CardActions>
       </Card>
     );
   }
