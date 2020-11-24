@@ -2,6 +2,7 @@ import React from "react";
 import { Menu, MenuItem } from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 import Divider from "@material-ui/core/Divider";
+import { Link } from "react-router-dom";
 
 class MenuButton extends React.Component {
   state = {
@@ -22,7 +23,13 @@ class MenuButton extends React.Component {
     const Wrapper = this.props.iconType;
     const listItems = this.props.items.map((link) => (
       <>
-        <MenuItem onClick={this.handleClose}>{link}</MenuItem>
+            <MenuItem
+                onClick={this.handleClose}
+                component={Link}
+                to={link.link}
+            >
+                {link.name}
+            </MenuItem>
         <Divider light />
       </>
     ));

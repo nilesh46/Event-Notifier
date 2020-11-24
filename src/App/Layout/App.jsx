@@ -1,6 +1,6 @@
 import { Container } from "@material-ui/core";
 import React from "react";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import EventDashboard from "../../features/event/EventDashboard/EventDashboard";
 import "./App.css";
 import NavBar from "./NavBar/navbarComponent";
@@ -13,8 +13,8 @@ import EventForm from "../../features/event/EventForm/EventForm";
 
 class App extends React.Component {
   render() {
-    return (
-      <BrowserRouter>
+      return (
+        <>
         <NavBar />
         <Container maxWidth="lg">
           <Switch>
@@ -24,10 +24,12 @@ class App extends React.Component {
             <Route path="/people" exact component={PeopleDashboard} />
             <Route path="/profile/:id" exact component={UserDetailedPage} />
             <Route path="/settings" exact component={SettingsDashboard} />
-            <Route path="/createevent" exact component={EventForm} />
+            <Route path="/createEvent" exact component={EventForm} />
+            {/* <Route path="/myEvents" exact component={MyEvents} />
+            <Route path="/help" exact component={Help} /> */}
           </Switch>
-        </Container>
-      </BrowserRouter>
+              </Container>
+              </>
     );
   }
 }

@@ -3,11 +3,17 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App/Layout/App";
 import reportWebVitals from "./reportWebVitals";
+import { BrowserRouter } from "react-router-dom";
 
 const rootEl = document.getElementById("root");
 
 let render = () => {
-	ReactDOM.render(<App />, rootEl);
+	ReactDOM.render(
+		<BrowserRouter>
+			<App />
+		</BrowserRouter>,
+		rootEl
+	);
 };
 
 if (module.hot) {

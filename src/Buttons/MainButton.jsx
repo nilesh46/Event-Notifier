@@ -1,5 +1,6 @@
 import React from "react";
 import Button from "@material-ui/core/Button";
+import { Link } from "react-router-dom";
 
 const style = {
   background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
@@ -14,7 +15,14 @@ const style = {
 
 class MainButton extends React.Component {
   render() {
-    return <Button style={style}>{this.props.buttonTitle}</Button>;
+      return (
+          <Button
+              style={style}
+              component={Link}
+              to={this.props.link}
+          >
+              {this.props.buttonTitle}
+          </Button>);
   }
 }
 
