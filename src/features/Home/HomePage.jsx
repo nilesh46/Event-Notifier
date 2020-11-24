@@ -1,7 +1,12 @@
-import React from "react";
+import React, {Fragment} from "react";
+import NavBar from "../NavBar/navbarComponent";
 
 const HomePage = () => {
-  return <div>Home Page</div>;
+    return (
+        <Fragment>
+            <NavBar />
+        </Fragment>    
+    );
 };
 
 export default HomePage;
