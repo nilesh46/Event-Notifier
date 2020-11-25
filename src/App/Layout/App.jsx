@@ -10,6 +10,7 @@ import PeopleDashboard from "../../features/User/PeopleDashboard/PeopleDashboard
 import UserDetailedPage from "../../features/User/UserDetailed/UserDetailedPage";
 import SettingsDashboard from "../../features/User/Settings/SettingsDashboard";
 import EventForm from "../../features/event/EventForm/EventForm";
+import testComponent from "../../Test/Components/testComponent";
 
 class App extends React.Component {
   render() {
@@ -39,6 +40,7 @@ class App extends React.Component {
                   <Route path="/createEvent" exact component={EventForm} />
                   {/* <Route path="/myEvents" exact component={MyEvents} />
                             <Route path="/help" exact component={Help} /> */}
+                  <Route path="/testing" exact component={testComponent} />
                 </Switch>
               </Container>
             </>
