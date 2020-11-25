@@ -42,18 +42,14 @@ class EventListItem extends Component {
           {/* Event Details */}
           <Grid item md>
             <CardContent>
-              <Typography
-                className={classes.title}
-                color="textSecondary"
-                gutterBottom
-              >
+              <div className={classes.title} color="textSecondary">
                 {/* Date and Time of the event */}
                 <Grid container direction="row" alignItems="center">
                   <ScheduleIcon fontSize="small" /> Today , 1:00 PM |{" "}
                   <RoomIcon fontSize="small" />
                   Latur
                 </Grid>
-              </Typography>
+              </div>
               <Typography variant="h5" component="h2">
                 Event Name
               </Typography>
