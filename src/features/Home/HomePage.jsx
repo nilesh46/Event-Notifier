@@ -6,7 +6,7 @@ import AuthenticationPanel from "../Panels/AuthenticationPanel";
 const styles = {
   root: {},
   Bg: {
-    height: "120vh",
+    height: "100vh",
     background:
       'url("./assets/HomePage/BGImage.png") no-repeat center center /cover',
   },
@@ -15,7 +15,7 @@ const styles = {
     height: "inherit",
   },
   authPanel: {
-    margin: "2rem",
+    margin: "5rem",
   },
 };
 
@@ -31,11 +31,11 @@ class HomePage extends Component {
               {/* Content */}
               <Grid container spacing={2}>
                 <Hidden smDown>
-                  <Grid item md>
+                  <Grid item sm>
                     Left Col
                   </Grid>
                 </Hidden>
-                <Grid item md>
+                <Grid item lg>
                   <div className={classes.authPanel}>
                     <AuthenticationPanel />
                   </div>
