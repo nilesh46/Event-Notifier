@@ -12,20 +12,20 @@ const store = configureStore();
 const rootEl = document.getElementById("root");
 
 let render = () => {
-  ReactDOM.render(
-    <Provider store={store}>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </Provider>,
-    rootEl
-  );
+	ReactDOM.render(
+		<Provider store={store}>
+			<BrowserRouter>
+				<App />
+			</BrowserRouter>
+		</Provider>,
+		rootEl
+	);
 };
 
 if (module.hot) {
-  module.hot.accept("./App/Layout/App", () => {
-    setTimeout(render);
-  });
+	module.hot.accept("./App/Layout/App", () => {
+		setTimeout(render);
+	});
 }
 
 render();

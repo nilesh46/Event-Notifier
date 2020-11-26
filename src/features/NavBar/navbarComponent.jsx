@@ -8,80 +8,86 @@ import SignedOutMenu from "../Menus/SignedOutMenu";
 import SignedInMenu from "../Menus/SignedInMenu";
 
 const styles = {
-  root: {
-    width: "100%",
-  },
-  title: {
-    flexGrow: 1,
-    marginLeft: 10,
-  },
-  flex: {
-    flex: 1,
-  },
-  menuButton: {
-    marginLeft: -12,
-    marginRight: 20,
-  },
-  logo: {
-    maxWidth: 60,
-  },
-  margin: {
-    marginLeft: 20,
-  },
-  typo: {
-    color: "inherit",
-    textDecoration: "none",
-  },
+	root: {
+		width: "100%",
+	},
+	title: {
+		flexGrow: 1,
+		marginLeft: 10,
+	},
+	flex: {
+		flex: 1,
+	},
+	menuButton: {
+		marginLeft: -12,
+		marginRight: 20,
+	},
+	logo: {
+		maxWidth: 60,
+	},
+	margin: {
+		marginLeft: 20,
+	},
+	typo: {
+		color: "inherit",
+		textDecoration: "none",
+	},
 };
 
 class MenuAppBar extends React.Component {
-  state = {
-    anchorEl: null,
-    authenticated: false,
-  };
+	state = {
+		anchorEl: null,
+		authenticated: false,
+	};
 
-  handleMenu = (event) => {
-    this.setState({ anchorEl: event.currentTarget });
-  };
+	handleMenu = (event) => {
+		this.setState({ anchorEl: event.currentTarget });
+	};
 
-  handleClose = () => {
-    this.setState({ anchorEl: null });
-  };
+	handleClose = () => {
+		this.setState({ anchorEl: null });
+	};
 
-  render() {
-    const { classes } = this.props;
+	render() {
+		const { classes } = this.props;
 
-    return (
-      <div className={classes.root}>
-        <AppBar position="static" style={{ background: "#2E3B55" }}>
-          <Toolbar>
-            {/* Logo */}
-            <Link to="/events">
-              <img src="assets/Logo.png" alt="Logo" className={classes.logo} />
-            </Link>
-            <Typography
-              type="title"
-              variant="h6"
-              color="inherit"
-              className={(classes.flex, classes.title)}
-            >
-              <Link to="/events" className={classes.typo}>
-                Ev-Net
-              </Link>
-            </Typography>
+		return (
+			<div className={classes.root}>
+				<AppBar position="static" style={{ background: "#2E3B55" }}>
+					<Toolbar>
+						{/* Logo */}
+						<Link to="/events">
+							<img
+								src="assets/Logo.png"
+								alt="Logo"
+								className={classes.logo}
+							/>
+						</Link>
+						<Typography
+							type="title"
+							variant="h6"
+							color="inherit"
+							className={(classes.flex, classes.title)}
+						>
+							<Link to="/events" className={classes.typo}>
+								Ev-Net
+							</Link>
+						</Typography>
 
-            {this.state.authenticated ? (
-              <SignedInMenu classes={classes} />
-            ) : (
-              <SignedOutMenu
-                onClick={() => this.setState({ authenticated: true })}
-              />
-            )}
-          </Toolbar>
-        </AppBar>
-      </div>
-    );
-  }
+						{this.state.authenticated ? (
+							<SignedInMenu classes={classes} />
+						) : (
+							<SignedOutMenu
+								onClick={() =>
+									this.setState({ authenticated: true })
+								}
+							/>
+						)}
+					</Toolbar>
+				</AppBar>
+			</div>
+		);
+	}
 }
 
 export default withStyles(styles)(MenuAppBar);

@@ -7,60 +7,63 @@ import NotificationsNoneRoundedIcon from "@material-ui/icons/NotificationsNoneRo
 import MenuButton from "../NavBar/MenuButton";
 
 class SignedInMenu extends React.Component {
-  render() {
-    return (
-      <Fragment>
-        <MainButton buttonTitle="Create Event" link="/createEvent" />
+	render() {
+		return (
+			<Fragment>
+				<MainButton buttonTitle="Create Event" link="/createEvent" />
 
-        {/* Notification */}
-        <IconButton color="inherit" classes={this.props.classes.IconButton}>
-          <NotificationsNoneRoundedIcon fontSize="small" />
-        </IconButton>
+				{/* Notification */}
+				<IconButton
+					color="inherit"
+					classes={this.props.classes.IconButton}
+				>
+					<NotificationsNoneRoundedIcon fontSize="small" />
+				</IconButton>
 
-        {/* First Menu */}
-        <MenuButton
-          iconType={AddRoundedIcon}
-          items={[
-            {
-              name: "Create Event",
-              link: "/createEvent",
-            },
-            {
-              name: "Browse Events",
-              link: "/events",
-            },
-            {
-              name: "My Events",
-              link: "/createEvent",
-            },
-          ]}
-        />
+				{/* First Menu */}
+				<MenuButton
+					iconType={AddRoundedIcon}
+					items={[
+						{
+							name: "Create Event",
+							link: "/createEvent",
+						},
+						{
+							name: "Browse Events",
+							link: "/events",
+						},
+						{
+							name: "My Events",
+							link: "/createEvent",
+						},
+					]}
+				/>
 
-        {/* Second Menu */}
-        <MenuButton
-          iconType={AccountCircle}
-          items={[
-            {
-              name: "Profile",
-              link: "/createEvent",
-            },
-            {
-              name: "Help",
-              link: "/createEvent",
-            },
-            {
-              name: "Settings",
-              link: "/settings",
-            },
-            {
-              name: "Logout",
-              link: "/",
-            },
-          ]}
-        />
-      </Fragment>
-    );
-  }
+				{/* Second Menu */}
+				<MenuButton
+					iconType={AccountCircle}
+					items={[
+						{
+							name: "Profile",
+							link: "/createEvent",
+						},
+						{
+							name: "Help",
+							link: "/createEvent",
+						},
+						{
+							name: "Settings",
+							link: "/settings",
+						},
+						{
+							name: "Logout",
+							link: "/",
+						},
+					]}
+				/>
+			</Fragment>
+		);
+	}
 }
 
 export default SignedInMenu;

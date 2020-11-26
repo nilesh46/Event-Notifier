@@ -1,7 +1,7 @@
 import React from "react";
 
 const PeopleDashboard = () => {
-  return <div>PeopleDashboard</div>;
+	return <div>PeopleDashboard</div>;
 };
 
 export default PeopleDashboard;
