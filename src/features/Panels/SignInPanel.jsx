@@ -15,7 +15,7 @@ import { withStyles } from "@material-ui/core";
 const styles = (theme) => ({
 	"@global": {
 		html: {
-			fontSize: 14,
+			fontSize: ".8rem",
 		},
 	},
 	paper: {

@@ -13,7 +13,7 @@ import Container from "@material-ui/core/Container";
 const styles = (theme) => ({
 	"@global": {
 		html: {
-			fontSize: 14,
+			fontSize: ".8rem",
 		},
 	},
 	paper: {
