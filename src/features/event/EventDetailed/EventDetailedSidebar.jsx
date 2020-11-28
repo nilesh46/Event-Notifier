@@ -1,5 +1,6 @@
 import {
     Avatar,
+    Box,
     Chip,
     Collapse,
     Divider,
@@ -55,62 +56,67 @@ class EventDetailedSidebar extends Component {
                     </ListItemText>
                     {this.state.open ? <ExpandLess /> : <ExpandMore />}
                 </ListItem>
-                <Collapse in={this.state.open} timeout="auto" unmountOnExit>
-                    <List component="div" disablePadding>
-                        <ListItem button className={classes.nested}>
-                            <ListItemIcon>
-                                <Avatar
-                                    alt="UserName"
-                                    src="https://source.unsplash.com/300x500/?person"
-                                />
-                            </ListItemIcon>
-                            <ListItemText>
-                                <Typography
-                                    variant="body2"
-                                    color="textSecondary"
-                                >
-                                    <strong>UserName</strong>
-                                </Typography>
-                            </ListItemText>
-                            <Chip label="HOST" color="secondary" />
-                        </ListItem>
+                <Box style={{ height: "40vh", overflowY: "auto" }}>
+                    <Collapse in={this.state.open} timeout="auto" unmountOnExit>
+                        <List component="div" disablePadding>
+                            <ListItem button className={classes.nested}>
+                                <ListItemIcon>
+                                    <Avatar
+                                        alt="UserName"
+                                        src="https://source.unsplash.com/300x500/?person"
+                                    />
+                                </ListItemIcon>
+                                <ListItemText>
+                                    <Typography
+                                        variant="body2"
+                                        color="textSecondary"
+                                    >
+                                        <strong>UserName</strong>
+                                    </Typography>
+                                </ListItemText>
+                                <Chip label="HOST" color="secondary" />
+                            </ListItem>
 
-                        <Divider />
+                            <Divider />
 
-                        <ListItem button className={classes.nested}>
-                            <ListItemIcon>
-                                <Avatar
-                                    alt="UserName"
-                                    src="https://source.unsplash.com/300x500/?person"
-                                />
-                            </ListItemIcon>
-                            <ListItemText>
-                                <Typography
-                                    variant="body2"
-                                    color="textSecondary"
-                                >
-                                    <strong>UserName</strong>
-                                </Typography>
-                            </ListItemText>
-                        </ListItem>
-                        <ListItem button className={classes.nested}>
-                            <ListItemIcon>
-                                <Avatar
-                                    alt="UserName"
-                                    src="https://source.unsplash.com/300x500/?person"
-                                />
-                            </ListItemIcon>
-                            <ListItemText>
-                                <Typography
-                                    variant="body2"
-                                    color="textSecondary"
-                                >
-                                    <strong>UserName</strong>
-                                </Typography>
-                            </ListItemText>
-                        </ListItem>
-                    </List>
-                </Collapse>
+                            <ListItem button className={classes.nested}>
+                                <ListItemIcon>
+                                    <Avatar
+                                        alt="UserName"
+                                        src="https://source.unsplash.com/300x500/?person"
+                                    />
+                                </ListItemIcon>
+                                <ListItemText>
+                                    <Typography
+                                        variant="body2"
+                                        color="textSecondary"
+                                    >
+                                        <strong>UserName</strong>
+                                    </Typography>
+                                </ListItemText>
+                            </ListItem>
+
+                            {[...new Array(12)].map(() => (
+                                <ListItem button className={classes.nested}>
+                                    <ListItemIcon>
+                                        <Avatar
+                                            alt="UserName"
+                                            src="https://source.unsplash.com/300x500/?person"
+                                        />
+                                    </ListItemIcon>
+                                    <ListItemText>
+                                        <Typography
+                                            variant="body2"
+                                            color="textSecondary"
+                                        >
+                                            <strong>UserName</strong>
+                                        </Typography>
+                                    </ListItemText>
+                                </ListItem>
+                            ))}
+                        </List>
+                    </Collapse>
+                </Box>
             </List>
         );
     }
