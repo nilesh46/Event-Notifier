@@ -16,12 +16,7 @@ const style = {
 class MainButton extends React.Component {
 	render() {
 		return (
-			<Button
-				style={style}
-				component={Link}
-				to={this.props.link}
-				onClick={() => this.props.onClick()}
-			>
+			<Button style={style} component={Link} to={this.props.link}>
 				{this.props.buttonTitle}
 			</Button>
 		);

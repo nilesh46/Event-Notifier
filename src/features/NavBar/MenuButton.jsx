@@ -27,6 +27,7 @@ class MenuButton extends React.Component {
 					onClick={this.handleClose}
 					component={Link}
 					to={link.link}
+					key={link.id}
 				>
 					{link.name}
 				</MenuItem>

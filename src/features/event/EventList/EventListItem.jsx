@@ -10,79 +10,116 @@ import ShareIcon from "@material-ui/icons/Share";
 import ScheduleIcon from "@material-ui/icons/Schedule";
 import RoomIcon from "@material-ui/icons/Room";
 import EventAttendee from "./EventAttendee";
+import Avatar from "@material-ui/core/Avatar";
+import { Link } from "react-router-dom";
 
 const styles = {
 	root: {
-		minWidth: 275,
-		flexGrow: 1,
+		minWidth: "15rem",
+		maxWidth: "50rem",
 		padding: 15,
 		margin: 20,
 	},
 	title: {
-		fontSize: 14,
+		fontSize: ".9rem",
+		marginTop: ".5rem",
+		marginBottom: ".7rem",
 	},
 	pos: {
-		marginBottom: 12,
+		marginBottom: "1.5rem",
+		marginLeft: "1rem",
+	},
+	pos1: {
+		marginLeft: "1rem",
+	},
+	heading: {
+		fontSize: "1.1rem",
+		marginLeft: "1rem",
 	},
 	media: {
 		height: 0,
 		paddingTop: "56.25%",
 		margin: "0.7rem",
 		borderRadius: "0.7rem",
+		marginBottom: "1rem",
+	},
+	large: {
+		height: "4.5rem",
+		width: "4.5rem",
 	},
 };
 
 class EventListItem extends Component {
 	render() {
 		const { classes } = this.props;
+		const { event, deleteEvent } = this.props;
 
 		return (
 			<Card className={classes.root} variant="outlined">
+				{/* Event Image */}
+				<Grid item md xs={12}>
+					<CardMedia
+						className={classes.media}
+						image="https://source.unsplash.com/random"
+						title="image name"
+					></CardMedia>
+				</Grid>
 				<Grid container spacing={1}>
 					{/* Event Details */}
+
 					<Grid item md>
 						<CardContent>
-							<div
-								className={classes.title}
-								color="textSecondary"
+							<Grid
+								container
+								direction="column"
+								alignItems="flex-start"
 							>
-								{/* Date and Time of the event */}
-								<Grid
-									container
-									direction="row"
-									alignItems="center"
-								>
-									<ScheduleIcon fontSize="small" /> Today ,
-									1:00 PM | <RoomIcon fontSize="small" />
-									Latur
+								<Grid item>
+									<Grid container direction="row">
+										<Grid item>
+											<Avatar
+												alt="Remy Sharp"
+												src={event.hostPhotoURL}
+												className={classes.large}
+											/>
+										</Grid>
+										<Grid item>
+											<Typography
+												className={classes.heading}
+											>
+												{event.title}
+											</Typography>
+
+											<Typography
+												className={classes.pos}
+												color="textSecondary"
+											>
+												Hosted by {event.hostedBy}
+											</Typography>
+										</Grid>
+									</Grid>
 								</Grid>
-							</div>
-							<Typography variant="h5" component="h2">
-								Event Name
-							</Typography>
-							<Typography
-								className={classes.pos}
-								color="textSecondary"
-							>
-								Hosted by HostName
-							</Typography>
+								<Grid item className={classes.pos1}>
+									{/* Date and Time of the event */}
+									<div
+										className={classes.title}
+										color="textSecondary"
+									>
+										<ScheduleIcon fontSize="small" />{" "}
+										{event.startDate} to {event.endDate}
+										<br />
+										<RoomIcon fontSize="small" />
+										{event.venue}
+									</div>
+								</Grid>
+							</Grid>
 							<Typography variant="body2" component="p">
-								Lorem ipsum dolor, sit amet consectetur
-								adipisicing elit. Tempore, eum?
+								{event.description}
 							</Typography>
 						</CardContent>
 
 						{/* Attendees Avatars */}
-						<EventAttendee />
-					</Grid>
-
-					{/* Event Image */}
-					<Grid item md xs={12}>
-						<CardMedia
-							className={classes.media}
-							image="https://source.unsplash.com/random"
-							title="image name"
-						></CardMedia>
+						<EventAttendee attendees={event.attendees} />
 					</Grid>
 				</Grid>
 
@@ -94,7 +131,22 @@ class EventListItem extends Component {
 					<IconButton aria-label="share">
 						<ShareIcon />
 					</IconButton>
-					<Button size="small">View</Button>
+					<Button
+						size="small"
+						component={Link}
+						to={`/events/${event.id}`}
+					>
+						View
+					</Button>
+					<Button
+						size="small"
+						color="secondary"
+						onClick={() => {
+							deleteEvent(event.id);
+						}}
+					>
+						Delete
+					</Button>
 				</CardActions>
 			</Card>
 		);

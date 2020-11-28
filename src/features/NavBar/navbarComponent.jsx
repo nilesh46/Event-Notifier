@@ -37,7 +37,7 @@ const styles = {
 class MenuAppBar extends React.Component {
 	state = {
 		anchorEl: null,
-		authenticated: false,
+		authenticated: true,
 	};
 
 	handleMenu = (event) => {
@@ -58,7 +58,7 @@ class MenuAppBar extends React.Component {
 						{/* Logo */}
 						<Link to="/events">
 							<img
-								src="assets/Logo.png"
+								src="/assets/Logo.png"
 								alt="Logo"
 								className={classes.logo}
 							/>

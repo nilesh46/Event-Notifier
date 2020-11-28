@@ -1,6 +1,6 @@
 import { Container } from "@material-ui/core";
 import React from "react";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, withRouter } from "react-router-dom";
 import EventDashboard from "../../features/event/EventDashboard/EventDashboard";
 import "./App.css";
 import NavBar from "../../features/NavBar/navbarComponent";
@@ -23,7 +23,7 @@ class App extends React.Component {
 						<>
 							<NavBar />
 							<Container maxWidth="lg">
-								<Switch>
+								<Switch key={this.props.location.key}>
 									<Route
 										path="/events"
 										exact
@@ -49,7 +49,7 @@ class App extends React.Component {
 										component={SettingsDashboard}
 									/>
 									<Route
-										path="/createEvent"
+										path={["/createEvent", "/manage/:id"]}
 										exact
 										component={EventForm}
 									/>
@@ -70,4 +70,4 @@ class App extends React.Component {
 	}
 }
 
-export default App;
+export default withRouter(App);
