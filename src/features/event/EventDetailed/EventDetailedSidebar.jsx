@@ -1,5 +1,4 @@
 import {
-<<<<<<< HEAD
 	Avatar,
 	Chip,
 	Collapse,
@@ -10,19 +9,6 @@ import {
 	ListItemText,
 	Typography,
 	withStyles,
-=======
-    Avatar,
-    Box,
-    Chip,
-    Collapse,
-    Divider,
-    List,
-    ListItem,
-    ListItemIcon,
-    ListItemText,
-    Typography,
-    withStyles,
->>>>>>> bc7355ab2446c1a76a53e586be4b970a897da6e1
 } from "@material-ui/core";
 import { ExpandLess, ExpandMore } from "@material-ui/icons";
 import GroupIcon from "@material-ui/icons/Group";
