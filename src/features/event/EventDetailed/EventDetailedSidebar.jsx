@@ -62,8 +62,9 @@ class EventDetailedSidebar extends Component {
                     </ListItemText>
                     {this.state.open ? <ExpandLess /> : <ExpandMore />}
                 </ListItem>
-                <Box style={{ height: "40vh", overflowY: "auto" }}>
-                    <Collapse in={this.state.open} timeout="auto" unmountOnExit>
+
+                <Collapse in={this.state.open} timeout="auto" unmountOnExit>
+                    <Box style={{ height: "40vh", overflowY: "auto" }}>
                         <List component="div" disablePadding>
                             {attendees &&
                                 attendees.map((attendee) => (
@@ -101,8 +102,8 @@ class EventDetailedSidebar extends Component {
                                     </div>
                                 ))}
                         </List>
-                    </Collapse>
-                </Box>
+                    </Box>
+                </Collapse>
             </List>
         );
     }
