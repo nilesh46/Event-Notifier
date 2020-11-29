@@ -1,9 +1,10 @@
-import React, { Fragment } from "react";
+import React from "react";
 import {
     Box,
     Button,
     Container,
     Divider,
+    Paper,
     Typography,
 } from "@material-ui/core/";
 import { connect } from "react-redux";
@@ -31,27 +32,12 @@ const styles = (theme) => ({
         marginTop: "2rem",
         marginBottom: "2rem",
         padding: "2rem",
-        borderRadius: "10px",
     },
     root: {
         "& .MuiTextField-root": {
             margin: theme.spacing(1),
             marginBottom: theme.spacing(2),
         },
-    },
-    typo: {
-        color: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
-        fontSize: "2rem",
-        fontWeight: 500,
-        marginTop: "1rem",
-        marginBottom: ".5rem",
-    },
-    btn: {
-        marginLeft: "0.3rem",
-        marginRight: "0.3rem",
-    },
-    dib: {
-        display: "inline-block",
     },
     marg: {
         margin: ".5rem",
@@ -155,8 +141,8 @@ class EventForm extends React.Component {
         ];
 
         return (
-            <Fragment>
-                <Container maxWidth="md" className={classes.mainBg}>
+            <Container maxWidth="md">
+                <Paper className={classes.mainBg} elevation={3}>
                     <Box textAlign="center" mb="2rem">
                         <Typography component="h1" variant="h4">
                             <i>
@@ -351,8 +337,8 @@ class EventForm extends React.Component {
                             </Box>
                         </Box>
                     </form>
-                </Container>
-            </Fragment>
+                </Paper>
+            </Container>
         );
     }
 }
