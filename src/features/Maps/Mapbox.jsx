@@ -7,9 +7,9 @@ mapboxgl.accessToken =
 
 class Mapbox extends Component {
 	state = {
-		lng: 76.577728,
-		lat: 18.399429,
-		zoom: 12,
+		lng: this.props.lng,
+		lat: this.props.lat,
+		zoom: this.props.zoom,
 	};
 
 	componentDidMount = () => {
@@ -27,6 +27,10 @@ class Mapbox extends Component {
 				zoom: map.getZoom().toFixed(2),
 			});
 		});
+
+		new mapboxgl.Marker()
+			.setLngLat([this.props.lng, this.props.lat])
+			.addTo(map);
 	};
 
 	render() {
