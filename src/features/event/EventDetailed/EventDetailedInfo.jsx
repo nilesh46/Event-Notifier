@@ -182,11 +182,13 @@ class EventDetailedInfo extends Component {
 							elevation={3}
 							style={{ height: "100%", width: "100%" }}
 						>
-							<Mapbox
-								lng={event.location.center[0]}
-								lat={event.location.center[1]}
-								zoom="12"
-							/>
+							{event.location && (
+								<Mapbox
+									lng={event.location.center[0]}
+									lat={event.location.center[1]}
+									zoom="12"
+								/>
+							)}
 						</Paper>
 					</Box>
 				</Collapse>
