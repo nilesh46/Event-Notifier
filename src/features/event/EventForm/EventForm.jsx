@@ -16,7 +16,7 @@ import {
 	hasLengthGreaterThan,
 } from "revalidate";
 import cuid from "cuid";
-import { reduxForm, Field, change } from "redux-form";
+import { reduxForm, Field, change, formValueSelector } from "redux-form";
 import TextInput from "./FormInputs/TextInput";
 import TextArea from "./FormInputs/TextArea";
 import SelectInput from "./FormInputs/SelectInput";
@@ -26,7 +26,7 @@ import { Grid } from "@material-ui/core";
 import { withStyles } from "@material-ui/core";
 import grey from "@material-ui/core/colors/grey";
 import GeoDecoder from "../../Maps/GeoDecoder";
-import { bindActionCreators } from "redux";
+import SwitchInput from "./FormInputs/SwitchInput";
 
 const styles = (theme) => ({
 	mainBg: {
@@ -47,6 +47,11 @@ const styles = (theme) => ({
 });
 
 class EventForm extends React.Component {
+	componentDidMount = () => {
+		this.props.dispatch(change("EventForm", "onlineEventSwitch", false));
+		this.props.dispatch(change("EventForm", "mapSwitch", true));
+	};
+
 	onFormSubmit = (values) => {
 		if (this.props.initialValues.id) {
 			this.props.updateEvent(values);
@@ -71,6 +76,8 @@ class EventForm extends React.Component {
 			invalid,
 			submitting,
 			pristine,
+			onlineEventSwitch,
+			mapSwitch,
 		} = this.props;
 
 		const category = [
@@ -157,147 +164,238 @@ class EventForm extends React.Component {
 						autoComplete="off"
 						className={classes.root}
 					>
-						<Grid container spacing={2}>
-							<Grid item sm={2}>
-								<Box
-									display="flex"
-									justifyContent="center"
-									alignItems="center"
-									height="100%"
-								>
-									<Typography
-										component="h1"
-										variant="h5"
-										color="secondary"
+						<Box>
+							<Grid container spacing={2}>
+								<Grid item sm={2}>
+									<Box
+										display="flex"
+										justifyContent="center"
+										alignItems="center"
+										height="100%"
 									>
-										BASIC DETAILS
-									</Typography>
-								</Box>
+										<Typography
+											component="h1"
+											variant="h5"
+											color="secondary"
+										>
+											BASIC DETAILS
+										</Typography>
+									</Box>
+								</Grid>
+
+								<Grid item sm={10}>
+									<Field
+										name="title"
+										component={TextInput}
+										label="Event Title *"
+									/>
+
+									<Field
+										name="category"
+										component={SelectInput}
+										options={category}
+										label="Event Category *"
+									/>
+
+									<Field
+										name="description"
+										component={TextArea}
+										rows="3"
+										label="Event Description *"
+									/>
+								</Grid>
 							</Grid>
-
-							<Grid item sm={10}>
-								<Field
-									name="title"
-									component={TextInput}
-									label="Event Title *"
-								/>
-
-								<Field
-									name="category"
-									component={SelectInput}
-									options={category}
-									label="Event Category *"
-								/>
-
-								<Field
-									name="description"
-									component={TextArea}
-									rows="3"
-									label="Event Description *"
-								/>
-							</Grid>
-						</Grid>
-						<Divider className={classes.marg} />
-						<Grid container spacing={2}>
-							<Grid item sm={2}>
-								<Box
-									display="flex"
-									justifyContent="center"
-									alignItems="center"
-									height="100%"
-								>
-									<Typography
-										component="h1"
-										variant="h5"
-										color="secondary"
+							<Divider className={classes.marg} />
+						</Box>
+						<Box>
+							<Grid container spacing={2}>
+								<Grid item sm={2}>
+									<Box
+										display="flex"
+										justifyContent="center"
+										alignItems="center"
+										height="100%"
 									>
-										LOCATION DETAILS
-									</Typography>
-								</Box>
+										<Typography
+											component="h1"
+											variant="h5"
+											color="secondary"
+										>
+											Options
+										</Typography>
+									</Box>
+								</Grid>
+								<Grid item sm={10}>
+									<Field
+										name="onlineEventSwitch"
+										component={SwitchInput}
+										label="Online event"
+										change={change}
+										dispatch={this.props.dispatch}
+									/>
+									<Field
+										name="mapSwitch"
+										component={SwitchInput}
+										label="Use map"
+										change={change}
+										dispatch={this.props.dispatch}
+									/>
+								</Grid>
 							</Grid>
-							<Grid item sm={10} style={{ width: "100%" }}>
-								<Field
-									name="location"
-									component={GeoDecoder}
-									change={change}
-									dispatch={this.props.dispatch}
-								/>
-							</Grid>
-						</Grid>
-						<Divider className={classes.marg} />
-						<Grid container spacing={2}>
-							<Grid item sm={2}>
-								<Box
-									display="flex"
-									justifyContent="center"
-									alignItems="center"
-									height="100%"
-								>
-									<Typography
-										component="h1"
-										variant="h5"
-										color="secondary"
-									>
-										ONLINE EVENT
-									</Typography>
-								</Box>
-							</Grid>
-							<Grid item sm={10}>
-								<Field
-									name="link1"
-									component={TextInput}
-									label="LiveStream URL"
-								/>
+							<Divider className={classes.marg} />
+						</Box>
 
-								<Field
-									name="link2"
-									component={TextInput}
-									label="Webinar URL"
-								/>
-							</Grid>
-						</Grid>
-						<Divider className={classes.marg} />
-						<Grid container spacing={2}>
-							<Grid item sm={2}>
-								<Box
-									display="flex"
-									justifyContent="center"
-									alignItems="center"
-									height="100%"
-								>
-									<Typography
-										component="h1"
-										variant="h5"
-										color="secondary"
+						{/* Location using mapbox and geocoder */}
+						{mapSwitch && (
+							<Box>
+								<Grid container spacing={2}>
+									<Grid item sm={2}>
+										<Box
+											display="flex"
+											justifyContent="center"
+											alignItems="center"
+											height="100%"
+										>
+											<Typography
+												component="h1"
+												variant="h5"
+												color="secondary"
+											>
+												LOCATION DETAILS
+											</Typography>
+										</Box>
+									</Grid>
+									<Grid
+										item
+										sm={10}
+										style={{ width: "100%" }}
 									>
-										DATE {"&"} TIMING
-									</Typography>
-								</Box>
-							</Grid>
-							<Grid item sm={10}>
-								<Field
-									name="startDate"
-									component={DateInput}
-									label="Event Start Date *"
-								/>
-								<Field
-									name="startTime"
-									component={TimeInput}
-									label="Starting Time *"
-								/>
+										<Field
+											name="location"
+											component={GeoDecoder}
+											change={change}
+											dispatch={this.props.dispatch}
+										/>
+									</Grid>
+								</Grid>
 
-								<Field
-									name="endDate"
-									component={DateInput}
-									label="Event End Date *"
-								/>
-								<Field
-									name="endTime"
-									component={TimeInput}
-									label="Ending Time *"
-								/>
+								<Divider className={classes.marg} />
+							</Box>
+						)}
+
+						{/* location using custom text fields */}
+						{!mapSwitch && (
+							<Box>
+								<Grid container spacing={2}>
+									<Grid item sm={2}>
+										<Box
+											display="flex"
+											justifyContent="center"
+											alignItems="center"
+											height="100%"
+										>
+											<Typography
+												component="h1"
+												variant="h5"
+												color="secondary"
+											>
+												LOCATION DETAILS
+											</Typography>
+										</Box>
+									</Grid>
+									<Grid
+										item
+										sm={10}
+										style={{ width: "100%" }}
+									>
+										<Field
+											name="AddressLine1"
+											component={TextInput}
+											label="Address Line 1*"
+										/>
+
+										<Field
+											name="AddressLine2"
+											component={TextInput}
+											label="Address Line 2"
+										/>
+									</Grid>
+								</Grid>
+
+								<Divider className={classes.marg} />
+							</Box>
+						)}
+
+						{/* online event */}
+						{onlineEventSwitch && (
+							<Box>
+								<Grid container spacing={2}>
+									<Grid item sm={2}>
+										<Box
+											display="flex"
+											justifyContent="center"
+											alignItems="center"
+											height="100%"
+										>
+											<Typography
+												component="h1"
+												variant="h5"
+												color="secondary"
+											>
+												ONLINE EVENT
+											</Typography>
+										</Box>
+									</Grid>
+									<Grid item sm={10}>
+										<Field
+											name="link1"
+											component={TextInput}
+											label="LiveStream URL"
+										/>
+
+										<Field
+											name="link2"
+											component={TextInput}
+											label="Webinar URL"
+										/>
+									</Grid>
+								</Grid>
+								<Divider className={classes.marg} />
+							</Box>
+						)}
+
+						<Box>
+							<Grid container spacing={2}>
+								<Grid item sm={2}>
+									<Box
+										display="flex"
+										justifyContent="center"
+										alignItems="center"
+										height="100%"
+									>
+										<Typography
+											component="h1"
+											variant="h5"
+											color="secondary"
+										>
+											DATE {"&"} TIME
+										</Typography>
+									</Box>
+								</Grid>
+								<Grid item sm={10}>
+									<Field
+										name="Date"
+										component={DateInput}
+										label="Event Date *"
+									/>
+									<Field
+										name="Time"
+										component={TimeInput}
+										label="Time *"
+									/>
+								</Grid>
 							</Grid>
-						</Grid>
+						</Box>
 
 						<Box
 							display="flex"
@@ -340,6 +438,9 @@ class EventForm extends React.Component {
 	}
 }
 
+// for getting current form values from global state
+const selector = formValueSelector("EventForm");
+
 const mapStateToProps = (state, ownProps) => {
 	const eventId = ownProps.match.params.id;
 
@@ -351,6 +452,8 @@ const mapStateToProps = (state, ownProps) => {
 
 	return {
 		initialValues: event,
+		onlineEventSwitch: selector(state, "onlineEventSwitch"),
+		mapSwitch: selector(state, "mapSwitch"),
 	};
 };
 
@@ -370,13 +473,14 @@ const validate = combineValidators({
 			message: "Event Desciption must be at least 5 characters",
 		})
 	)(),
-	startDate: isRequired({ message: "Event Starting Date is required" }),
-	endDate: isRequired({ message: "Event Ending Date is required" }),
-	startTime: isRequired({ message: "Event Starting Time is required" }),
-	endTime: isRequired({ message: "Event Ending Date is required" }),
+	Date: isRequired({ message: "Event Date is required" }),
+	Time: isRequired({ message: "Event Time is required" }),
+	AddressLine1: isRequired({ message: "Address is required" }),
 });
 
-export default connect(
-	mapStateToProps,
-	actions
-)(reduxForm({ form: "EventForm", validate })(withStyles(styles)(EventForm)));
+const eventForm = reduxForm({
+	form: "EventForm",
+	validate,
+})(EventForm);
+
+export default connect(mapStateToProps, actions)(withStyles(styles)(eventForm));
