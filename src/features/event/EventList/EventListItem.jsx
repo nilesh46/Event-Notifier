@@ -118,8 +118,9 @@ class EventListItem extends Component {
 										</Box>
 									</Box>
 								</Grid>
-								{/* Date and Time of the event */}
+
 								<Box>
+									{/* Date and Time of the event */}
 									<Box
 										display="flex"
 										alignItems="center"
@@ -138,19 +139,27 @@ class EventListItem extends Component {
 										</Box>
 									</Box>
 									<Divider />
+									{/* Location of the event */}
 									<Box
 										display="flex"
 										alignItems="center"
 										my="0.5rem"
 									>
 										<RoomIcon fontSize="small" />
-										<Box mx="0.5rem">
-											<Typography color="textSecondary">
-												{event.AddressLine1}{" "}
-												{event.AddressLine2 &&
-													event.AddressLine2}
-											</Typography>
-										</Box>
+										{!event.location && (
+											<Box mx="0.5rem">
+												<Typography color="textSecondary">
+													{event.AddressLine1}
+												</Typography>
+											</Box>
+										)}
+										{event.location && (
+											<Box mx="0.5rem">
+												<Typography color="textSecondary">
+													{event.location.placeName}
+												</Typography>
+											</Box>
+										)}
 									</Box>
 								</Box>
 							</Grid>

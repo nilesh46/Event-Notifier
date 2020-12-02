@@ -8,17 +8,17 @@ mapboxgl.accessToken =
 
 class GeoDecoder extends Component {
 	state = {
-		lng: 77.216721,
-		lat: 28.6448,
-		zoom: 13,
+		lng: 77.209,
+		lat: 28.6139,
+		zoom: 11,
 	};
 
 	componentDidMount = () => {
 		const map = new mapboxgl.Map({
 			container: this.mapContainer,
 			style: "mapbox://styles/mapbox/streets-v11",
-			center: [77.216721, 28.6448],
-			zoom: 13,
+			center: [77.209, 28.6139],
+			zoom: 11,
 		});
 
 		map.on("move", () => {
@@ -43,12 +43,15 @@ class GeoDecoder extends Component {
 
 		document.getElementById("geocoder").appendChild(geocoder.onAdd(map));
 
+		if (this.props.location) {
+			geocoder.setInput(this.props.location.placeName);
+		}
+
 		geocoder.on("result", (result) => {
 			const data = {
 				center: result.result.center,
 				placeName: result.result.place_name,
 			};
-			console.log(data);
 
 			this.props.meta.dispatch(
 				this.props.change("EventForm", "location", data)

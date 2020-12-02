@@ -1,15 +1,18 @@
 import { FormControlLabel, Switch } from "@material-ui/core";
 import React from "react";
+import { change } from "redux-form";
 
 const SwitchInput = ({
 	input,
 	label,
 	placeholder,
-	meta: { touched, error, dispatch },
+	meta: { touched, error, dispatch, form },
+
 	...custom
 }) => {
 	const handleChange = (e) => {
-		dispatch(custom.change("EventForm", input.name, e.target.checked));
+		if (form === "EventForm")
+			dispatch(change("EventForm", input.name, e.target.checked));
 	};
 
 	return (
@@ -20,7 +23,7 @@ const SwitchInput = ({
 					{...input}
 					{...custom}
 					onChange={handleChange}
-					checked={input.value}
+					checked={input.value === true}
 				/>
 			}
 			label={label}

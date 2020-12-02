@@ -48,13 +48,13 @@ const styles = (theme) => ({
 
 class EventForm extends React.Component {
 	componentDidMount = () => {
-		this.props.dispatch(change("EventForm", "onlineEventSwitch", false));
-		this.props.dispatch(change("EventForm", "mapSwitch", true));
+		const { dispatch } = this.props;
+		dispatch(change("EventForm", "onlineEventSwitch", false));
+		dispatch(change("EventForm", "mapSwitch", true));
 	};
 
 	onFormSubmit = (values) => {
 		if (this.props.initialValues.id) {
-			console.log(values);
 			this.props.updateEvent(values);
 			this.props.history.push(`/events/${this.props.initialValues.id}`);
 		} else {
@@ -231,15 +231,11 @@ class EventForm extends React.Component {
 										name="onlineEventSwitch"
 										component={SwitchInput}
 										label="Online event"
-										change={change}
-										dispatch={this.props.dispatch}
 									/>
 									<Field
 										name="mapSwitch"
 										component={SwitchInput}
 										label="Use map"
-										change={change}
-										dispatch={this.props.dispatch}
 									/>
 								</Grid>
 							</Grid>
@@ -271,12 +267,26 @@ class EventForm extends React.Component {
 										sm={10}
 										style={{ width: "100%" }}
 									>
-										<Field
-											name="location"
-											component={GeoDecoder}
-											change={change}
-											dispatch={this.props.dispatch}
-										/>
+										{!this.props.initialValues.location && (
+											<Field
+												name="location"
+												component={GeoDecoder}
+												change={change}
+												dispatch={this.props.dispatch}
+											/>
+										)}
+										{this.props.initialValues.location && (
+											<Field
+												name="location"
+												component={GeoDecoder}
+												change={change}
+												dispatch={this.props.dispatch}
+												location={
+													this.props.initialValues
+														.location
+												}
+											/>
+										)}
 									</Grid>
 								</Grid>
 
