@@ -9,10 +9,24 @@ import { BrowserRouter } from "react-router-dom";
 import { configureStore } from "./redux/store/configureStore";
 import { Provider } from "react-redux";
 import ScrollToTop from "./App/Util/ScrollToTop";
-import { loadEvents } from "./redux/actions";
+import { ReactReduxFirebaseProvider } from "react-redux-firebase";
+import firebase from "./App/Config/firebase";
+import { createFirestoreInstance } from "redux-firestore";
 
 const store = configureStore();
-store.dispatch(loadEvents());
+
+const rrfConfig = {
+	userProfiles: "users",
+	attachAuthReady: true,
+	useFirestoreForProfile: true,
+};
+
+const rrfProps = {
+	firebase,
+	config: rrfConfig,
+	dispatch: store.dispatch,
+	createFirestoreInstance,
+};
 
 const rootEl = document.getElementById("root");
 
@@ -27,7 +41,9 @@ let render = () => {
 					transitionOut="fadeOut"
 					progressBar
 				/>
-				<App />
+				<ReactReduxFirebaseProvider {...rrfProps}>
+					<App />
+				</ReactReduxFirebaseProvider>
 			</BrowserRouter>
 		</Provider>,
 		rootEl

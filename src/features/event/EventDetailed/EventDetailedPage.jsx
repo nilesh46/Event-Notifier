@@ -7,37 +7,37 @@ import EventDetailedInfo from "./EventDetailedInfo";
 import EventDetailedSidebar from "./EventDetailedSidebar";
 
 const EventDetailedPage = ({ event }) => {
-    return (
-        <div>
-            <Grid container spacing={3}>
-                <Grid item md={8} xs={12}>
-                    <EventDetailedHeader event={event} />
-                    <EventDetailedInfo event={event} />
-                </Grid>
-                <Grid item md xs={12}>
-                    <EventDetailedSidebar attendees={event.attendees} />
-                </Grid>
-                <Grid item md={12} xs={12}>
-                    <EventDetailedChat />
-                </Grid>
-            </Grid>
-        </div>
-    );
+	return (
+		<div>
+			<Grid container spacing={3}>
+				<Grid item md={8} xs={12}>
+					<EventDetailedHeader event={event} />
+					<EventDetailedInfo event={event} />
+				</Grid>
+				<Grid item md xs={12}>
+					<EventDetailedSidebar attendees={event.attendees} />
+				</Grid>
+				<Grid item md={8} xs={12}>
+					<EventDetailedChat />
+				</Grid>
+			</Grid>
+		</div>
+	);
 };
 
 const mapStateToProps = (state, ownProps) => {
-    const eventId = ownProps.match.params.id;
+	const eventId = ownProps.match.params.id;
 
-    // If there is no event for specific event id, then it will show nothing instead of an error
-    let event = {};
+	// If there is no event for specific event id, then it will show nothing instead of an error
+	let event = {};
 
-    if (eventId && state.events.length > 0) {
-        event = state.events.filter((event) => event.id === eventId)[0];
-    }
+	if (eventId && state.events.length > 0) {
+		event = state.events.filter((event) => event.id === eventId)[0];
+	}
 
-    return {
-        event,
-    };
+	return {
+		event,
+	};
 };
 
 export default connect(mapStateToProps)(EventDetailedPage);

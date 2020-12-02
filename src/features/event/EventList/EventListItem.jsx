@@ -21,7 +21,7 @@ import Avatar from "@material-ui/core/Avatar";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { openModal, deleteEvent } from "../../../redux/actions";
-import { format, parseISO } from "date-fns";
+import { format } from "date-fns";
 
 const styles = {
 	root: {
@@ -131,10 +131,14 @@ class EventListItem extends Component {
 										<Box mx="0.5rem">
 											<Typography color="textSecondary">
 												{format(
-													parseISO(event.date),
+													event.date.toDate(),
 													"EEEE do, LLL"
 												)}{" "}
-												at {event.time}
+												at{" "}
+												{format(
+													event.date.toDate(),
+													"h:mm a"
+												)}
 											</Typography>
 										</Box>
 									</Box>
