@@ -54,6 +54,7 @@ class EventForm extends React.Component {
 
 	onFormSubmit = (values) => {
 		if (this.props.initialValues.id) {
+			console.log(values);
 			this.props.updateEvent(values);
 			this.props.history.push(`/events/${this.props.initialValues.id}`);
 		} else {
@@ -384,12 +385,12 @@ class EventForm extends React.Component {
 								</Grid>
 								<Grid item sm={10}>
 									<Field
-										name="Date"
+										name="date"
 										component={DateInput}
 										label="Event Date *"
 									/>
 									<Field
-										name="Time"
+										name="time"
 										component={TimeInput}
 										label="Time *"
 									/>
@@ -464,18 +465,16 @@ const actions = {
 
 const validate = combineValidators({
 	title: isRequired({ message: "Please give your event a name" }),
-	city: isRequired({ message: "The Event City is required" }),
-	venue: isRequired({ message: "The Venue is required" }),
 	category: isRequired({ message: "The Event Category is required" }),
 	description: composeValidators(
 		isRequired({ message: "The Event Description is required" }),
 		hasLengthGreaterThan(4)({
-			message: "Event Desciption must be at least 5 characters",
+			message: "Event Description must be at least 5 characters",
 		})
 	)(),
-	Date: isRequired({ message: "Event Date is required" }),
-	Time: isRequired({ message: "Event Time is required" }),
-	AddressLine1: isRequired({ message: "Address is required" }),
+	date: isRequired({ message: "Event Date is required" }),
+	time: isRequired({ message: "Event Time is required" }),
+	AddressLine1: isRequired({ message: " Location Address is required" }),
 });
 
 const eventForm = reduxForm({

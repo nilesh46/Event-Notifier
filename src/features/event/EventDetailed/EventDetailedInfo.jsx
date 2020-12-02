@@ -16,6 +16,7 @@ import LocationOnOutlinedIcon from "@material-ui/icons/LocationOnOutlined";
 import React, { Component } from "react";
 import Mapbox from "../../Maps/Mapbox";
 import HttpIcon from "@material-ui/icons/Http";
+import { format, parseISO } from "date-fns";
 
 const style = (theme) => ({
 	root: {
@@ -45,6 +46,7 @@ class EventDetailedInfo extends Component {
 	render() {
 		const { classes } = this.props;
 		const { event } = this.props;
+		const { openMap } = this.state;
 		return (
 			<List className={classes.root}>
 				<ListItem>
@@ -63,7 +65,7 @@ class EventDetailedInfo extends Component {
 					</Typography>
 				</ListItem>
 				<Divider />
-				{event.onlineEventSwitch && (
+				{event.onlineEventSwitch && (event.link1 || event.link2) && (
 					<div>
 						<ListItem>
 							<ListItemIcon>
@@ -79,27 +81,31 @@ class EventDetailedInfo extends Component {
 									variant="body2"
 									color="textSecondary"
 								>
-									<Box mb="0.5rem">
-										LiveStream URL :{" "}
-										<a
-											href={event.link1}
-											target="_blank"
-											rel="noreferrer"
-										>
-											{event.link1}
-										</a>
-									</Box>
+									{event.link1 && (
+										<Box mb="0.5rem">
+											LiveStream URL :{" "}
+											<a
+												href={event.link1}
+												target="_blank"
+												rel="noreferrer"
+											>
+												{event.link1}
+											</a>
+										</Box>
+									)}
 									<Divider />
-									<Box mt="0.5rem">
-										Webinar URL :{" "}
-										<a
-											href={event.link2}
-											target="_blank"
-											rel="noreferrer"
-										>
-											{event.link2}
-										</a>
-									</Box>
+									{event.link2 && (
+										<Box mt="0.5rem">
+											Webinar URL :{" "}
+											<a
+												href={event.link2}
+												target="_blank"
+												rel="noreferrer"
+											>
+												{event.link2}
+											</a>
+										</Box>
+									)}
 								</Typography>
 							</Typography>
 						</ListItem>
@@ -118,8 +124,13 @@ class EventDetailedInfo extends Component {
 					>
 						Event Date and Timing
 						<Typography variant="body2" color="textSecondary">
-							<strong>Date</strong> : {event.Date} <br />{" "}
-							<strong>Timing</strong> :{event.Time}
+							<strong>Date</strong> :{" "}
+							{event.date &&
+								format(
+									parseISO(event.date),
+									"EEEE do, LLL"
+								)}{" "}
+							<br /> <strong>Timing</strong> :{event.time}
 						</Typography>
 					</Typography>
 				</ListItem>
@@ -170,7 +181,7 @@ class EventDetailedInfo extends Component {
 									onClick={this.handleMapBtnClick}
 									className={classes.btn}
 								>
-									View Map
+									{!openMap ? "View Map" : "Hide Map"}
 								</Button>
 							</Box>
 						)}

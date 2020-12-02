@@ -11,6 +11,7 @@ import {
 	ASYNC_ACTION_ERROR,
 	FETCH_EVENTS,
 } from "./types";
+import { toastr } from "react-redux-toastr";
 
 // Test Actions
 export const testAction = () => {
@@ -30,20 +31,34 @@ export const testActionAsync = () => {
 
 // Events Actions
 export const createEvent = (event) => {
-	return {
-		type: CREATE_EVENT,
-		payload: {
-			event,
-		},
+	return async (dispatch) => {
+		try {
+			dispatch({
+				type: CREATE_EVENT,
+				payload: {
+					event,
+				},
+			});
+			toastr.success("Success!!! ", "Event has been created");
+		} catch (error) {
+			toastr.error("Oops", "Something went wrong");
+		}
 	};
 };
 
 export const updateEvent = (event) => {
-	return {
-		type: UPDATE_EVENT,
-		payload: {
-			event,
-		},
+	return async (dispatch) => {
+		try {
+			dispatch({
+				type: UPDATE_EVENT,
+				payload: {
+					event,
+				},
+			});
+			toastr.success("Success!!! ", "Event has been updated");
+		} catch (error) {
+			toastr.error("Oops", "Something went wrong");
+		}
 	};
 };
 
