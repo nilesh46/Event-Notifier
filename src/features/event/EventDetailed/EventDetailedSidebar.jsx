@@ -39,7 +39,7 @@ class EventDetailedSidebar extends Component {
 	};
 	render() {
 		const { classes } = this.props;
-		const { attendees } = this.props;
+		const attendees = Object.values(this.props.attendees);
 		const isHost = false;
 		return (
 			<List className={classes.root}>

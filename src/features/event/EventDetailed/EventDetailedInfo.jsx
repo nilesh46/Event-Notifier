@@ -16,7 +16,7 @@ import LocationOnOutlinedIcon from "@material-ui/icons/LocationOnOutlined";
 import React, { Component } from "react";
 import Mapbox from "../../Maps/Mapbox";
 import HttpIcon from "@material-ui/icons/Http";
-import { format, parseISO } from "date-fns";
+import { format } from "date-fns";
 
 const style = (theme) => ({
 	root: {
@@ -125,12 +125,9 @@ class EventDetailedInfo extends Component {
 						Event Date and Timing
 						<Typography variant="body2" color="textSecondary">
 							<strong>Date</strong> :{" "}
-							{event.date &&
-								format(
-									parseISO(event.date),
-									"EEEE do, LLL"
-								)}{" "}
-							<br /> <strong>Timing</strong> :{event.time}
+							{format(event.date.toDate(), "EEEE do, LLL")} <br />{" "}
+							<strong>Timing</strong> :
+							{format(event.date.toDate(), "h:mm a")}
 						</Typography>
 					</Typography>
 				</ListItem>
