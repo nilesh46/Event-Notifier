@@ -13,10 +13,9 @@ const TextInput = ({
 	type,
 	label,
 	placeholder,
-	meta: { touched, error },
+	meta: { touched, error, dispatch },
 	...custom
 }) => {
-	console.log(today);
 	const [selectedDate, setSelectedDate] = React.useState(
 		new Date("2020-12-05T14:22:00.000Z")
 	);
@@ -32,9 +31,9 @@ const TextInput = ({
 				minDate={today || undefined}
 				inputVariant="outlined"
 				variant="inline"
+				label={label}
 				format="MM/dd/yyyy"
 				margin="normal"
-				label={label}
 				KeyboardButtonProps={{
 					"aria-label": "change date",
 				}}

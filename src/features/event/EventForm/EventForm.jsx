@@ -482,7 +482,7 @@ const validate = combineValidators({
 			message: "Event Description must be at least 5 characters",
 		})
 	)(),
-	date: isRequired({ message: "Event Date is required" }),
+	// date: isRequired({ message: "Event Date is required" }),
 	time: isRequired({ message: "Event Time is required" }),
 	AddressLine1: isRequired({ message: " Location Address is required" }),
 });
