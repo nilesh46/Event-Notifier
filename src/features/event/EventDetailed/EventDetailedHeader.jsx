@@ -9,7 +9,7 @@ import Typography from "@material-ui/core/Typography";
 import { deepOrange } from "@material-ui/core/colors";
 import { Box, Button } from "@material-ui/core";
 import { Link } from "react-router-dom";
-import { format, parseISO } from "date-fns";
+import { format } from "date-fns";
 
 const styles = (theme) => ({
 	root: {
@@ -48,8 +48,8 @@ class EventDetailedHeader extends Component {
 					title={event.title}
 					subheader={`${
 						event.date &&
-						format(parseISO(event.date), "EEEE do, LLL")
-					} at ${event.time}`}
+						format(event.date.toDate(), "EEEE do, LLL")
+					} at ${format(event.date.toDate(), "h:mm a")}`}
 				/>
 				<CardMedia
 					className={classes.media}

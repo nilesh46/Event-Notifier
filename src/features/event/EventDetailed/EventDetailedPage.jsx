@@ -1,6 +1,7 @@
 import { Grid } from "@material-ui/core";
 import React from "react";
 import { connect } from "react-redux";
+import { firestoreConnect } from "react-redux-firebase";
 import EventDetailedChat from "./EventDetailedChat";
 import EventDetailedHeader from "./EventDetailedHeader";
 import EventDetailedInfo from "./EventDetailedInfo";
@@ -17,7 +18,7 @@ const EventDetailedPage = ({ event }) => {
 				<Grid item md xs={12}>
 					<EventDetailedSidebar attendees={event.attendees} />
 				</Grid>
-				<Grid item md={8} xs={12}>
+				<Grid item md={12} xs={12}>
 					<EventDetailedChat />
 				</Grid>
 			</Grid>
@@ -27,12 +28,13 @@ const EventDetailedPage = ({ event }) => {
 
 const mapStateToProps = (state, ownProps) => {
 	const eventId = ownProps.match.params.id;
+	const { events } = state.firestore.ordered;
 
 	// If there is no event for specific event id, then it will show nothing instead of an error
 	let event = {};
 
-	if (eventId && state.events.length > 0) {
-		event = state.events.filter((event) => event.id === eventId)[0];
+	if (eventId && events.length > 0) {
+		event = events.filter((event) => event.id === eventId)[0];
 	}
 
 	return {
@@ -40,4 +42,8 @@ const mapStateToProps = (state, ownProps) => {
 	};
 };
 
-export default connect(mapStateToProps)(EventDetailedPage);
+const fireEventDetailedPage = firestoreConnect([{ collection: "events" }])(
+	EventDetailedPage
+);
+
+export default connect(mapStateToProps)(fireEventDetailedPage);
