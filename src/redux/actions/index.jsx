@@ -12,6 +12,8 @@ import {
 	FETCH_EVENTS,
 } from "./types";
 import { toastr } from "react-redux-toastr";
+import history from "../../history";
+import { SubmissionError } from "redux-form";
 
 // Test Actions
 export const testAction = () => {
@@ -119,6 +121,63 @@ export const asyncActionError = () => {
 	return {
 		type: ASYNC_ACTION_ERROR,
 	};
+};
+
+// Auth Actions
+export const login = ({ firebase }, creds) => async (dispatch) => {
+	try {
+		await firebase
+			.auth()
+			.signInWithEmailAndPassword(creds.email, creds.password);
+
+		history.push("/events");
+		history.go(0);
+	} catch (error) {
+		console.log(error);
+		throw new SubmissionError({
+			_error: error.message,
+		});
+	}
+};
+
+export const registerUser = ({ firebase, firestore }, creds) => async (
+	dispatch
+) => {
+	try {
+		//creating a user in auth
+		let createdUser = await firebase
+			.auth()
+			.createUserWithEmailAndPassword(creds.email, creds.password);
+
+		console.log(createdUser);
+		//updates the auth profile
+		await createdUser.user.updateProfile({
+			displayName: creds.firstName,
+		});
+
+		//creating new profile in firestore
+		let newUser = {
+			displayName: createdUser.user.displayName,
+			email: createdUser.user.email,
+			createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+		};
+		console.log("newUser" + newUser);
+
+		// adding new user in users collection
+		await firebase
+			.firestore()
+			.collection("users")
+			.doc(createdUser.user.id)
+			.set(newUser);
+
+		history.push("/events");
+		history.go(0);
+	} catch (error) {
+		console.log(error);
+		throw new SubmissionError({
+			_error: error.message,
+		});
+	}
 };
 
 const delay = (ms) => {

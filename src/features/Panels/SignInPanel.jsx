@@ -8,18 +8,22 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import { ButtonBase, withStyles } from "@material-ui/core";
-import { logIn } from "../../redux/actions";
+import { login } from "../../redux/actions";
 import { connect } from "react-redux";
 import { Field, reduxForm } from "redux-form";
 import TextInput from "../event/EventForm/FormInputs/TextInput";
 import PasswordInput from "../event/EventForm/FormInputs/PasswordInput";
 import { combineValidators, isRequired } from "revalidate";
+import { getFirebase } from "react-redux-firebase";
 
 const styles = (theme) => ({
 	"@global": {
 		html: {
 			fontSize: ".8rem",
 		},
+	},
+	typo: {
+		color: "red",
 	},
 	paper: {
 		marginTop: theme.spacing(0),
@@ -41,9 +45,16 @@ const styles = (theme) => ({
 });
 
 class SignInPanel extends Component {
+	state = {
+		err: null,
+	};
+
 	onFormSubmit = (values) => {
+		const firebase = getFirebase();
 		const creds = { ...values };
-		// this.props.logIn(creds);
+		this.props
+			.login({ firebase }, creds)
+			.catch((error) => this.setState({ err: error.errors._error }));
 		console.log(creds);
 	};
 
@@ -55,6 +66,8 @@ class SignInPanel extends Component {
 			pristine,
 			handleChange,
 		} = this.props;
+
+		const { err } = this.state;
 
 		return (
 			<Container component="main" maxWidth="xs">
@@ -70,6 +83,7 @@ class SignInPanel extends Component {
 					<form
 						className={classes.form}
 						onSubmit={this.props.handleSubmit(this.onFormSubmit)}
+						autoComplete="off"
 					>
 						<Field
 							name="email"
@@ -85,6 +99,11 @@ class SignInPanel extends Component {
 							}
 							label="Remember me"
 						/> */}
+						{err && (
+							<Typography variant="body2" color="secondary">
+								{err}
+							</Typography>
+						)}
 						<Button
 							type="submit"
 							fullWidth
@@ -122,7 +141,7 @@ class SignInPanel extends Component {
 }
 
 const actions = {
-	logIn,
+	login,
 };
 
 const validate = combineValidators({

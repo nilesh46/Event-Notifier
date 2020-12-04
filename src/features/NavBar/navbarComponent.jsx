@@ -6,6 +6,8 @@ import Typography from "@material-ui/core/Typography";
 import { Link } from "react-router-dom";
 import SignedOutMenu from "../Menus/SignedOutMenu";
 import SignedInMenu from "../Menus/SignedInMenu";
+import { connect } from "react-redux";
+import { withFirebase } from "react-redux-firebase";
 
 const styles = (theme) => ({
 	root: {
@@ -43,7 +45,6 @@ const styles = (theme) => ({
 class MenuAppBar extends React.Component {
 	state = {
 		anchorEl: null,
-		authenticated: true,
 	};
 
 	handleMenu = (event) => {
@@ -56,6 +57,9 @@ class MenuAppBar extends React.Component {
 
 	render() {
 		const { classes } = this.props;
+		const { auth } = this.props;
+		const authenticated = auth.isLoaded && !auth.isEmpty;
+		console.log(authenticated);
 
 		return (
 			<div className={classes.root}>
@@ -80,8 +84,8 @@ class MenuAppBar extends React.Component {
 							</Link>
 						</Typography>
 
-						{this.state.authenticated ? (
-							<SignedInMenu classes={classes} />
+						{authenticated ? (
+							<SignedInMenu classes={classes} auth={auth} />
 						) : (
 							<SignedOutMenu
 								onClick={() =>
@@ -96,4 +100,10 @@ class MenuAppBar extends React.Component {
 	}
 }
 
-export default withStyles(styles)(MenuAppBar);
+const mapStateToProps = (state) => ({
+	auth: state.firebase.auth,
+});
+
+export default withFirebase(
+	connect(mapStateToProps)(withStyles(styles)(MenuAppBar))
+);

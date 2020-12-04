@@ -1,11 +1,12 @@
 import React from "react";
-import { Box, Hidden, Menu, MenuItem, Typography } from "@material-ui/core";
+import { Box, Menu, MenuItem, Typography } from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 import Divider from "@material-ui/core/Divider";
 import { Link } from "react-router-dom";
 import { Grid } from "@material-ui/core";
+import { getFirebase } from "react-redux-firebase";
 
-class MenuButton extends React.Component {
+class MenuWithLogout extends React.Component {
 	state = {
 		anchorEl: null,
 	};
@@ -16,6 +17,11 @@ class MenuButton extends React.Component {
 
 	handleClose = () => {
 		this.setState({ anchorEl: null });
+	};
+
+	handleLogout = () => {
+		const firebase = getFirebase();
+		firebase.auth().signOut();
 	};
 
 	BtnText = (text) => {
@@ -30,20 +36,9 @@ class MenuButton extends React.Component {
 		const { anchorEl } = this.state;
 		const open = Boolean(anchorEl);
 		const Wrapper = this.props.iconType;
-		const listItems = this.props.items.map((link) => (
-			<Box key={link.name}>
-				<MenuItem
-					onClick={this.handleClose}
-					component={Link}
-					to={link.link}
-				>
-					{link.name}
-				</MenuItem>
-				<Divider light />
-			</Box>
-		));
 
-		const { menuName, name } = this.props;
+		const { auth } = this.props;
+
 		return (
 			<Box>
 				<Grid container direction="row" alignItems="center">
@@ -55,8 +50,7 @@ class MenuButton extends React.Component {
 					>
 						{<Wrapper />}
 					</IconButton>
-					<Hidden mdUp>{this.BtnText(menuName)}</Hidden>
-					{name && this.BtnText(name)}
+					{auth.email && this.BtnText(auth.email)}
 				</Grid>
 				<Menu
 					id="menu-appbar"
@@ -74,11 +68,44 @@ class MenuButton extends React.Component {
 					getContentAnchorEl={null}
 					onClose={this.handleClose}
 				>
-					{listItems}
+					<MenuItem
+						onClick={this.handleClose}
+						component={Link}
+						to="/settings/about"
+					>
+						Profile
+					</MenuItem>
+					<Divider light />
+
+					<MenuItem
+						onClick={this.handleClose}
+						component={Link}
+						to="/events"
+					>
+						Help
+					</MenuItem>
+					<Divider light />
+
+					<MenuItem
+						onClick={this.handleClose}
+						component={Link}
+						to="/settings"
+					>
+						Settings
+					</MenuItem>
+					<Divider light />
+
+					<MenuItem
+						component={Link}
+						to="/"
+						onClick={this.handleLogout}
+					>
+						Logout
+					</MenuItem>
 				</Menu>
 			</Box>
 		);
 	}
 }
 
-export default MenuButton;
+export default MenuWithLogout;

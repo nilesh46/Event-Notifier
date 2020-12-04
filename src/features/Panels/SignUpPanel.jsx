@@ -13,6 +13,8 @@ import { Field, reduxForm } from "redux-form";
 import { connect } from "react-redux";
 import TextInput from "../event/EventForm/FormInputs/TextInput";
 import PasswordInput from "../event/EventForm/FormInputs/PasswordInput";
+import { registerUser } from "../../redux/actions";
+import { getFirebase } from "react-redux-firebase";
 
 const styles = (theme) => ({
 	"@global": {
@@ -40,8 +42,17 @@ const styles = (theme) => ({
 });
 
 class SignUpPanel extends Component {
+	state = {
+		err: null,
+	};
+
 	onFormSubmit = (values) => {
+		const firebase = getFirebase();
+		const firestore = firebase.firestore();
 		const creds = { ...values };
+		this.props
+			.registerUser({ firebase, firestore }, creds)
+			.catch((error) => this.setState({ err: error.errors._error }));
 		console.log(creds);
 	};
 
@@ -53,6 +64,8 @@ class SignUpPanel extends Component {
 			pristine,
 			handleChange,
 		} = this.props;
+
+		const { err } = this.state;
 
 		return (
 			<Container component="main" maxWidth="xs">
@@ -67,6 +80,7 @@ class SignUpPanel extends Component {
 					<form
 						className={classes.form}
 						onSubmit={this.props.handleSubmit(this.onFormSubmit)}
+						autoComplete="off"
 					>
 						<Grid container spacing={2}>
 							<Grid item xs={12} sm={6}>
@@ -100,6 +114,11 @@ class SignUpPanel extends Component {
 								/>
 							</Grid>
 						</Grid>
+						{err && (
+							<Typography variant="body2" color="secondary">
+								{err}
+							</Typography>
+						)}
 						<Button
 							type="submit"
 							fullWidth
@@ -130,7 +149,9 @@ class SignUpPanel extends Component {
 		);
 	}
 }
-const actions = {};
+const actions = {
+	registerUser,
+};
 
 const validate = combineValidators({
 	firstName: isRequired({ message: "Please enter your First Name" }),

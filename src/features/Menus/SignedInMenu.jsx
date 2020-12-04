@@ -7,25 +7,32 @@ import NotificationsNoneRoundedIcon from "@material-ui/icons/NotificationsNoneRo
 import MenuButton from "../NavBar/MenuButton";
 import { Box, Hidden, Typography } from "@material-ui/core";
 import SideDrawer from "./SideDrawer";
+import { Grid } from "@material-ui/core";
+import MenuWithLogout from "../NavBar/MenuWithLogout";
 
 class SignedInMenu extends React.Component {
 	drawerList = () => {
+		const { auth } = this.props;
 		return (
 			<Fragment>
 				{/* Notification */}
-				<IconButton
-					color="inherit"
-					classes={this.props.classes.IconButton}
-				>
-					<NotificationsNoneRoundedIcon fontSize="small" />
-					<Hidden mdUp>
-						<Box display="flex" alignItems="center">
-							<Typography variant="body2" color="textSecondary">
-								Notifications
-							</Typography>
-						</Box>
-					</Hidden>
-				</IconButton>
+				<div>
+					<Grid container alignItems="center" direction="row">
+						<IconButton
+							color="inherit"
+							classes={this.props.classes.IconButton}
+						>
+							<NotificationsNoneRoundedIcon fontSize="small" />
+						</IconButton>
+						<Hidden mdUp>
+							<Box display="flex" alignItems="center">
+								<Typography variant="body2">
+									Notifications
+								</Typography>
+							</Box>
+						</Hidden>
+					</Grid>
+				</div>
 
 				{/* First Menu */}
 				<MenuButton
@@ -48,28 +55,7 @@ class SignedInMenu extends React.Component {
 				/>
 
 				{/* Events Menu */}
-				<MenuButton
-					iconType={AccountCircle}
-					items={[
-						{
-							name: "Profile",
-							link: "/createEvent",
-						},
-						{
-							name: "Help",
-							link: "/createEvent",
-						},
-						{
-							name: "Settings",
-							link: "/settings",
-						},
-						{
-							name: "Logout",
-							link: "/",
-						},
-					]}
-					menuName="Username"
-				/>
+				<MenuWithLogout iconType={AccountCircle} auth={auth} />
 			</Fragment>
 		);
 	};

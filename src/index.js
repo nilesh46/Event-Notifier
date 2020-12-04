@@ -5,13 +5,14 @@ import "react-redux-toastr/lib/css/react-redux-toastr.min.css";
 import App from "./App/Layout/App";
 import reportWebVitals from "./reportWebVitals";
 import ReduxToastr from "react-redux-toastr";
-import { BrowserRouter } from "react-router-dom";
+import { Router } from "react-router-dom";
 import { configureStore } from "./redux/store/configureStore";
 import { Provider } from "react-redux";
 import ScrollToTop from "./App/Util/ScrollToTop";
 import { ReactReduxFirebaseProvider } from "react-redux-firebase";
 import firebase from "./App/Config/firebase";
 import { createFirestoreInstance } from "redux-firestore";
+import history from "./history";
 
 const store = configureStore();
 
@@ -33,7 +34,7 @@ const rootEl = document.getElementById("root");
 let render = () => {
 	ReactDOM.render(
 		<Provider store={store}>
-			<BrowserRouter>
+			<Router history={history}>
 				<ScrollToTop />
 				<ReduxToastr
 					position="bottom-right"
@@ -44,7 +45,7 @@ let render = () => {
 				<ReactReduxFirebaseProvider {...rrfProps}>
 					<App />
 				</ReactReduxFirebaseProvider>
-			</BrowserRouter>
+			</Router>
 		</Provider>,
 		rootEl
 	);
