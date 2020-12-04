@@ -15,6 +15,7 @@ import ModalManager from "../../features/Modals/ModalManager";
 import { connect } from "react-redux";
 import EmailVerificationPage from "../../features/Verification/EmailVerificationPage";
 import WarningPage from "../../features/Verification/WarningPage";
+import PasswordResetPage from "../../features/Verification/PasswordResetPage";
 
 class App extends React.Component {
 	render() {
@@ -25,11 +26,26 @@ class App extends React.Component {
 			authenticated && auth.providerData[0].providerId !== "password";
 		const verified = emailVerified || IsOauth;
 
+		const verifiedPaths = ["/", "/resetPassword"];
+		const IsPathVerified =
+			verifiedPaths.indexOf(window.location.pathname) !== -1;
+
 		return (
 			<>
 				<ModalManager />
-				<Route path="/" exact component={HomePage} />
-				{!authenticated && <WarningPage />}
+				{IsPathVerified && (
+					<>
+						<Route path="/" exact component={HomePage} />
+						<Route
+							path="/resetPassword"
+							exact
+							component={PasswordResetPage}
+						/>
+					</>
+				)}
+
+				{!IsPathVerified && !authenticated && <WarningPage />}
+
 				{authenticated && !verified && <EmailVerificationPage />}
 				{authenticated && verified && (
 					<Route

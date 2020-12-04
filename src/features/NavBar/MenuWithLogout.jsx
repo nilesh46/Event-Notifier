@@ -49,8 +49,8 @@ class MenuWithLogout extends React.Component {
 						color="inherit"
 					>
 						{<Wrapper />}
+						{auth.displayName && this.BtnText(auth.displayName)}
 					</IconButton>
-					{auth.email && this.BtnText(auth.email)}
 				</Grid>
 				<Menu
 					id="menu-appbar"
