@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
@@ -16,6 +15,7 @@ import PasswordInput from "../event/EventForm/FormInputs/PasswordInput";
 import { combineValidators, isRequired } from "revalidate";
 import { getFirebase } from "react-redux-firebase";
 import { Alert } from "@material-ui/lab";
+import { Link } from "react-router-dom";
 
 const styles = (theme) => ({
 	"@global": {
@@ -109,7 +109,7 @@ class SignInPanel extends Component {
 						</Button>
 						<Grid container>
 							<Grid item xs>
-								<Link href="#" variant="body2">
+								<Link to="/resetPassword" variant="body2">
 									Forgot password?
 								</Link>
 							</Grid>

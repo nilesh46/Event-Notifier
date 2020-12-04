@@ -208,7 +208,6 @@ export const socialLogin = ({ firebase }, selectedProvider) => async (
 			provider: selectedProvider,
 			type: "popup",
 		});
-		console.log(user);
 		if (user.additionalUserInfo.isNewUser) {
 			await firebase
 				.firestore()
