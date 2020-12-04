@@ -15,13 +15,15 @@ import TextInput from "../event/EventForm/FormInputs/TextInput";
 import PasswordInput from "../event/EventForm/FormInputs/PasswordInput";
 import { combineValidators, isRequired } from "revalidate";
 import { getFirebase } from "react-redux-firebase";
-import { Alert } from "@material-ui/lab";
 
 const styles = (theme) => ({
 	"@global": {
 		html: {
 			fontSize: ".8rem",
 		},
+	},
+	typo: {
+		color: "red",
 	},
 	paper: {
 		marginTop: theme.spacing(0),
@@ -53,6 +55,7 @@ class SignInPanel extends Component {
 		this.props
 			.login({ firebase }, creds)
 			.catch((error) => this.setState({ err: error.errors._error }));
+		console.log(creds);
 	};
 
 	render() {
@@ -96,7 +99,11 @@ class SignInPanel extends Component {
 							}
 							label="Remember me"
 						/> */}
-						{err && <Alert severity="error">{err}</Alert>}
+						{err && (
+							<Typography variant="body2" color="secondary">
+								{err}
+							</Typography>
+						)}
 						<Button
 							type="submit"
 							fullWidth

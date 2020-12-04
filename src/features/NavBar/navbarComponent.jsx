@@ -59,8 +59,7 @@ class MenuAppBar extends React.Component {
 		const { classes } = this.props;
 		const { auth } = this.props;
 		const authenticated = auth.isLoaded && !auth.isEmpty;
-		const showSignedInMenu =
-			authenticated && window.location.pathname !== "/";
+		console.log(authenticated);
 
 		return (
 			<div className={classes.root}>
@@ -85,7 +84,7 @@ class MenuAppBar extends React.Component {
 							</Link>
 						</Typography>
 
-						{showSignedInMenu ? (
+						{authenticated ? (
 							<SignedInMenu classes={classes} auth={auth} />
 						) : (
 							<SignedOutMenu

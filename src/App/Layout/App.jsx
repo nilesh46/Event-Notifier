@@ -12,84 +12,64 @@ import SettingsDashboard from "../../features/User/Settings/SettingsDashboard";
 import EventForm from "../../features/event/EventForm/EventForm";
 import testComponent from "../../Test/Components/testComponent";
 import ModalManager from "../../features/Modals/ModalManager";
-import { connect } from "react-redux";
-import EmailVerificationPage from "../../features/Verification/EmailVerificationPage";
-import WarningPage from "../../features/Verification/WarningPage";
 
 class App extends React.Component {
 	render() {
-		const { auth } = this.props;
-		const authenticated = auth.isLoaded && !auth.isEmpty;
-		const emailVerified = auth.emailVerified;
-
 		return (
 			<>
 				<ModalManager />
 				<Route path="/" exact component={HomePage} />
-				{!authenticated && <WarningPage />}
-				{authenticated && !emailVerified && <EmailVerificationPage />}
-				{authenticated && emailVerified && (
-					<Route
-						path="/(.+)"
-						render={() => (
-							<>
-								<NavBar />
-								<Container maxWidth="lg">
-									<Switch key={this.props.location.key}>
-										<>
-											<Route
-												path="/events"
-												exact
-												component={EventDashboard}
-											/>
-											<Route
-												path="/events/:id"
-												exact
-												component={EventDetailedPage}
-											/>
-											<Route
-												path="/people"
-												exact
-												component={PeopleDashboard}
-											/>
-											<Route
-												path="/profile/:id"
-												exact
-												component={UserDetailedPage}
-											/>
-											<Route
-												path="/settings"
-												component={SettingsDashboard}
-											/>
-											<Route
-												path={[
-													"/createEvent",
-													"/manage/:id",
-												]}
-												exact
-												component={EventForm}
-											/>
-											{/* <Route path="/myEvents" exact component={MyEvents} />
+				<Route
+					path="/(.+)"
+					render={() => (
+						<>
+							<NavBar />
+							<Container maxWidth="lg">
+								<Switch key={this.props.location.key}>
+									<Route
+										path="/events"
+										exact
+										component={EventDashboard}
+									/>
+									<Route
+										path="/events/:id"
+										exact
+										component={EventDetailedPage}
+									/>
+									<Route
+										path="/people"
+										exact
+										component={PeopleDashboard}
+									/>
+									<Route
+										path="/profile/:id"
+										exact
+										component={UserDetailedPage}
+									/>
+									<Route
+										path="/settings"
+										component={SettingsDashboard}
+									/>
+									<Route
+										path={["/createEvent", "/manage/:id"]}
+										exact
+										component={EventForm}
+									/>
+									{/* <Route path="/myEvents" exact component={MyEvents} />
                             <Route path="/help" exact component={Help} /> */}
-											<Route
-												path="/testing"
-												exact
-												component={testComponent}
-											/>
-										</>
-									</Switch>
-								</Container>
-							</>
-						)}
-					/>
-				)}
+									<Route
+										path="/testing"
+										exact
+										component={testComponent}
+									/>
+								</Switch>
+							</Container>
+						</>
+					)}
+				/>
 			</>
 		);
 	}
 }
 
-const mapStateToProps = (state) => {
-	return { auth: state.firebase.auth };
-};
-
-export default connect(mapStateToProps)(withRouter(App));
+export default withRouter(App);
