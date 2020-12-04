@@ -15,6 +15,7 @@ import TextInput from "../event/EventForm/FormInputs/TextInput";
 import PasswordInput from "../event/EventForm/FormInputs/PasswordInput";
 import { registerUser } from "../../redux/actions";
 import { getFirebase } from "react-redux-firebase";
+import { Alert } from "@material-ui/lab";
 
 const styles = (theme) => ({
 	"@global": {
@@ -53,7 +54,6 @@ class SignUpPanel extends Component {
 		this.props
 			.registerUser({ firebase, firestore }, creds)
 			.catch((error) => this.setState({ err: error.errors._error }));
-		console.log(creds);
 	};
 
 	render() {
@@ -114,11 +114,7 @@ class SignUpPanel extends Component {
 								/>
 							</Grid>
 						</Grid>
-						{err && (
-							<Typography variant="body2" color="secondary">
-								{err}
-							</Typography>
-						)}
+						{err && <Alert severity="error">{err}</Alert>}
 						<Button
 							type="submit"
 							fullWidth
