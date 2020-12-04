@@ -8,7 +8,7 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import { ButtonBase, withStyles } from "@material-ui/core";
-import { login } from "../../redux/actions";
+import { login, socialLogin } from "../../redux/actions";
 import { connect } from "react-redux";
 import { Field, reduxForm } from "redux-form";
 import TextInput from "../event/EventForm/FormInputs/TextInput";
@@ -142,6 +142,7 @@ class SignInPanel extends Component {
 
 const actions = {
 	login,
+	socialLogin,
 };
 
 const validate = combineValidators({

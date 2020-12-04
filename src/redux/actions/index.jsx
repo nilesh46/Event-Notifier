@@ -180,6 +180,34 @@ export const registerUser = ({ firebase, firestore }, creds) => async (
 	}
 };
 
+export const socialLogin = ({ firebase }, selectedProvider) => async (
+	dispatch
+) => {
+	try {
+		const user = await firebase.login({
+			provider: selectedProvider,
+			type: "popup",
+		});
+		console.log(user);
+		if (user.additionalUserInfo.isNewUser) {
+			await firebase
+				.firestore()
+				.collection("users")
+				.doc(user.id)
+				.set({
+					displayName: user.user.displayName,
+					email: user.user.email,
+					photoURL: user.user.photoURL || null,
+					createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+				});
+		}
+		history.push("/events");
+		history.go(0);
+	} catch (error) {
+		console.log(error);
+	}
+};
+
 const delay = (ms) => {
 	return new Promise((resolve) => setTimeout(resolve, ms));
 };
