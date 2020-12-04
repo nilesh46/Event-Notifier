@@ -131,11 +131,34 @@ export const login = ({ firebase }, creds) => async (dispatch) => {
 			.signInWithEmailAndPassword(creds.email, creds.password);
 
 		history.push("/events");
-		history.go(0);
+		// history.go(0);
 	} catch (error) {
-		console.log(error);
+		let msg;
+		const cases = [
+			"There is no user record corresponding to this identifier. The user may have been deleted.",
+			"The email address is badly formatted.",
+			"The password is invalid or the user does not have a password.",
+		];
+		switch (error.message) {
+			case cases[0]:
+				msg =
+					"The email address you have entered is not registered with this app";
+
+				break;
+			case cases[1]:
+				msg = "Please check your email address";
+
+				break;
+			case cases[2]:
+				msg = "Invalid Password";
+
+				break;
+			default:
+				break;
+		}
+
 		throw new SubmissionError({
-			_error: error.message,
+			_error: msg,
 		});
 	}
 };
@@ -149,7 +172,6 @@ export const registerUser = ({ firebase, firestore }, creds) => async (
 			.auth()
 			.createUserWithEmailAndPassword(creds.email, creds.password);
 
-		console.log(createdUser);
 		//updates the auth profile
 		await createdUser.user.updateProfile({
 			displayName: creds.firstName,
@@ -161,7 +183,6 @@ export const registerUser = ({ firebase, firestore }, creds) => async (
 			email: createdUser.user.email,
 			createdAt: firebase.firestore.FieldValue.serverTimestamp(),
 		};
-		console.log("newUser" + newUser);
 
 		// adding new user in users collection
 		await firebase
@@ -171,9 +192,8 @@ export const registerUser = ({ firebase, firestore }, creds) => async (
 			.set(newUser);
 
 		history.push("/events");
-		history.go(0);
+		// history.go(0);
 	} catch (error) {
-		console.log(error);
 		throw new SubmissionError({
 			_error: error.message,
 		});
@@ -202,10 +222,8 @@ export const socialLogin = ({ firebase }, selectedProvider) => async (
 				});
 		}
 		history.push("/events");
-		history.go(0);
-	} catch (error) {
-		console.log(error);
-	}
+		// history.go(0);
+	} catch (error) {}
 };
 
 const delay = (ms) => {
