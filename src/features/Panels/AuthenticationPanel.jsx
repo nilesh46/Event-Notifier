@@ -9,6 +9,8 @@ import Box from "@material-ui/core/Box";
 import SignUpPanel from "./SignUpPanel";
 import SignInPanel from "./SignInPanel";
 import OAuthPanel from "./OAuthPanel";
+import { socialLogin } from "../../redux/actions";
+import { connect } from "react-redux";
 
 const TabPanel = (props) => {
 	const { children, value, index, ...other } = props;
@@ -58,7 +60,7 @@ class AuthenticationPanel extends Component {
 	};
 
 	render() {
-		const { classes, theme } = this.props;
+		const { classes, theme, socialLogin } = this.props;
 		const { value } = this.state;
 		return (
 			<div className={classes.root}>
@@ -96,10 +98,17 @@ class AuthenticationPanel extends Component {
 						<SignInPanel handleChange={this.handleChange} />
 					</TabPanel>
 				</SwipeableViews>
-				<OAuthPanel />
+				<OAuthPanel socialLogin={socialLogin} />
 			</div>
 		);
 	}
 }
 
-export default withStyles(styles, { withTheme: true })(AuthenticationPanel);
+const actions = {
+	socialLogin,
+};
+
+export default connect(
+	null,
+	actions
+)(withStyles(styles, { withTheme: true })(AuthenticationPanel));
