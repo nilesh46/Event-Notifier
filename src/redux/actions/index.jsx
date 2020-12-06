@@ -209,7 +209,7 @@ export const socialLogin = ({ firebase }, selectedProvider) => async (
 			type: "popup",
 		});
 		if (user.additionalUserInfo.isNewUser) {
-			await firebase
+			const newuser = await firebase
 				.firestore()
 				.collection("users")
 				.doc(user.id)
@@ -219,7 +219,9 @@ export const socialLogin = ({ firebase }, selectedProvider) => async (
 					photoURL: user.user.photoURL || null,
 					createdAt: firebase.firestore.FieldValue.serverTimestamp(),
 				});
+			console.log(newuser);
 		}
+
 		history.push("/events");
 		// history.go(0);
 	} catch (error) {}

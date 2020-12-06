@@ -1,7 +1,6 @@
 import React, { Fragment } from "react";
 import MainButton from "../../Buttons/MainButton";
 import IconButton from "@material-ui/core/IconButton";
-import { AccountCircle } from "@material-ui/icons";
 import AddRoundedIcon from "@material-ui/icons/AddRounded";
 import NotificationsNoneRoundedIcon from "@material-ui/icons/NotificationsNoneRounded";
 import MenuButton from "../NavBar/MenuButton";
@@ -9,6 +8,7 @@ import { Box, Hidden, Typography } from "@material-ui/core";
 import SideDrawer from "./SideDrawer";
 import { Grid } from "@material-ui/core";
 import MenuWithLogout from "../NavBar/MenuWithLogout";
+import SettingsIcon from "@material-ui/icons/Settings";
 
 class SignedInMenu extends React.Component {
 	drawerList = () => {
@@ -54,8 +54,31 @@ class SignedInMenu extends React.Component {
 					menuName="Events"
 				/>
 
+				<MenuButton
+					iconType={SettingsIcon}
+					items={[
+						{
+							name: "Basic Details",
+							link: "/settings/basic",
+						},
+						{
+							name: "About Me",
+							link: "/settings/about",
+						},
+						{
+							name: "My Photos",
+							link: "/settings/photos",
+						},
+						{
+							name: "Account",
+							link: "/settings/account",
+						},
+					]}
+					menuName="Settings"
+				/>
+
 				{/* Events Menu */}
-				<MenuWithLogout iconType={AccountCircle} auth={auth} />
+				<MenuWithLogout auth={auth} />
 			</Fragment>
 		);
 	};

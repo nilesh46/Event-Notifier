@@ -5,6 +5,16 @@ import Divider from "@material-ui/core/Divider";
 import { Link } from "react-router-dom";
 import { Grid } from "@material-ui/core";
 import { getFirebase } from "react-redux-firebase";
+import { Avatar } from "@material-ui/core";
+import { withStyles } from "@material-ui/core";
+
+const style = (theme) => ({
+	small: {
+		width: theme.spacing(3),
+		height: theme.spacing(3),
+		marginRight: 7,
+	},
+});
 
 class MenuWithLogout extends React.Component {
 	state = {
@@ -35,9 +45,8 @@ class MenuWithLogout extends React.Component {
 	render() {
 		const { anchorEl } = this.state;
 		const open = Boolean(anchorEl);
-		const Wrapper = this.props.iconType;
 
-		const { auth } = this.props;
+		const { auth, classes } = this.props;
 
 		return (
 			<Box>
@@ -48,7 +57,11 @@ class MenuWithLogout extends React.Component {
 						onClick={this.handleMenu}
 						color="inherit"
 					>
-						{<Wrapper />}
+						<Avatar
+							alt={auth.displayName && auth.displayName}
+							src={auth.photoURL}
+							className={classes.small}
+						/>
 						{auth.displayName && this.BtnText(auth.displayName)}
 					</IconButton>
 				</Grid>
@@ -87,15 +100,6 @@ class MenuWithLogout extends React.Component {
 					<Divider light />
 
 					<MenuItem
-						onClick={this.handleClose}
-						component={Link}
-						to="/settings"
-					>
-						Settings
-					</MenuItem>
-					<Divider light />
-
-					<MenuItem
 						component={Link}
 						to="/"
 						onClick={this.handleLogout}
@@ -108,4 +112,4 @@ class MenuWithLogout extends React.Component {
 	}
 }
 
-export default MenuWithLogout;
+export default withStyles(style)(MenuWithLogout);

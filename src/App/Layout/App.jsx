@@ -16,6 +16,10 @@ import { connect } from "react-redux";
 import EmailVerificationPage from "../../features/Verification/EmailVerificationPage";
 import WarningPage from "../../features/Verification/WarningPage";
 import PasswordResetPage from "../../features/Verification/PasswordResetPage";
+import BasicPage from "../../features/User/Settings/BasicPage";
+import AboutPage from "../../features/User/Settings/AboutPage";
+import PhotosPage from "../../features/User/Settings/PhotosPage";
+import AccountPage from "../../features/User/Settings/AccountPage";
 
 class App extends React.Component {
 	render() {
@@ -77,8 +81,22 @@ class App extends React.Component {
 												component={UserDetailedPage}
 											/>
 											<Route
-												path="/settings"
-												component={SettingsDashboard}
+												path="/settings/basic"
+												exact
+												component={BasicPage}
+											/>
+											<Route
+												path="/settings/about"
+												exact
+												component={AboutPage}
+											/>
+											<Route
+												path="/settings/photos"
+												component={PhotosPage}
+											/>
+											<Route
+												path="/settings/account"
+												component={AccountPage}
 											/>
 											<Route
 												path={[
