@@ -1,12 +1,12 @@
 import { Box, ButtonBase, Typography, withStyles } from "@material-ui/core";
 import React, { Component } from "react";
 import { getFirebase } from "react-redux-firebase";
+import emailSentBG from "../../Assets/emailSent.jpg";
 
 const style = (theme) => ({
 	root: {
 		height: "100vh",
-		background:
-			'url("./assets/emailSent.jpg") no-repeat center center /cover',
+		background: `url(${emailSentBG}) no-repeat center center /cover`,
 		color: "#FFF",
 	},
 	darkOverlay: {
