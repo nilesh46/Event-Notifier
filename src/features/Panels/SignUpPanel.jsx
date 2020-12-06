@@ -8,7 +8,12 @@ import Typography from "@material-ui/core/Typography";
 import { withStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { ButtonBase } from "@material-ui/core";
-import { combineValidators, isRequired } from "revalidate";
+import {
+	combineValidators,
+	composeValidators,
+	isRequired,
+	matchesField,
+} from "revalidate";
 import { Field, reduxForm } from "redux-form";
 import { connect } from "react-redux";
 import TextInput from "../event/EventForm/FormInputs/TextInput";
@@ -50,7 +55,18 @@ class SignUpPanel extends Component {
 	onFormSubmit = (values) => {
 		const firebase = getFirebase();
 		const firestore = firebase.firestore();
-		const creds = { ...values };
+
+		// Filtering out the confirm password key
+		const notAllowed = ["confirmPassword"];
+		const creds = Object.keys(values)
+			.filter((key) => !notAllowed.includes(key))
+			.reduce((obj, key) => {
+				return {
+					...obj,
+					[key]: values[key],
+				};
+			}, {});
+
 		this.props
 			.registerUser({ firebase, firestore }, creds)
 			.catch((error) => this.setState({ err: error.errors._error }));
@@ -111,6 +127,12 @@ class SignUpPanel extends Component {
 								<Field
 									name="password"
 									component={PasswordInput}
+									label="Password*"
+								/>
+								<Field
+									name="confirmPassword"
+									component={PasswordInput}
+									label="Confirm Password*"
 								/>
 							</Grid>
 						</Grid>
@@ -154,6 +176,10 @@ const validate = combineValidators({
 	lastName: isRequired({ message: "Please enter your Last Name" }),
 	email: isRequired({ message: "Please enter a valid Email ID" }),
 	password: isRequired({ message: "Please enter your password" }),
+	confirmPassword: composeValidators(
+		isRequired({ message: "Please confirm your password" }),
+		matchesField("password")({ message: "Password do not match" })
+	)(),
 });
 
 const SignUpForm = reduxForm({ form: "SignUpForm", validate })(SignUpPanel);

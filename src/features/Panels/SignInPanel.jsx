@@ -89,7 +89,11 @@ class SignInPanel extends Component {
 							autoComplete="email"
 						/>
 
-						<Field name="password" component={PasswordInput} />
+						<Field
+							name="password"
+							component={PasswordInput}
+							label="Password*"
+						/>
 						{/* <FormControlLabel
 							control={
 								<Checkbox value="remember" color="primary" />

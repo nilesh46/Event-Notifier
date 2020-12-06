@@ -32,21 +32,15 @@ const PasswordInput = ({ input, meta: { touched, error }, ...custom }) => {
 		event.preventDefault();
 	};
 
-	// const handleChange = (prop) => (event) => {
-	// 	setValues({ ...values, [prop]: event.target.value });
-	// };
-
 	return (
 		<FormControl className={classes.root} variant="outlined" fullWidth>
 			<InputLabel htmlFor="outlined-adornment-password">
-				Password*
+				{custom.label}
 			</InputLabel>
 			<OutlinedInput
 				error={touched && !!error}
 				id="outlined-adornment-password"
 				type={values.showPassword ? "text" : "password"}
-				// value={values.password}
-				// onChange={handleChange("password")}
 				endAdornment={
 					<InputAdornment position="end">
 						<IconButton
@@ -64,11 +58,11 @@ const PasswordInput = ({ input, meta: { touched, error }, ...custom }) => {
 					</InputAdornment>
 				}
 				{...input}
-				labelWidth={70}
+				labelWidth={custom.label.length * 7}
 			/>
 			{touched && error && (
 				<FormHelperText
-					children="Please enter your Password"
+					children={error}
 					variant="outlined"
 					error={true}
 				/>
