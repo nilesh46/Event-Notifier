@@ -8,6 +8,7 @@ import SignedOutMenu from "../Menus/SignedOutMenu";
 import SignedInMenu from "../Menus/SignedInMenu";
 import { connect } from "react-redux";
 import { withFirebase } from "react-redux-firebase";
+import mainLogo from "../../Assets/Logo.svg";
 
 const styles = (theme) => ({
 	root: {
@@ -69,7 +70,7 @@ class MenuAppBar extends React.Component {
 						{/* Logo */}
 						<Link to="/events">
 							<img
-								src="/assets/Logo.png"
+								src={mainLogo}
 								alt="Logo"
 								className={classes.logo}
 							/>

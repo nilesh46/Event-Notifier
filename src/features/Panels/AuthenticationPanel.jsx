@@ -46,7 +46,7 @@ const a11yProps = (index) => {
 };
 
 const styles = {
-	root: {},
+	root: { margin: "2rem 0" },
 	panelsBg: {
 		backgroundColor: "#fff",
 	},

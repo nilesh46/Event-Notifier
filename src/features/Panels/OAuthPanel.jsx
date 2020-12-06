@@ -3,6 +3,9 @@ import React, { Component } from "react";
 import blue from "@material-ui/core/colors/blue";
 import grey from "@material-ui/core/colors/grey";
 import { getFirebase } from "react-redux-firebase";
+import facebookLogo from "../../Assets/Icons/facebook.svg";
+import googleLogo from "../../Assets/Icons/google.svg";
+import githubLogo from "../../Assets/Icons/github.svg";
 
 const style = (theme) => ({
 	root: {
@@ -68,7 +71,7 @@ class OAuthPanel extends Component {
 							justifyContent="center"
 							alignItems="center"
 						>
-							<img src="./assets/icons/google.svg" alt="google" />
+							<img src={googleLogo} alt="google" />
 							<Typography>
 								<strong>Google</strong>
 							</Typography>
@@ -85,10 +88,7 @@ class OAuthPanel extends Component {
 							justifyContent="center"
 							alignItems="center"
 						>
-							<img
-								src="./assets/icons/facebook.svg"
-								alt="facebook"
-							/>
+							<img src={facebookLogo} alt="facebook" />
 							<Typography>
 								<strong>Facebook</strong>
 							</Typography>
@@ -105,7 +105,7 @@ class OAuthPanel extends Component {
 							justifyContent="center"
 							alignItems="center"
 						>
-							<img src="./assets/icons/github.svg" alt="github" />
+							<img src={githubLogo} alt="github" />
 							<Typography>
 								<strong>GitHub</strong>
 							</Typography>
