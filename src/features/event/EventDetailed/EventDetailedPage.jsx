@@ -18,7 +18,7 @@ const EventDetailedPage = ({ event }) => {
 				<Grid item md xs={12}>
 					<EventDetailedSidebar attendees={event.attendees} />
 				</Grid>
-				<Grid item md={12} xs={12}>
+				<Grid item md={8} xs={12}>
 					<EventDetailedChat />
 				</Grid>
 			</Grid>
