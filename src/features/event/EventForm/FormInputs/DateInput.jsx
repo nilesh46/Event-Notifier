@@ -4,6 +4,7 @@ import {
 	MuiPickersUtilsProvider,
 } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
+import { change } from "redux-form";
 
 const today = new Date();
 
@@ -16,12 +17,11 @@ const TextInput = ({
 	meta: { touched, error, dispatch },
 	...custom
 }) => {
-	const [selectedDate, setSelectedDate] = React.useState(
-		new Date("2020-12-05T14:22:00.000Z")
-	);
+	const [selectedDate, setSelectedDate] = React.useState(new Date());
 
 	const handleDateChange = (date) => {
 		setSelectedDate(date);
+		dispatch(change("EventForm", "date", date));
 	};
 
 	return (
