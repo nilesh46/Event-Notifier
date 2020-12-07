@@ -149,7 +149,7 @@ class EventDetailedInfo extends Component {
 								component={"div"}
 							>
 								Event Venue
-								{event.mapSwitch && (
+								{event.mapSwitch && event.location && (
 									<Typography
 										variant="body2"
 										color="textSecondary"
@@ -169,7 +169,7 @@ class EventDetailedInfo extends Component {
 								)}
 							</Typography>
 						</Box>
-						{event.mapSwitch && (
+						{event.mapSwitch && event.location && (
 							<Box>
 								<Button
 									variant="outlined"

@@ -1,8 +1,6 @@
 import { fetchSampleData } from "../../App/Data/mockApi";
 import {
 	TEST_ACTION,
-	CREATE_EVENT,
-	UPDATE_EVENT,
 	DELETE_EVENT,
 	OPEN_MODAL,
 	CLOSE_MODAL,
@@ -14,6 +12,9 @@ import {
 import { toastr } from "react-redux-toastr";
 import history from "../../history";
 import { SubmissionError } from "redux-form";
+import { createNewEvent } from "../../App/Util/helpers";
+import userPNG from "../../Assets/user.png";
+import { getFirebase } from "react-redux-firebase";
 
 // Test Actions
 export const testAction = () => {
@@ -33,32 +34,118 @@ export const testActionAsync = () => {
 
 // Events Actions
 export const createEvent = (event) => {
-	return async (dispatch) => {
+	return async (dispatch, getState) => {
+		const firebase = getFirebase();
+		const firestore = firebase.firestore();
+
+		const user = firebase.auth().currentUser;
+		// const photoURL = getState().firebase.profile.photoURL;
+		const photoURL = user.photoURL;
+		const newEvent = createNewEvent(user, photoURL, event);
 		try {
-			dispatch({
-				type: CREATE_EVENT,
-				payload: {
-					event,
-				},
-			});
+			let createdEvent = await firestore
+				.collection("events")
+				.add(newEvent);
+
+			await firestore
+				.collection("event_attendee")
+				.doc(`${createdEvent.id}_${user.uid}`)
+				.set({
+					eventId: createdEvent.id,
+					userUid: user.uid,
+					eventDate: event.date,
+					host: true,
+					category: event.category,
+				});
+
 			toastr.success("Success!!! ", "Event has been created");
+			return createdEvent;
 		} catch (error) {
 			toastr.error("Oops", "Something went wrong");
 		}
 	};
 };
 
-export const updateEvent = (event) => {
+export const updateEvent = (event, eventId) => {
 	return async (dispatch) => {
+		const firebase = getFirebase();
+		const firestore = firebase.firestore();
+
 		try {
-			dispatch({
-				type: UPDATE_EVENT,
-				payload: {
-					event,
-				},
-			});
+			await firestore.collection("events").doc(`${eventId}`).set(event);
 			toastr.success("Success!!! ", "Event has been updated");
 		} catch (error) {
+			toastr.error("Oops", "Something went wrong");
+		}
+	};
+};
+
+export const joinEvent = (event) => {
+	return async (dispatch) => {
+		const firebase = getFirebase();
+		const firestore = firebase.firestore();
+		const user = firebase.auth().currentUser;
+		// const photoURL = getState().firebase.profile.photoURL;
+		const photoURL = user.photoURL;
+
+		const newAttendee = {
+			id: user.uid,
+			going: true,
+			joinDate: new Date(),
+			photoURL: photoURL || userPNG,
+			displayName: user.displayName,
+			host: false,
+		};
+
+		try {
+			await firestore
+				.collection("events")
+				.doc(`${event.id}`)
+				.update({ [`attendees.${user.uid}`]: newAttendee });
+
+			await firestore
+				.collection("event_attendee")
+				.doc(`${event.id}_${user.uid}`)
+				.set({
+					eventId: event.id,
+					userUid: user.uid,
+					eventDate: event.date,
+					host: false,
+					category: event.category,
+				});
+
+			toastr.success("Success!!! ", "You successfully joined the event");
+		} catch (error) {
+			toastr.error("Oops", "Something went wrong");
+		}
+	};
+};
+
+export const cancelJoiningEvent = (event) => {
+	return async (dispatch) => {
+		const firebase = getFirebase();
+		const firestore = firebase.firestore();
+		const user = firebase.auth().currentUser;
+
+		try {
+			await firestore
+				.collection("events")
+				.doc(`${event.id}`)
+				.update({
+					[`attendees.${user.uid}`]: firebase.firestore.FieldValue.delete(),
+				});
+
+			await firestore
+				.collection("event_attendee")
+				.doc(`${event.id}_${user.uid}`)
+				.delete();
+
+			toastr.success(
+				"Success!!! ",
+				"You have removed yourself from the event"
+			);
+		} catch (error) {
+			console.log(error);
 			toastr.error("Oops", "Something went wrong");
 		}
 	};

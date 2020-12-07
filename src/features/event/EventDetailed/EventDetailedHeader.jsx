@@ -10,6 +10,8 @@ import { deepOrange } from "@material-ui/core/colors";
 import { Box, Button } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import { format } from "date-fns";
+import { cancelJoiningEvent, joinEvent } from "../../../redux/actions";
+import { connect } from "react-redux";
 
 const styles = (theme) => ({
 	root: {
@@ -33,8 +35,15 @@ const styles = (theme) => ({
 
 class EventDetailedHeader extends Component {
 	render() {
-		const { classes } = this.props;
-		const { event } = this.props;
+		const {
+			classes,
+			event,
+			isGoing,
+			isHost,
+			joinEvent,
+			cancelJoiningEvent,
+		} = this.props;
+
 		return (
 			<Card className={classes.root}>
 				<CardHeader
@@ -69,35 +78,49 @@ class EventDetailedHeader extends Component {
 						justifyContent="space-between"
 						mt="0.5rem"
 					>
-						<Box>
-							<Button
-								variant="contained"
-								size="small"
-								className={classes.btn}
-							>
-								Cancel
-							</Button>
-							<Button
-								variant="contained"
-								size="small"
-								color="primary"
-								className={classes.btn}
-							>
-								Join
-							</Button>
-						</Box>
-						<Box>
-							<Button
-								variant="outlined"
-								size="small"
-								color="secondary"
-								className={classes.btn}
-								component={Link}
-								to={`/manage/${event.id}`}
-							>
-								Manage
-							</Button>
-						</Box>
+						{!isHost && (
+							<Box>
+								{isGoing && (
+									<Button
+										variant="contained"
+										size="small"
+										className={classes.btn}
+										onClick={() => {
+											cancelJoiningEvent(event);
+										}}
+									>
+										Cancel My Seat
+									</Button>
+								)}
+								{!isGoing && (
+									<Button
+										variant="contained"
+										size="small"
+										color="primary"
+										className={classes.btn}
+										onClick={() => {
+											joinEvent(event);
+										}}
+									>
+										Join This Event
+									</Button>
+								)}
+							</Box>
+						)}
+						{isHost && (
+							<Box>
+								<Button
+									variant="outlined"
+									size="small"
+									color="secondary"
+									className={classes.btn}
+									component={Link}
+									to={`/manage/${event.id}`}
+								>
+									Manage This Event
+								</Button>
+							</Box>
+						)}
 					</Box>
 				</CardContent>
 			</Card>
@@ -105,4 +128,9 @@ class EventDetailedHeader extends Component {
 	}
 }
 
-export default withStyles(styles)(EventDetailedHeader);
+const actions = {
+	joinEvent,
+	cancelJoiningEvent,
+};
+
+export default connect(null, actions)(withStyles(styles)(EventDetailedHeader));

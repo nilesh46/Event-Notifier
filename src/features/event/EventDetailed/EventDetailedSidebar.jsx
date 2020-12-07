@@ -38,9 +38,9 @@ class EventDetailedSidebar extends Component {
 		this.setState({ open: !this.state.open });
 	};
 	render() {
-		const { classes } = this.props;
-		const attendees = Object.values(this.props.attendees);
-		const isHost = false;
+		const { classes, attendees } = this.props;
+		const host = attendees.find((a) => a.host);
+
 		return (
 			<List className={classes.root}>
 				<ListItem
@@ -66,41 +66,66 @@ class EventDetailedSidebar extends Component {
 				<Collapse in={this.state.open} timeout="auto" unmountOnExit>
 					<Box style={{ height: "40vh", overflowY: "auto" }}>
 						<List component="div" disablePadding>
-							{attendees &&
-								attendees.map((attendee) => (
-									<div>
-										<ListItem
-											button
-											key={attendee.id}
-											className={classes.nested}
-										>
-											<ListItemIcon>
-												<Avatar
-													alt={attendee.name}
-													src={attendee.photoURL}
-												/>
-											</ListItemIcon>
-											<ListItemText>
-												<Typography
-													variant="body2"
-													color="textSecondary"
-												>
-													<strong>
-														{attendee.name}
-													</strong>
-												</Typography>
-											</ListItemText>
-											{isHost && (
-												<Chip
-													label="HOST"
-													color="secondary"
-												/>
-											)}
-										</ListItem>
+							{
+								<div key={host.id}>
+									<ListItem button className={classes.nested}>
+										<ListItemIcon>
+											<Avatar
+												alt={host.displayName}
+												src={host.photoURL}
+											/>
+										</ListItemIcon>
+										<ListItemText>
+											<Typography
+												variant="body2"
+												color="textSecondary"
+											>
+												<strong>
+													{host.displayName}
+												</strong>
+											</Typography>
+										</ListItemText>
 
-										<Divider />
-									</div>
-								))}
+										<Chip label="HOST" color="secondary" />
+									</ListItem>
+
+									<Divider />
+								</div>
+							}
+							{attendees.map((attendee) => {
+								if (!attendee.host)
+									return (
+										<div key={attendee.id}>
+											<ListItem
+												button
+												className={classes.nested}
+											>
+												<ListItemIcon>
+													<Avatar
+														alt={
+															attendee.displayName
+														}
+														src={attendee.photoURL}
+													/>
+												</ListItemIcon>
+												<ListItemText>
+													<Typography
+														variant="body2"
+														color="textSecondary"
+													>
+														<strong>
+															{
+																attendee.displayName
+															}
+														</strong>
+													</Typography>
+												</ListItemText>
+											</ListItem>
+
+											<Divider />
+										</div>
+									);
+							})}
 						</List>
 					</Box>
 				</Collapse>
