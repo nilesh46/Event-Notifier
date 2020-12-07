@@ -22,6 +22,7 @@ import blue from "@material-ui/core/colors/blue";
 import grey from "@material-ui/core/colors/grey";
 import facebookLogo from "../../../Assets/Icons/facebook.svg";
 import googleLogo from "../../../Assets/Icons/google.svg";
+import githubLogo from "../../../Assets/Icons/github.svg";
 
 const styles = (theme) => ({
 	"@global": {
@@ -65,6 +66,17 @@ const GoogleButton = withStyles((theme) => ({
 		backgroundColor: grey[50],
 		"&:hover": {
 			backgroundColor: grey[300],
+		},
+		flex: 1,
+	},
+}))(Button);
+
+const GithubButton = withStyles((theme) => ({
+	root: {
+		color: theme.palette.getContrastText(grey[300]),
+		backgroundColor: grey[350],
+		"&:hover": {
+			backgroundColor: grey[500],
 		},
 		flex: 1,
 	},
@@ -220,6 +232,44 @@ class AccountPage extends Component {
 								</Typography>
 							</Box>
 						</GoogleButton>
+					</div>
+				)}
+				{providerId && providerId === "github.com" && (
+					<div>
+						<Typography
+							component="h1"
+							variant="h5"
+							color="secondary"
+						>
+							GitHub Account
+						</Typography>
+						<Box mb="1rem">
+							<Typography variant="body1">
+								Please visit github to update your account
+								settings
+							</Typography>
+						</Box>
+						<GithubButton
+							variant="contained"
+							onClick={() => {
+								window.open(
+									"https://www.github.com/",
+									"_blank"
+								);
+							}}
+						>
+							<Box
+								display="flex"
+								flexWrap="wrap"
+								justifyContent="center"
+								alignItems="center"
+							>
+								<img src={githubLogo} alt="google" />
+								<Typography>
+									<strong>GitHub</strong>
+								</Typography>
+							</Box>
+						</GithubButton>
 					</div>
 				)}
 			</Container>

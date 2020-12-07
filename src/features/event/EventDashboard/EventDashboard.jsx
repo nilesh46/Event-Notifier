@@ -22,10 +22,10 @@ class EventDashboard extends Component {
 		return (
 			<div className={classes.root}>
 				<Grid container spacing={3}>
-					<Grid item md={8}>
+					<Grid item md={8} xs={12}>
 						<EventList events={events} />
 					</Grid>
-					<Grid item md={4}>
+					<Grid item md={4} xs={12}>
 						<h1>Recent Activity</h1>
 					</Grid>
 				</Grid>
