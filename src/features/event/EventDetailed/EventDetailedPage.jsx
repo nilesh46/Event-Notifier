@@ -8,8 +8,29 @@ import EventDetailedHeader from "./EventDetailedHeader";
 import EventDetailedInfo from "./EventDetailedInfo";
 import EventDetailedSidebar from "./EventDetailedSidebar";
 
+<<<<<<< HEAD
 class EventDetailedPage extends Component {
 	state = { event: null, unsubscribe: null };
+=======
+const EventDetailedPage = ({ event }) => {
+	return (
+		<div>
+			<Grid container spacing={3}>
+				<Grid item md={8} xs={12}>
+					<EventDetailedHeader event={event} />
+					<EventDetailedInfo event={event} />
+				</Grid>
+				<Grid item md xs={12}>
+					<EventDetailedSidebar attendees={event.attendees} />
+				</Grid>
+				<Grid item md={8} xs={12}>
+					<EventDetailedChat />
+				</Grid>
+			</Grid>
+		</div>
+	);
+};
+>>>>>>> upstream/master
 
 	componentDidMount = () => {
 		const eventId = this.props.match.params.id;
