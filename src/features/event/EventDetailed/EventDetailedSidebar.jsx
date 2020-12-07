@@ -125,6 +125,7 @@ class EventDetailedSidebar extends Component {
 											<Divider />
 										</div>
 									);
+								return <></>;
 							})}
 						</List>
 					</Box>

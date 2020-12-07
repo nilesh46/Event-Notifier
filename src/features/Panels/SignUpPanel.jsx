@@ -7,10 +7,11 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { withStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import { ButtonBase } from "@material-ui/core";
+import { Box, ButtonBase, IconButton } from "@material-ui/core";
 import {
 	combineValidators,
 	composeValidators,
+	createValidator,
 	isRequired,
 	matchesField,
 } from "revalidate";
@@ -18,9 +19,10 @@ import { Field, reduxForm } from "redux-form";
 import { connect } from "react-redux";
 import TextInput from "../event/EventForm/FormInputs/TextInput";
 import PasswordInput from "../event/EventForm/FormInputs/PasswordInput";
-import { registerUser } from "../../redux/actions";
+import { openModal, registerUser } from "../../redux/actions";
 import { getFirebase } from "react-redux-firebase";
 import { Alert } from "@material-ui/lab";
+import InfoIcon from "@material-ui/icons/Info";
 
 const styles = (theme) => ({
 	"@global": {
@@ -72,6 +74,35 @@ class SignUpPanel extends Component {
 			.catch((error) => this.setState({ err: error.errors._error }));
 	};
 
+	showPasswordInfo = () => {
+		const { openModal } = this.props;
+		const title = "Passowrd Rules";
+		const description =
+			"For secuirity of your account we ensure strong password pratices by user";
+		const list = [
+			"1.Password should contain one uppercase letter",
+			"2.Password should contain one lowercase letter",
+			"3.Password should contain one symbol",
+			"4.Password should contain one digit",
+			"5.Password should be min of 8 characters",
+		];
+		openModal("InfoModal", { title, description, list });
+	};
+
+	showEmailInfo = () => {
+		const { openModal } = this.props;
+		const title = "Email Rules";
+		const description =
+			"For stoping spam users we are currently allowing some major email domains to be supported by our system. If you want to add some email domain you can request our support team so";
+		const list = [
+			"1.@gmail.com",
+			"2.@outlook.com",
+			"3.@yahoo.com",
+			"4.@hotmail.com",
+		];
+		openModal("InfoModal", { title, description, list });
+	};
+
 	render() {
 		const {
 			classes,
@@ -116,19 +147,39 @@ class SignUpPanel extends Component {
 								/>
 							</Grid>
 							<Grid item xs={12}>
-								<Field
-									name="email"
-									component={TextInput}
-									label="Email Address*"
-									autoComplete="email"
-								/>
+								<Box display="flex" alignItems="center">
+									<Field
+										name="email"
+										component={TextInput}
+										label="Email Address*"
+										autoComplete="email"
+									/>
+									<Box ml="0.5rem">
+										<IconButton
+											onClick={this.showEmailInfo}
+											size="small"
+										>
+											<InfoIcon />
+										</IconButton>
+									</Box>
+								</Box>
 							</Grid>
 							<Grid item xs={12}>
-								<Field
-									name="password"
-									component={PasswordInput}
-									label="Password*"
-								/>
+								<Box display="flex" alignItems="center">
+									<Field
+										name="password"
+										component={PasswordInput}
+										label="Password*"
+									/>
+									<Box ml="0.5rem">
+										<IconButton
+											onClick={this.showPasswordInfo}
+											size="small"
+										>
+											<InfoIcon />
+										</IconButton>
+									</Box>
+								</Box>
 								<Field
 									name="confirmPassword"
 									component={PasswordInput}
@@ -169,13 +220,40 @@ class SignUpPanel extends Component {
 }
 const actions = {
 	registerUser,
+	openModal,
 };
+
+const passwordValidator = createValidator(
+	(message) => (value) => {
+		const re = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+		if (!re.test(value))
+			return "Please ensure your password is strong enough";
+	},
+	"Invalid Password"
+);
+
+const emailValidator = createValidator(
+	(message) => (value) => {
+		const list = ["gmail.com", "outlook.com", "yahoo.com", "hotmail.com"];
+		const domain = value.split("@")[1];
+
+		if (list.indexOf(domain) === -1)
+			return "Please ensure your email domain is in our list of supported domains";
+	},
+	"Invalid email"
+);
 
 const validate = combineValidators({
 	firstName: isRequired({ message: "Please enter your First Name" }),
 	lastName: isRequired({ message: "Please enter your Last Name" }),
-	email: isRequired({ message: "Please enter a valid Email ID" }),
-	password: isRequired({ message: "Please enter your password" }),
+	email: composeValidators(
+		isRequired({ message: "Please enter a valid Email ID" }),
+		emailValidator
+	)(),
+	password: composeValidators(
+		isRequired({ message: "Please enter password" }),
+		passwordValidator
+	)(),
 	confirmPassword: composeValidators(
 		isRequired({ message: "Please confirm your password" }),
 		matchesField("password")({ message: "Password do not match" })

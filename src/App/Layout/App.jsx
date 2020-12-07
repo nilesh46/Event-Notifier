@@ -19,6 +19,7 @@ import BasicPage from "../../features/User/Settings/BasicPage";
 import AboutPage from "../../features/User/Settings/AboutPage";
 import PhotosPage from "../../features/User/Settings/PhotosPage";
 import AccountPage from "../../features/User/Settings/AccountPage";
+import HelmetMetaData from "../Util/HelmetMetaData";
 
 class App extends React.Component {
 	render() {
@@ -35,6 +36,7 @@ class App extends React.Component {
 
 		return (
 			<>
+				<HelmetMetaData></HelmetMetaData>
 				<ModalManager />
 				{IsPathVerified && (
 					<>

@@ -68,6 +68,14 @@ class EventListItem extends Component {
 		});
 	};
 
+	handleShare = () => {
+		const { event, openModal } = this.props;
+		openModal("SocialShareModal", {
+			event: event,
+			url: window.location.href,
+		});
+	};
+
 	render() {
 		const { classes } = this.props;
 		const { event } = this.props;
@@ -182,7 +190,7 @@ class EventListItem extends Component {
 					<IconButton aria-label="add to favorites">
 						<FavoriteIcon />
 					</IconButton>
-					<IconButton aria-label="share">
+					<IconButton aria-label="share" onClick={this.handleShare}>
 						<ShareIcon />
 					</IconButton>
 					<Button
