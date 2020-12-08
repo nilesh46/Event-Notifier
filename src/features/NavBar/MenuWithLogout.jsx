@@ -84,7 +84,7 @@ class MenuWithLogout extends React.Component {
 					<MenuItem
 						onClick={this.handleClose}
 						component={Link}
-						to="/settings/about"
+						to={`/profile/${auth.uid}`}
 					>
 						Profile
 					</MenuItem>
