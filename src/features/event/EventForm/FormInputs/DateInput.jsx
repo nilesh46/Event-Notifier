@@ -14,14 +14,14 @@ const TextInput = ({
 	type,
 	label,
 	placeholder,
-	meta: { touched, error, dispatch },
+	meta: { touched, error, dispatch, form },
 	...custom
 }) => {
 	const [selectedDate, setSelectedDate] = React.useState(new Date());
 
 	const handleDateChange = (date) => {
 		setSelectedDate(date);
-		dispatch(change("EventForm", "date", date));
+		dispatch(change(form, input.name, date));
 	};
 
 	return (

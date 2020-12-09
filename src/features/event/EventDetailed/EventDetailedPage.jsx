@@ -1,4 +1,4 @@
-import { Box, Grid, Typography } from "@material-ui/core";
+import { Box, Grid, Typography, withStyles } from "@material-ui/core";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { firebaseConnect, getFirebase, isEmpty } from "react-redux-firebase";
@@ -10,6 +10,14 @@ import EventDetailedChat from "./EventDetailedChat";
 import EventDetailedHeader from "./EventDetailedHeader";
 import EventDetailedInfo from "./EventDetailedInfo";
 import EventDetailedSidebar from "./EventDetailedSidebar";
+
+const style = {
+	"@global": {
+		html: {
+			fontSize: ".8rem",
+		},
+	},
+};
 
 class EventDetailedPage extends Component {
 	state = { event: null, unsubscribe: null };
@@ -99,4 +107,4 @@ const mapStateToProps = (state, ownProps) => {
 export default compose(
 	connect(mapStateToProps, actions),
 	firebaseConnect((props) => [`event_chat/${props.match.params.id}`])
-)(EventDetailedPage);
+)(withStyles(style)(EventDetailedPage));

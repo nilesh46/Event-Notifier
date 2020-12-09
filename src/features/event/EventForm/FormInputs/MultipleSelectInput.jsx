@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Input from "@material-ui/core/Input";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -6,6 +6,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import Chip from "@material-ui/core/Chip";
+import { change } from "redux-form";
 
 const useStyles = makeStyles((theme) => ({
 	formControl: {
@@ -36,34 +37,28 @@ const MenuProps = {
 	},
 };
 
-// function getStyles(name, personName, theme) {
-// 	return {
-// 		fontWeight:
-// 			personName.indexOf(name) === -1
-// 				? theme.typography.fontWeightRegular
-// 				: theme.typography.fontWeightMedium,
-// 	};
-// }
-
-export default function MultipleSelectInput({ input, label, interest }) {
+export default function MultipleSelectInput({
+	input,
+	label,
+	interest,
+	meta: { form, dispatch },
+}) {
 	const classes = useStyles();
-	// const theme = useTheme();
-	const [personName, setPersonName] = React.useState([]);
+	
+	const [interestName, setInterestName] = React.useState([]);
+	const [firstTime, setFirstTime] = React.useState(true);
+
+	useEffect(() => {
+		if (firstTime && interestName.length === 0 && input.value !== "") {
+			setInterestName(input.value);
+		}
+	}, [firstTime, interestName, input.value]);
 
 	const handleChange = (event) => {
-		setPersonName(event.target.value);
+		setInterestName(event.target.value);
+		setFirstTime(false);
+		dispatch(change(form, input.name, event.target.value));
 	};
-
-	// const handleChangeMultiple = (event) => {
-	// 	const { options } = event.target;
-	// 	const value = [];
-	// 	for (let i = 0, l = options.length; i < l; i += 1) {
-	// 		if (options[i].selected) {
-	// 			value.push(options[i].value);
-	// 		}
-	// 	}
-	// 	setPersonName(value);
-	// };
 
 	return (
 		<FormControl className={classes.formControl}>
@@ -72,7 +67,7 @@ export default function MultipleSelectInput({ input, label, interest }) {
 				labelId="demo-mutiple-chip-label"
 				id="demo-mutiple-chip"
 				multiple
-				value={personName}
+				value={interestName}
 				onChange={handleChange}
 				variant="outlined"
 				input={<Input id="select-multiple-chip" />}
@@ -90,11 +85,7 @@ export default function MultipleSelectInput({ input, label, interest }) {
 				MenuProps={MenuProps}
 			>
 				{interest.map((item) => (
-					<MenuItem
-						key={item.key}
-						value={item.value}
-						//style={getStyles(name, personName, theme)}
-					>
+					<MenuItem key={item.key} value={item.value}>
 						{item.text}
 					</MenuItem>
 				))}

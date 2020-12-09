@@ -46,7 +46,7 @@ class MenuWithLogout extends React.Component {
 		const { anchorEl } = this.state;
 		const open = Boolean(anchorEl);
 
-		const { auth, classes } = this.props;
+		const { auth, profile, classes } = this.props;
 
 		return (
 			<Box>
@@ -58,11 +58,12 @@ class MenuWithLogout extends React.Component {
 						color="inherit"
 					>
 						<Avatar
-							alt={auth.displayName && auth.displayName}
-							src={auth.photoURL}
+							alt={profile.displayName && profile.displayName}
+							src={profile.photoURL}
 							className={classes.small}
 						/>
-						{auth.displayName && this.BtnText(auth.displayName)}
+						{profile.displayName &&
+							this.BtnText(profile.displayName)}
 					</IconButton>
 				</Grid>
 				<Menu

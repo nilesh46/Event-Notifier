@@ -5,6 +5,11 @@ import AuthenticationPanel from "../Panels/AuthenticationPanel";
 import HomePageBg from "../../Assets/HomePage/BGImage.png";
 
 const styles = {
+	"@global": {
+		html: {
+			fontSize: ".8rem",
+		},
+	},
 	root: {},
 	Bg: {
 		height: "100%",

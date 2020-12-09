@@ -36,6 +36,11 @@ import { getFirebase } from "react-redux-firebase";
 import LoadingComponent from "../../../App/Layout/LoadingComponent";
 
 const styles = (theme) => ({
+	"@global": {
+		html: {
+			fontSize: ".8rem",
+		},
+	},
 	mainBg: {
 		backgroundColor: grey["50"],
 		marginTop: "2rem",
