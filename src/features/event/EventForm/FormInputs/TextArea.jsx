@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
 	Collapse,
 	IconButton,
@@ -22,10 +22,18 @@ const TextInput = ({
 	...custom
 }) => {
 	const [text, setText] = React.useState("");
+	const [firstTime, setFirstTime] = React.useState(true);
 	const [openEmojiPicker, setOpenEmojiPicker] = React.useState(false);
+
+	useEffect(() => {
+		if (firstTime && text === "") {
+			setText(input.value);
+		}
+	}, [firstTime, text, input.value]);
 
 	const onChange = (e) => {
 		setText(e.target.value);
+		setFirstTime(false);
 	};
 
 	const onClickIcon = () => {
@@ -39,7 +47,7 @@ const TextInput = ({
 		let emoji = String.fromCodePoint(...codesArray);
 		setText(text + emoji);
 
-		dispatch(change(form, "comment", text + emoji));
+		dispatch(change(form, input.name, text + emoji));
 	};
 
 	return (

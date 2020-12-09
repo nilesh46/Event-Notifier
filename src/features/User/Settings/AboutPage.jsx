@@ -47,6 +47,8 @@ class AboutPage extends React.Component {
 	};
 
 	updateBasicDetails = (values) => {
+		const { reset } = this.props;
+		console.log(reset);
 		const firebase = getFirebase();
 		const user = firebase.auth().currentUser;
 		firebase
@@ -56,6 +58,7 @@ class AboutPage extends React.Component {
 			.update({ ...values })
 			.then(() => {
 				this.setState({ err: null });
+				reset();
 				toastr.success("Success!!! ", "Profile has been updated");
 			})
 			.catch((error) => {
@@ -64,7 +67,6 @@ class AboutPage extends React.Component {
 	};
 
 	onFormSubmit = (values) => {
-		console.log(values);
 		this.updateBasicDetails(values);
 	};
 	render() {
@@ -127,6 +129,7 @@ class AboutPage extends React.Component {
 							label="Interests"
 							className={classes.field}
 							interest={interest}
+							multiple
 						/>
 						<Field
 							name="occupation"

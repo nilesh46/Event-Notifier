@@ -12,7 +12,7 @@ import SettingsIcon from "@material-ui/icons/Settings";
 
 class SignedInMenu extends React.Component {
 	drawerList = () => {
-		const { auth } = this.props;
+		const { auth, profile } = this.props;
 		return (
 			<Fragment>
 				{/* Notification */}
@@ -78,7 +78,7 @@ class SignedInMenu extends React.Component {
 				/>
 
 				{/* Events Menu */}
-				<MenuWithLogout auth={auth} />
+				<MenuWithLogout auth={auth} profile={profile} />
 			</Fragment>
 		);
 	};

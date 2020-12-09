@@ -28,6 +28,11 @@ import UserPhotos from "./UserPhotos";
 import cuid from "cuid";
 
 const useStyles = makeStyles((theme) => ({
+	"@global": {
+		html: {
+			fontSize: ".8rem",
+		},
+	},
 	mainBg: {
 		backgroundColor: grey["50"],
 		marginTop: "2rem",

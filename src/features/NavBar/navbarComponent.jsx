@@ -58,7 +58,7 @@ class MenuAppBar extends React.Component {
 
 	render() {
 		const { classes } = this.props;
-		const { auth } = this.props;
+		const { auth, profile } = this.props;
 		const authenticated = auth.isLoaded && !auth.isEmpty;
 		const showSignedInMenu =
 			authenticated && window.location.pathname !== "/";
@@ -87,7 +87,11 @@ class MenuAppBar extends React.Component {
 						</Typography>
 
 						{showSignedInMenu ? (
-							<SignedInMenu classes={classes} auth={auth} />
+							<SignedInMenu
+								classes={classes}
+								auth={auth}
+								profile={profile}
+							/>
 						) : (
 							<SignedOutMenu
 								onClick={() =>
@@ -103,7 +107,8 @@ class MenuAppBar extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-	auth: state.firebase.profile,
+	auth: state.firebase.auth,
+	profile: state.firebase.profile,
 });
 
 export default withFirebase(
