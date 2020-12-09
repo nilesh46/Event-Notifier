@@ -314,6 +314,34 @@ export const socialLogin = ({ firebase }, selectedProvider) => async (
 	} catch (error) {}
 };
 
+export const addEventComment = (firebase, eventId, values, parentId) => async (
+	dispatch
+) => {
+	try {
+		const user = firebase.auth().currentUser;
+		// const photoURL = getState().firebase.profile.photoURL;
+		// const displayName = getState().firebase.profile.displayName;
+		const photoURL = user.photoURL || userPNG;
+		const displayName = user.displayName;
+
+		const newComment = {
+			displayName,
+			photoURL,
+			parentId,
+			uid: user.uid,
+			text: values.comment,
+			date: Date.now(),
+			id: user.uid + Date.now(),
+		};
+
+		await firebase.push(`event_chat/${eventId}`, newComment);
+		toastr.success("Success!!! ", "Comment added successfully");
+	} catch (error) {
+		console.log(error);
+		toastr.error("Oops", "Something went wrong");
+	}
+};
+
 const delay = (ms) => {
 	return new Promise((resolve) => setTimeout(resolve, ms));
 };
