@@ -1,8 +1,11 @@
 import { Box, Grid, Typography } from "@material-ui/core";
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { getFirebase } from "react-redux-firebase";
+import { firebaseConnect, getFirebase, isEmpty } from "react-redux-firebase";
+import { compose } from "redux";
 import LoadingComponent from "../../../App/Layout/LoadingComponent";
+import { createDataTree } from "../../../App/Util/helpers";
+import { addEventComment } from "../../../redux/actions";
 import EventDetailedChat from "./EventDetailedChat";
 import EventDetailedHeader from "./EventDetailedHeader";
 import EventDetailedInfo from "./EventDetailedInfo";
@@ -31,12 +34,13 @@ class EventDetailedPage extends Component {
 
 	render() {
 		const { event } = this.state;
-		const { auth } = this.props;
-
+		const { auth, addEventComment, eventChat } = this.props;
 		const attendees =
 			event && event.attendees && Object.values(event.attendees);
 		const isHost = event && event.hostUid === auth.uid;
 		const isGoing = attendees && attendees.some((a) => a.id === auth.uid);
+		const firebase = getFirebase();
+		const eventChatTree = eventChat && createDataTree(eventChat);
 
 		return (
 			<>
@@ -63,7 +67,12 @@ class EventDetailedPage extends Component {
 								<EventDetailedSidebar attendees={attendees} />
 							</Grid>
 							<Grid item md={8} xs={12}>
-								<EventDetailedChat />
+								<EventDetailedChat
+									addEventComment={addEventComment}
+									eventId={event.id}
+									firebase={firebase}
+									eventChat={eventChatTree}
+								/>
 							</Grid>
 						</Grid>
 					</div>
@@ -73,8 +82,21 @@ class EventDetailedPage extends Component {
 	}
 }
 
-const mapStateToProps = (state) => {
-	return { auth: state.firebase.auth };
+const actions = { addEventComment };
+
+const mapStateToProps = (state, ownProps) => {
+	return {
+		auth: state.firebase.auth,
+		eventChat:
+			!isEmpty(state.firebase.data.event_chat) &&
+			state.firebase.data.event_chat[ownProps.match.params.id] &&
+			Object.values(
+				state.firebase.data.event_chat[ownProps.match.params.id]
+			),
+	};
 };
 
-export default connect(mapStateToProps)(EventDetailedPage);
+export default compose(
+	connect(mapStateToProps, actions),
+	firebaseConnect((props) => [`event_chat/${props.match.params.id}`])
+)(EventDetailedPage);
