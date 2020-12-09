@@ -103,7 +103,7 @@ class MenuAppBar extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-	auth: state.firebase.auth,
+	auth: state.firebase.profile,
 });
 
 export default withFirebase(

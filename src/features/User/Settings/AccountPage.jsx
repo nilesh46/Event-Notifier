@@ -127,7 +127,7 @@ class AccountPage extends Component {
 							<LockOutlinedIcon />
 						</Avatar>
 						<Typography component="h1" variant="h5">
-							Update Pasword
+							Update Password
 						</Typography>
 
 						<form

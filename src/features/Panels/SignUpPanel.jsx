@@ -76,9 +76,9 @@ class SignUpPanel extends Component {
 
 	showPasswordInfo = () => {
 		const { openModal } = this.props;
-		const title = "Passowrd Rules";
+		const title = "Password Rules";
 		const description =
-			"For secuirity of your account we ensure strong password pratices by user";
+			"For security of your account we ensure strong password pratices by user";
 		const list = [
 			"1.Password should contain one uppercase letter",
 			"2.Password should contain one lowercase letter",
@@ -93,7 +93,7 @@ class SignUpPanel extends Component {
 		const { openModal } = this.props;
 		const title = "Email Rules";
 		const description =
-			"For stoping spam users we are currently allowing some major email domains to be supported by our system. If you want to add some email domain you can request our support team so";
+			"For stopping spam users we are currently allowing some major email domains to be supported by our system. If you want to add some email domain you can request our support team so";
 		const list = [
 			"1.@gmail.com",
 			"2.@outlook.com",

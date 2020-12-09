@@ -17,7 +17,7 @@ import WarningPage from "../../features/Verification/WarningPage";
 import PasswordResetPage from "../../features/Verification/PasswordResetPage";
 import BasicPage from "../../features/User/Settings/BasicPage";
 import AboutPage from "../../features/User/Settings/AboutPage";
-import PhotosPage from "../../features/User/Settings/PhotosPage";
+import PhotosPage from "../../features/User/Settings/Photos/PhotosPage";
 import AccountPage from "../../features/User/Settings/AccountPage";
 import HelmetMetaData from "../Util/HelmetMetaData";
 

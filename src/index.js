@@ -17,7 +17,7 @@ import history from "./history";
 const store = configureStore();
 
 const rrfConfig = {
-	userProfiles: "users",
+	userProfile: "users",
 	attachAuthReady: true,
 	useFirestoreForProfile: true,
 };

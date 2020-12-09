@@ -211,6 +211,7 @@ export const asyncActionError = () => {
 };
 
 // Auth Actions
+// Auth Actions
 export const login = ({ firebase }, creds) => async (dispatch) => {
 	try {
 		await firebase
@@ -261,7 +262,7 @@ export const registerUser = ({ firebase, firestore }, creds) => async (
 
 		//updates the auth profile
 		await createdUser.user.updateProfile({
-			displayName: creds.firstName,
+			displayName: creds.firstName + creds.lastName,
 		});
 
 		//creating new profile in firestore
@@ -275,7 +276,7 @@ export const registerUser = ({ firebase, firestore }, creds) => async (
 		await firebase
 			.firestore()
 			.collection("users")
-			.doc(createdUser.user.id)
+			.doc(createdUser.user.uid)
 			.set(newUser);
 
 		history.push("/events");
@@ -299,7 +300,7 @@ export const socialLogin = ({ firebase }, selectedProvider) => async (
 			const newuser = await firebase
 				.firestore()
 				.collection("users")
-				.doc(user.id)
+				.doc(user.uid)
 				.set({
 					displayName: user.user.displayName,
 					email: user.user.email,
@@ -312,6 +313,72 @@ export const socialLogin = ({ firebase }, selectedProvider) => async (
 		history.push("/events");
 		// history.go(0);
 	} catch (error) {}
+};
+
+export const updateUserProfilePhoto = (
+	{ firebase },
+	downloadURL,
+	filename
+) => async (dispatch) => {
+	const user = firebase.auth().currentUser;
+	const userDocRef = firebase.firestore().collection("users").doc(user.uid);
+	try {
+		const userDoc = await userDocRef.get();
+		if (!userDoc.data().photoURL) {
+			await firebase
+				.firestore()
+				.collection("users")
+				.doc(user.uid)
+				.update({
+					photoURL: downloadURL,
+				});
+			await user.updateProfile({
+				photoURL: downloadURL,
+			});
+		}
+		return await firebase
+			.firestore()
+			.collection("users")
+			.doc(user.uid)
+			.collection("photos")
+			.add({
+				name: filename,
+				url: downloadURL,
+			});
+	} catch (error) {
+		throw error;
+	}
+};
+
+export const deletePhoto = ({ firebase }, fileName, id) => async (dispatch) => {
+	const uid = firebase.auth().currentUser.uid;
+	const storageRef = firebase.storage().ref();
+	const photoRef = storageRef.child(`${uid}/user_images/${fileName}`);
+	try {
+		await photoRef.delete();
+		await firebase
+			.firestore()
+			.collection("users")
+			.doc(uid)
+			.collection("photos")
+			.doc(id)
+			.delete();
+	} catch (error) {
+		toastr.error(error.message);
+		throw error;
+	}
+};
+
+export const setMainPhoto = ({ firebase }, url) => async (dispatch) => {
+	try {
+		const user = firebase.auth().currentUser;
+		await firebase.firestore().collection("users").doc(user.uid).update({
+			photoURL: url,
+		});
+	} catch (error) {
+		toastr.error(error.message);
+		throw error;
+	}
 };
 
 export const addEventComment = (firebase, eventId, values, parentId) => async (
