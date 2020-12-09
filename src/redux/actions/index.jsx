@@ -381,6 +381,19 @@ export const setMainPhoto = ({ firebase }, url) => async (dispatch) => {
 	}
 };
 
+export const updateEventPhoto = ({ firebase }, downloadURL, eventId) => async (
+	dispatch
+) => {
+	try {
+		await firebase.firestore().collection("events").doc(eventId).update({
+			photoURL: downloadURL,
+		});
+	} catch (error) {
+		console.log(error);
+		toastr.error("Oops", "Something went wrong");
+	}
+};
+
 export const addEventComment = (firebase, eventId, values, parentId) => async (
 	dispatch
 ) => {

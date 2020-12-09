@@ -34,6 +34,7 @@ import GeoDecoder from "../../Maps/GeoDecoder";
 import SwitchInput from "./FormInputs/SwitchInput";
 import { getFirebase } from "react-redux-firebase";
 import LoadingComponent from "../../../App/Layout/LoadingComponent";
+import EventPhoto from "./EventPhoto";
 
 const styles = (theme) => ({
 	"@global": {
@@ -455,6 +456,8 @@ class EventForm extends React.Component {
 									</Grid>
 								</Box>
 
+								<Divider className={classes.marg} />
+								<EventPhoto />
 								<Box
 									display="flex"
 									alignItems="center"

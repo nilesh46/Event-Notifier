@@ -22,6 +22,7 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { openModal, deleteEvent } from "../../../redux/actions";
 import { format } from "date-fns";
+import noImage from "../../../Assets/noImage.jpg";
 
 const styles = {
 	root: {
@@ -42,7 +43,7 @@ const styles = {
 	},
 	media: {
 		height: 0,
-		paddingTop: "56.25%",
+		paddingTop: "60%",
 		margin: "0.7rem",
 		borderRadius: "0.7rem",
 		marginBottom: "1rem",
@@ -86,7 +87,7 @@ class EventListItem extends Component {
 				<Grid item md xs={12}>
 					<CardMedia
 						className={classes.media}
-						image="https://source.unsplash.com/random"
+						image={event.photoURL || noImage}
 						title="image name"
 					></CardMedia>
 				</Grid>

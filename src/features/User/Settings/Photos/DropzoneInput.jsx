@@ -4,7 +4,7 @@ import AddAPhotoIcon from "@material-ui/icons/AddAPhoto";
 import grey from "@material-ui/core/colors/grey";
 import { IconButton } from "@material-ui/core";
 
-const DropzoneInput = ({ setFiles }) => {
+const DropzoneInput = ({ setFiles, marg }) => {
 	const onDrop = useCallback(
 		(acceptedFiles) => {
 			setFiles(
@@ -26,7 +26,7 @@ const DropzoneInput = ({ setFiles }) => {
 	return (
 		<div {...getRootProps()}>
 			<input {...getInputProps()} />
-			<IconButton style={{ margin: "4rem" }}>
+			<IconButton style={{ margin: "7.5rem" }}>
 				<AddAPhotoIcon fontSize="large" style={{ color: grey[50] }} />
 			</IconButton>
 		</div>

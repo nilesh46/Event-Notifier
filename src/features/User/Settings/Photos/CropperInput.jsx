@@ -18,11 +18,11 @@ class CropperInput extends Component {
 	}
 
 	render() {
-		const { imagePreview } = this.props;
+		const { imagePreview, height } = this.props;
 		return (
 			<Cropper
 				src={imagePreview}
-				style={{ height: 200, width: "100%" }}
+				style={{ height: { height }, width: "100%" }}
 				initialAspectRatio={1}
 				aspectRatio={1}
 				preview=".img-preview"

@@ -188,6 +188,7 @@ const PhotosPage = ({
 								<CropperInput
 									setImage={setImage}
 									imagePreview={files[0].preview}
+									height="200"
 								/>
 							)}
 						</Paper>

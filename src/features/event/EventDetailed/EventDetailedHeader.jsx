@@ -12,6 +12,7 @@ import { Link } from "react-router-dom";
 import { format } from "date-fns";
 import { cancelJoiningEvent, joinEvent } from "../../../redux/actions";
 import { connect } from "react-redux";
+import noImage from "../../../Assets/noImage.jpg";
 
 const styles = (theme) => ({
 	root: {
@@ -21,7 +22,7 @@ const styles = (theme) => ({
 	},
 	media: {
 		height: 0,
-		paddingTop: "56.25%", // 16:9
+		paddingTop: "100%", // 16:9
 	},
 	avatar: {
 		color: theme.palette.getContrastText(deepOrange[500]),
@@ -62,7 +63,7 @@ class EventDetailedHeader extends Component {
 				/>
 				<CardMedia
 					className={classes.media}
-					image="https://source.unsplash.com/1600x900/?gaming"
+					image={event.photoURL || noImage}
 					title="Image Title"
 				/>
 				<CardContent>
@@ -118,6 +119,20 @@ class EventDetailedHeader extends Component {
 									to={`/manage/${event.id}`}
 								>
 									Manage This Event
+								</Button>
+							</Box>
+						)}
+						{isHost && (
+							<Box>
+								<Button
+									variant="outlined"
+									size="small"
+									color="secondary"
+									className={classes.btn}
+									component={Link}
+									to={`/setPhoto/${event.id}`}
+								>
+									Set Photo
 								</Button>
 							</Box>
 						)}

@@ -20,6 +20,7 @@ import AboutPage from "../../features/User/Settings/AboutPage";
 import PhotosPage from "../../features/User/Settings/Photos/PhotosPage";
 import AccountPage from "../../features/User/Settings/AccountPage";
 import HelmetMetaData from "../Util/HelmetMetaData";
+import EventPhoto from "../../features/event/EventForm/EventPhoto";
 
 class App extends React.Component {
 	render() {
@@ -106,6 +107,11 @@ class App extends React.Component {
 												]}
 												exact
 												component={EventForm}
+											/>
+											<Route
+												path="/setPhoto/:id"
+												exact
+												component={EventPhoto}
 											/>
 											{/* <Route path="/myEvents" exact component={MyEvents} />
                             <Route path="/help" exact component={Help} /> */}
