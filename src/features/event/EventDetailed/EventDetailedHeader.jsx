@@ -22,7 +22,7 @@ const styles = (theme) => ({
 	},
 	media: {
 		height: 0,
-		paddingTop: "100%", // 16:9
+		paddingTop: "56.25%", // 16:9
 	},
 	avatar: {
 		color: theme.palette.getContrastText(deepOrange[500]),

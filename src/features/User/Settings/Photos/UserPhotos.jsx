@@ -12,11 +12,10 @@ import {
 import React, { Fragment } from "react";
 
 const useStyles = makeStyles((theme) => ({
-	root: {
-		width: 200,
-	},
+	root: {},
 	media: {
-		height: 200,
+		height: 0,
+		paddingTop: "56.25%",
 	},
 }));
 
@@ -36,7 +35,7 @@ const UserPhotos = ({
 	return (
 		<Fragment>
 			<Grid direction="row" container spacing={3}>
-				<Grid item>
+				<Grid item xs={12} md={3}>
 					<Card className={classes.root}>
 						<CardActionArea>
 							<CardMedia
@@ -53,7 +52,7 @@ const UserPhotos = ({
 				{photos &&
 					filteredPhotos.map((photo) => {
 						return (
-							<Grid item key={photo.id}>
+							<Grid item key={photo.id} xs={12} md={3}>
 								<Card className={classes.root} key={photo.id}>
 									<CardActionArea>
 										<CardMedia

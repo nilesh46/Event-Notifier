@@ -1,13 +1,14 @@
 import React, { useState, useEffect, Fragment } from "react";
 import {
+	Box,
 	Button,
 	ButtonGroup,
+	Container,
 	Grid,
 	Paper,
 	Typography,
 } from "@material-ui/core/";
 import { makeStyles } from "@material-ui/core";
-import grey from "@material-ui/core/colors/grey";
 import blueGrey from "@material-ui/core/colors/blueGrey";
 import CancelIcon from "@material-ui/icons/Cancel";
 import DoneAllIcon from "@material-ui/icons/DoneAll";
@@ -21,31 +22,34 @@ import { updateEventPhoto, openModal } from "../../../redux/actions";
 import history from "../../../history";
 
 const useStyles = makeStyles((theme) => ({
-	mainBg: {
-		backgroundColor: grey["50"],
-		marginTop: "2rem",
-		marginBottom: "2rem",
-		padding: "2rem",
+	"@global": {
+		html: {
+			fontSize: ".8rem",
+		},
 	},
-	root: {
-		width: 150,
-		borderRadius: 150,
-		height: 150,
-	},
+	root: {},
 	marg: {
 		margin: ".5rem",
 	},
-	media: {
-		height: 240,
-	},
 	backgr: {
+		position: "absolute",
+		top: 0,
+		left: 0,
+		width: "100%",
+		height: "100%",
 		backgroundColor: blueGrey["800"],
-		height: 300,
-		width: 300,
 	},
 	secBg: {
-		height: 300,
-		width: 300,
+		position: "absolute",
+		top: 0,
+		left: 0,
+		width: "100%",
+		height: "100%",
+	},
+	inRatio: {
+		position: "relative",
+		height: 0,
+		paddingTop: "56.25%",
 	},
 }));
 
@@ -129,94 +133,122 @@ const EventPhoto = ({ auth, eventId, updateEventPhoto, openModal }) => {
 			},
 		});
 	};
+	if (eventId) {
+		return (
+			<Container style={{ margin: "2rem 0" }}>
+				<Grid container spacing={3}>
+					<Grid item xs={12} md>
+						<Box>
+							<Typography
+								component="h5"
+								variant="h6"
+								style={{ marginBottom: "1rem" }}
+							>
+								Step 1: Add photo
+							</Typography>
 
-	return (
-		<Fragment>
-			<Grid container direction="row" spacing={5}>
-				<Grid item sm={6} md={4}>
-					<Typography
-						component="h5"
-						variant="h6"
-						style={{ marginBottom: "1rem" }}
-					>
-						Step 1: Add photo
-					</Typography>
-
-					<Paper elevation={3} className={classes.backgr}>
-						<DropzoneInput setFiles={setFiles} />
-					</Paper>
-				</Grid>
-				<Grid item sm={6} md={4}>
-					<Typography
-						component="h5"
-						variant="h6"
-						style={{ marginBottom: "1rem" }}
-					>
-						Step 2: Resize image
-					</Typography>
-
-					<Paper elevation={3} className={classes.secBg}>
-						{files.length > 0 && (
-							<CropperInput
-								setImage={setImage}
-								imagePreview={files[0].preview}
-								height="300"
-							/>
-						)}
-					</Paper>
-				</Grid>
-				<Grid item sm={12} md={4}>
-					<Typography
-						component="h5"
-						variant="h6"
-						style={{ marginBottom: "1rem" }}
-					>
-						Step 3: Review
-					</Typography>
-
-					<Paper elevation={3} className={classes.secBg}>
-						{files.length > 0 && (
-							<Fragment>
-								<div
-									className="img-preview"
-									style={{
-										minHeight: "300px",
-										minWidth: "300px",
-										overflow: "hidden",
-									}}
-									alt="Image Preview"
-								/>
-								<ButtonGroup
-									variant="contained"
-									aria-label="contained secondary button group"
-								>
-									<Button
-										color="primary"
-										style={{ width: "150px" }}
-										onClick={handleClickTick}
+							<Box className={classes.inRatio}>
+								<Paper elevation={3} className={classes.backgr}>
+									<Box
+										height="100%"
+										width="100%"
+										display="flex"
+										alignItems="center"
+										justifyContent="center"
 									>
-										<DoneAllIcon />
-									</Button>
-									<Button
-										color="secondary"
-										style={{ width: "150px" }}
-										onClick={handleCancelCrop}
-									>
-										<CancelIcon />
-									</Button>
-								</ButtonGroup>
-							</Fragment>
-						)}
-					</Paper>
+										<DropzoneInput setFiles={setFiles} />
+									</Box>
+								</Paper>
+							</Box>
+						</Box>
+					</Grid>
+					<Grid item xs={12} md>
+						<Box>
+							<Typography
+								component="h5"
+								variant="h6"
+								style={{ marginBottom: "1rem" }}
+							>
+								Step 2: Resize image
+							</Typography>
+
+							<Box className={classes.inRatio}>
+								<Paper elevation={3} className={classes.secBg}>
+									{files.length > 0 && (
+										<CropperInput
+											setImage={setImage}
+											imagePreview={files[0].preview}
+										/>
+									)}
+								</Paper>
+							</Box>
+						</Box>
+					</Grid>
+					<Grid item xs={12} md>
+						<Box>
+							<Typography
+								component="h5"
+								variant="h6"
+								style={{ marginBottom: "1rem" }}
+							>
+								Step 3: Review
+							</Typography>
+
+							<Box className={classes.inRatio}>
+								<Paper elevation={3} className={classes.secBg}>
+									{files.length > 0 && (
+										<Fragment>
+											<Box className={classes.inRatio}>
+												<div
+													className="img-preview"
+													style={{
+														position: "absolute",
+														top: 0,
+														left: 0,
+														width: "100%",
+														height: "100%",
+														overflow: "hidden",
+													}}
+													alt="Image Preview"
+												/>
+											</Box>
+
+											<ButtonGroup
+												variant="contained"
+												aria-label="contained secondary button group"
+												fullWidth
+												style={{ margin: "1rem 0" }}
+											>
+												<Button
+													color="primary"
+													onClick={handleClickTick}
+												>
+													<DoneAllIcon />
+												</Button>
+												<Button
+													color="secondary"
+													onClick={handleCancelCrop}
+												>
+													<CancelIcon />
+												</Button>
+											</ButtonGroup>
+										</Fragment>
+									)}
+								</Paper>
+							</Box>
+						</Box>
+					</Grid>
 				</Grid>
-			</Grid>
-		</Fragment>
-	);
+			</Container>
+		);
+	}
+
+	return <></>;
 };
 
 const mapStateToProps = (state, ownProps) => ({
 	auth: state.firebase.auth,
-	eventId: ownProps.match.params.id,
+	eventId: ownProps.match && ownProps.match.params.id,
 });
 
 const actions = {

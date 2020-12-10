@@ -1,5 +1,6 @@
 import React, { useState, useEffect, Fragment } from "react";
 import {
+	Box,
 	Button,
 	ButtonGroup,
 	Container,
@@ -51,13 +52,24 @@ const useStyles = makeStyles((theme) => ({
 		height: 240,
 	},
 	backgr: {
+		position: "absolute",
+		top: 0,
+		left: 0,
+		width: "100%",
+		height: "100%",
 		backgroundColor: blueGrey["800"],
-		height: "12rem",
-		width: "12rem",
 	},
 	secBg: {
-		height: "12rem",
-		width: "12rem",
+		position: "absolute",
+		top: 0,
+		left: 0,
+		width: "100%",
+		height: "100%",
+	},
+	inRatio: {
+		position: "relative",
+		height: 0,
+		paddingTop: "56.25%",
 	},
 }));
 
@@ -161,7 +173,7 @@ const PhotosPage = ({
 
 				<br />
 				<Grid container direction="row" spacing={8}>
-					<Grid item sm={4} md={4}>
+					<Grid item xs={12} md>
 						<Typography
 							component="h5"
 							variant="h6"
@@ -170,11 +182,21 @@ const PhotosPage = ({
 							Step 1: Add photo
 						</Typography>
 
-						<Paper elevation={3} className={classes.backgr}>
-							<DropzoneInput setFiles={setFiles} />
-						</Paper>
+						<Box className={classes.inRatio}>
+							<Paper elevation={3} className={classes.backgr}>
+								<Box
+									height="100%"
+									width="100%"
+									display="flex"
+									alignItems="center"
+									justifyContent="center"
+								>
+									<DropzoneInput setFiles={setFiles} />
+								</Box>
+							</Paper>
+						</Box>
 					</Grid>
-					<Grid item sm={4} md={4}>
+					<Grid item xs={12} md>
 						<Typography
 							component="h5"
 							variant="h6"
@@ -182,18 +204,18 @@ const PhotosPage = ({
 						>
 							Step 2: Resize image
 						</Typography>
-
-						<Paper elevation={3} className={classes.secBg}>
-							{files.length > 0 && (
-								<CropperInput
-									setImage={setImage}
-									imagePreview={files[0].preview}
-									height="200"
-								/>
-							)}
-						</Paper>
+						<Box className={classes.inRatio}>
+							<Paper elevation={3} className={classes.secBg}>
+								{files.length > 0 && (
+									<CropperInput
+										setImage={setImage}
+										imagePreview={files[0].preview}
+									/>
+								)}
+							</Paper>
+						</Box>
 					</Grid>
-					<Grid item sm={4} md={4}>
+					<Grid item xs={12} md>
 						<Typography
 							component="h5"
 							variant="h6"
@@ -201,41 +223,47 @@ const PhotosPage = ({
 						>
 							Step 3: Review
 						</Typography>
-
-						<Paper elevation={3} className={classes.secBg}>
-							{files.length > 0 && (
-								<Fragment>
-									<div
-										className="img-preview"
-										style={{
-											minHeight: "200px",
-											minWidth: "200px",
-											overflow: "hidden",
-										}}
-										alt="Image Preview"
-									/>
-									<ButtonGroup
-										variant="contained"
-										aria-label="contained secondary button group"
-									>
-										<Button
-											color="primary"
-											onClick={handleUploadImage}
-											style={{ width: "100px" }}
+						<Box className={classes.inRatio}>
+							<Paper elevation={3} className={classes.secBg}>
+								{files.length > 0 && (
+									<Fragment>
+										<Box className={classes.inRatio}>
+											<div
+												className="img-preview"
+												style={{
+													position: "absolute",
+													top: 0,
+													left: 0,
+													width: "100%",
+													height: "100%",
+													overflow: "hidden",
+												}}
+												alt="Image Preview"
+											/>
+										</Box>
+										<ButtonGroup
+											variant="contained"
+											aria-label="contained secondary button group"
+											fullWidth
+											style={{ margin: "1rem 0" }}
 										>
-											<DoneAllIcon />
-										</Button>
-										<Button
-											color="secondary"
-											onClick={handleCancelCrop}
-											style={{ width: "100px" }}
-										>
-											<CancelIcon />
-										</Button>
-									</ButtonGroup>
-								</Fragment>
-							)}
-						</Paper>
+											<Button
+												color="primary"
+												onClick={handleUploadImage}
+											>
+												<DoneAllIcon />
+											</Button>
+											<Button
+												color="secondary"
+												onClick={handleCancelCrop}
+											>
+												<CancelIcon />
+											</Button>
+										</ButtonGroup>
+									</Fragment>
+								)}
+							</Paper>
+						</Box>
 					</Grid>
 				</Grid>
 
