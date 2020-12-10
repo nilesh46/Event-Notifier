@@ -12,7 +12,7 @@ import { Link } from "react-router-dom";
 import { format } from "date-fns";
 import { cancelJoiningEvent, joinEvent } from "../../../redux/actions";
 import { connect } from "react-redux";
-import noImage from "../../../Assets/noImage.jpg";
+import noImage from "../../../Assets/noImage.svg";
 
 const styles = (theme) => ({
 	root: {
