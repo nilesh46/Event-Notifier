@@ -22,7 +22,7 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { openModal, deleteEvent } from "../../../redux/actions";
 import { format } from "date-fns";
-import noImage from "../../../Assets/noImage.jpg";
+import noImage from "../../../Assets/noImage.svg";
 
 const styles = {
 	root: {
