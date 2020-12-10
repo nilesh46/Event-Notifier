@@ -26,7 +26,7 @@ const DropzoneInput = ({ setFiles, marg }) => {
 	return (
 		<div {...getRootProps()}>
 			<input {...getInputProps()} />
-			<IconButton style={{ margin: "7.5rem" }}>
+			<IconButton>
 				<AddAPhotoIcon fontSize="large" style={{ color: grey[50] }} />
 			</IconButton>
 		</div>

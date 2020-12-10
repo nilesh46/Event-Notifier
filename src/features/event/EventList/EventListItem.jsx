@@ -43,7 +43,7 @@ const styles = {
 	},
 	media: {
 		height: 0,
-		paddingTop: "60%",
+		paddingTop: "56.25%",
 		margin: "0.7rem",
 		borderRadius: "0.7rem",
 		marginBottom: "1rem",
