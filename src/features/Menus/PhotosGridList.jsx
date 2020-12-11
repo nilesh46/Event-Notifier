@@ -32,6 +32,7 @@ const styles = (theme) => ({
 		color: "white",
 	},
 	photoStyle: {
+		cursor: "pointer",
 		width: "100%",
 		height: "100%",
 		overflowX: "auto",
@@ -62,7 +63,6 @@ class PhotosGridList extends Component {
 								onClick={() => {
 									this.openImageOnFullScreen(photo);
 								}}
-								role="button"
 							/>
 
 							<GridListTileBar
