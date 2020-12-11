@@ -116,9 +116,20 @@ const EventPhoto = ({ auth, eventId, updateEventPhoto, openModal }) => {
 	const uploadFileToFirebaseStorage = ({ firebase }, file, fileName) => {
 		const user = firebase.auth().currentUser;
 		const storageRef = firebase.storage().ref();
-		if (storageRef.child(`${user.uid}/myEvents/${eventId}/Image`)) {
-			storageRef.child(`${user.uid}/myEvents/${eventId}/Image`).delete();
-		}
+		const folderRef = storageRef.child(
+			`${user.uid}/myEvents/${eventId}/Image`
+		);
+		folderRef
+			.listAll()
+			.then((result) => {
+				result.items.forEach(function (file) {
+					file.delete();
+				});
+			})
+			.catch((error) => {
+				console.error(error);
+			});
+		//}
 		return storageRef
 			.child(`${user.uid}/myEvents/${eventId}/Image/${fileName}`)
 			.put(file);
