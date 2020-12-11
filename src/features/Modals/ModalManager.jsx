@@ -3,11 +3,13 @@ import { connect } from "react-redux";
 import AlertModal from "./AlertModal";
 import SocialShareModal from "./SocialShareModal";
 import InfoModal from "./InfoModal";
+import ImageModal from "./ImageModal";
 
 const modalLookup = {
 	AlertModal,
 	SocialShareModal,
 	InfoModal,
+	ImageModal,
 };
 
 const ModalManagar = ({ currentModal }) => {

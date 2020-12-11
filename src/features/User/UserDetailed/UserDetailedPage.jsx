@@ -1,5 +1,7 @@
-import { Grid, withStyles } from "@material-ui/core";
+import { Box, Grid, Typography, withStyles } from "@material-ui/core";
 import React, { Component } from "react";
+import { getFirebase } from "react-redux-firebase";
+import LoadingComponent from "../../../App/Layout/LoadingComponent";
 import UserDeatailedSidebar from "./UserDeatailedSidebar";
 import UserDetailedAbout from "./UserDetailedAbout";
 import UserDetailedEvents from "./UserDetailedEvents";
@@ -15,25 +17,56 @@ const style = {
 };
 
 class UserDetailedPage extends Component {
+	state = { user: null, unsubscribe: null };
+
+	componentDidMount = () => {
+		const userId = this.props.match.params.id;
+		const firestore = getFirebase().firestore();
+
+		const unsubscribe = firestore
+			.collection("users")
+			.doc(userId)
+			.onSnapshot((doc) => {
+				this.setState({ user: { id: userId, ...doc.data() } });
+			});
+
+		this.setState({ unsubscribe });
+	};
+
+	componentWillUnmount = () => {
+		this.state.unsubscribe();
+	};
+
 	render() {
+		const { user } = this.state;
 		return (
-			<div>
-				<Grid container spacing={3}>
-					<Grid item md={8} xs={12}>
-						<UserDetailedHeader />
-						<UserDetailedAbout />
+			<>
+				{user === null && <LoadingComponent />}
+				{user === undefined && (
+					<Box textAlign="center" my="3rem">
+						<Typography component="h1" variant="h5">
+							Please check your url or go back and try again
+						</Typography>
+					</Box>
+				)}
+				{user && (
+					<Grid container spacing={3}>
+						<Grid item md={8} xs={12}>
+							<UserDetailedHeader user={user} />
+							<UserDetailedAbout user={user} />
+						</Grid>
+						<Grid item md xs={12}>
+							<UserDeatailedSidebar />
+						</Grid>
+						<Grid item md={8} xs={12}>
+							<UserDetailedPhotos user={user} />
+						</Grid>
+						<Grid item md={8} xs={12}>
+							<UserDetailedEvents />
+						</Grid>
 					</Grid>
-					<Grid item md xs={12}>
-						<UserDeatailedSidebar />
-					</Grid>
-					<Grid item md={8} xs={12}>
-						<UserDetailedPhotos />
-					</Grid>
-					<Grid item md={8} xs={12}>
-						<UserDetailedEvents />
-					</Grid>
-				</Grid>
-			</div>
+				)}
+			</>
 		);
 	}
 }
