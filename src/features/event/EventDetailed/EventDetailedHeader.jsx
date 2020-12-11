@@ -13,6 +13,7 @@ import { format } from "date-fns";
 import { cancelJoiningEvent, joinEvent } from "../../../redux/actions";
 import { connect } from "react-redux";
 import noImage from "../../../Assets/noImage.svg";
+import { openModal } from "../../../redux/actions";
 
 const styles = (theme) => ({
 	root: {
@@ -23,7 +24,9 @@ const styles = (theme) => ({
 	media: {
 		height: 0,
 		paddingTop: "56.25%", // 16:9
+		cursor: "pointer",
 	},
+
 	avatar: {
 		color: theme.palette.getContrastText(deepOrange[500]),
 		backgroundColor: deepOrange[500],
@@ -35,6 +38,11 @@ const styles = (theme) => ({
 });
 
 class EventDetailedHeader extends Component {
+	openImageOnFullScreen = (photo) => {
+		const { openModal } = this.props;
+		openModal("ImageModal", { photo });
+	};
+
 	render() {
 		const {
 			classes,
@@ -65,6 +73,12 @@ class EventDetailedHeader extends Component {
 					className={classes.media}
 					image={event.photoURL || noImage}
 					title="Image Title"
+					onClick={() =>
+						this.openImageOnFullScreen({
+							url: event.photoURL,
+							name: event.title,
+						})
+					}
 				/>
 				<CardContent>
 					<Typography
@@ -146,6 +160,7 @@ class EventDetailedHeader extends Component {
 const actions = {
 	joinEvent,
 	cancelJoiningEvent,
+	openModal,
 };
 
 export default connect(null, actions)(withStyles(styles)(EventDetailedHeader));

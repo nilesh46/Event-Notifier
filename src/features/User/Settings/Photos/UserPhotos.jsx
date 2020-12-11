@@ -10,6 +10,12 @@ import {
 	makeStyles,
 } from "@material-ui/core";
 import React, { Fragment } from "react";
+import { connect } from "react-redux";
+import { openModal } from "../../../../redux/actions";
+
+const openImageOnFullScreen = (photo, openModal) => {
+	openModal("ImageModal", { photo });
+};
 
 const useStyles = makeStyles((theme) => ({
 	root: {},
@@ -24,6 +30,7 @@ const UserPhotos = ({
 	profile,
 	handleDeletePhoto,
 	handleSetMainPhoto,
+	openModal,
 }) => {
 	let filteredPhotos;
 	if (photos) {
@@ -42,6 +49,15 @@ const UserPhotos = ({
 								className={classes.media}
 								image={profile.photoURL}
 								title="Profile Photo"
+								onClick={() =>
+									openImageOnFullScreen(
+										{
+											url: profile.photoURL,
+											name: "profilePhoto",
+										},
+										openModal
+									)
+								}
 							/>
 						</CardActionArea>
 						<CardActions>
@@ -58,6 +74,12 @@ const UserPhotos = ({
 										<CardMedia
 											className={classes.media}
 											image={photo.url}
+											onClick={() =>
+												openImageOnFullScreen(
+													photo,
+													openModal
+												)
+											}
 											title="My Photo"
 										/>
 									</CardActionArea>
@@ -109,4 +131,8 @@ const UserPhotos = ({
 	);
 };
 
-export default UserPhotos;
+const actions = {
+	openModal,
+};
+
+export default connect(null, actions)(UserPhotos);

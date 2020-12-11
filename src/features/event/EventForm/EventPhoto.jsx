@@ -46,6 +46,7 @@ const useStyles = makeStyles((theme) => ({
 		left: 0,
 		width: "100%",
 		height: "100%",
+		overflow: "auto",
 	},
 	inRatio: {
 		position: "relative",
@@ -262,29 +263,30 @@ const EventPhoto = ({ auth, eventId, updateEventPhoto, openModal }) => {
 													alt="Image Preview"
 												/>
 											</Box>
-
-											<ButtonGroup
-												variant="contained"
-												aria-label="contained secondary button group"
-												fullWidth
-												style={{ margin: "1rem 0" }}
-											>
-												<Button
-													color="primary"
-													onClick={handleClickTick}
-												>
-													<DoneAllIcon />
-												</Button>
-												<Button
-													color="secondary"
-													onClick={handleCancelCrop}
-												>
-													<CancelIcon />
-												</Button>
-											</ButtonGroup>
 										</Fragment>
 									)}
 								</Paper>
+								{loading === null && files.length > 0 && (
+									<ButtonGroup
+										variant="contained"
+										aria-label="contained secondary button group"
+										fullWidth
+										style={{ margin: "1rem 0" }}
+									>
+										<Button
+											color="primary"
+											onClick={handleClickTick}
+										>
+											<DoneAllIcon />
+										</Button>
+										<Button
+											color="secondary"
+											onClick={handleCancelCrop}
+										>
+											<CancelIcon />
+										</Button>
+									</ButtonGroup>
+								)}
 							</Box>
 						</Box>
 					</Grid>
