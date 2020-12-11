@@ -6,8 +6,6 @@ import {
 import DateFnsUtils from "@date-io/date-fns";
 import { change } from "redux-form";
 
-const today = new Date();
-
 const TextInput = ({
 	input,
 	width,
@@ -27,8 +25,9 @@ const TextInput = ({
 	return (
 		<MuiPickersUtilsProvider utils={DateFnsUtils}>
 			<KeyboardDatePicker
-				disableToolbar
-				minDate={today || undefined}
+				disableToolbar={!custom.fullView}
+				minDate={custom.mindate || undefined}
+				maxDate={custom.maxdate || undefined}
 				inputVariant="outlined"
 				variant="inline"
 				label={label}

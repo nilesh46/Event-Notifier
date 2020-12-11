@@ -1,12 +1,14 @@
-import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import React, { Component } from "react";
+import { withStyles } from "@material-ui/core/styles";
 import GridList from "@material-ui/core/GridList";
 import GridListTile from "@material-ui/core/GridListTile";
 import GridListTileBar from "@material-ui/core/GridListTileBar";
 import IconButton from "@material-ui/core/IconButton";
 import StarBorderIcon from "@material-ui/icons/StarBorder";
+import { openModal } from "../../redux/actions";
+import { connect } from "react-redux";
 
-const useStyles = makeStyles((theme) => ({
+const styles = (theme) => ({
 	root: {
 		display: "flex",
 		flexWrap: "wrap",
@@ -29,58 +31,64 @@ const useStyles = makeStyles((theme) => ({
 	icon: {
 		color: "white",
 	},
-}));
+	photoStyle: {
+		width: "100%",
+		height: "100%",
+		overflowX: "auto",
+	},
+});
 
-/**
- * The example data is structured as follows:
- *
- * import image from 'path/to/image.jpg';
- * [etc...]
- *
- * const tileData = [
- *   {
- *     img: image,
- *     title: 'Image',
- *     author: 'author',
- *     featured: true,
- *   },
- *   {
- *     [etc...]
- *   },
- * ];
- */
-const PhotosGridList = ({ photos }) => {
-	const classes = useStyles();
+class PhotosGridList extends Component {
+	openImageOnFullScreen = (photo) => {
+		const { openModal } = this.props;
+		openModal("ImageModal", { photo });
+	};
 
-	return (
-		<div className={classes.root}>
-			<GridList cellHeight={200} spacing={1} className={classes.gridList}>
-				{photos.map((photo) => (
-					<GridListTile
-						key={photo.img}
-						cols={photo.featured ? 2 : 1}
-						rows={photo.featured ? 2 : 1}
-					>
-						<img src={photo.img} alt={photo.title} />
-						<GridListTileBar
-							title={photo.title}
-							titlePosition="top"
-							actionIcon={
-								<IconButton
-									aria-label={`star ${photo.title}`}
-									className={classes.icon}
-								>
-									<StarBorderIcon />
-								</IconButton>
-							}
-							actionPosition="left"
-							className={classes.titleBar}
-						/>
-					</GridListTile>
-				))}
-			</GridList>
-		</div>
-	);
+	render() {
+		const { classes, photos } = this.props;
+		return (
+			<div className={classes.root}>
+				<GridList
+					cellHeight={200}
+					spacing={1}
+					className={classes.gridList}
+				>
+					{photos.map((photo) => (
+						<GridListTile key={photo.photoId} cols={2} rows={1.5}>
+							<img
+								src={photo.url}
+								alt={photo.name}
+								className={classes.photoStyle}
+								onClick={() => {
+									this.openImageOnFullScreen(photo);
+								}}
+								role="button"
+							/>
+
+							<GridListTileBar
+								title={photo.title}
+								titlePosition="top"
+								actionIcon={
+									<IconButton
+										aria-label={`star ${photo.name}`}
+										className={classes.icon}
+									>
+										<StarBorderIcon />
+									</IconButton>
+								}
+								actionPosition="left"
+								className={classes.titleBar}
+							/>
+						</GridListTile>
+					))}
+				</GridList>
+			</div>
+		);
+	}
+}
+
+const actions = {
+	openModal,
 };
 
-export default PhotosGridList;
+export default connect(null, actions)(withStyles(styles)(PhotosGridList));

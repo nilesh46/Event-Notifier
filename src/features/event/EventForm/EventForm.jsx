@@ -446,6 +446,8 @@ class EventForm extends React.Component {
 												name="date"
 												component={DateInput}
 												label="Event Date *"
+												mindate={new Date()}
+												fullView={false}
 											/>
 											<Field
 												name="time"

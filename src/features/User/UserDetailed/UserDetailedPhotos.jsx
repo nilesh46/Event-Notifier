@@ -2,42 +2,32 @@ import { Box, Paper, Typography } from "@material-ui/core";
 import React, { Component } from "react";
 import PhotosGridList from "../../Menus/PhotosGridList";
 import PhotoAlbumIcon from "@material-ui/icons/PhotoAlbum";
-
-const photos = [
-	{
-		img: "https://source.unsplash.com/random",
-		title: "photo",
-		featured: true,
-	},
-	{
-		img: "https://source.unsplash.com/random",
-		title: "photo",
-		featured: false,
-	},
-	{
-		img: "https://source.unsplash.com/random",
-		title: "photo",
-		featured: false,
-	},
-	{
-		img: "https://source.unsplash.com/random",
-		title: "photo",
-		featured: false,
-	},
-	{
-		img: "https://source.unsplash.com/random",
-		title: "photo",
-		featured: false,
-	},
-	{
-		img: "https://source.unsplash.com/random",
-		title: "photo",
-		featured: true,
-	},
-];
+import { getFirebase } from "react-redux-firebase";
+import LoadingComponent from "../../../App/Layout/LoadingComponent";
 
 class UserDetailedPhotos extends Component {
+	state = { photos: null };
+
+	componentDidMount = () => {
+		const { user } = this.props;
+		const firestore = getFirebase().firestore();
+		firestore
+			.collection("users")
+			.doc(`${user.id}`)
+			.collection("photos")
+			.get()
+			.then((querySnapshot) => {
+				let arr = [];
+				querySnapshot.forEach(function (doc) {
+					arr.push({ photoId: doc.id, ...doc.data() });
+				});
+				this.setState({ photos: arr });
+			})
+			.catch((err) => console.log(err));
+	};
+
 	render() {
+		const photos = this.state.photos;
 		return (
 			<Box>
 				<Paper elevation={2}>
@@ -48,7 +38,8 @@ class UserDetailedPhotos extends Component {
 								<b>About User Displayname</b>
 							</Typography>
 						</Box>
-						<PhotosGridList photos={photos} />
+						{photos === null && <LoadingComponent />}
+						{photos && <PhotosGridList photos={photos} />}
 					</Box>
 				</Paper>
 			</Box>

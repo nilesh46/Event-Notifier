@@ -109,7 +109,9 @@ class BasicPage extends React.Component {
 							name="dob"
 							component={DateInput}
 							label="Date of Birth"
-							minDate={"01/01/2000"}
+							mindate={"01/01/1970"}
+							maxdate={new Date()}
+							fullView={true}
 							className={classes.field}
 							maxDate={addYears(new Date(), -18)}
 						/>

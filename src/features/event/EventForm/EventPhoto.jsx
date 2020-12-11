@@ -3,6 +3,7 @@ import {
 	Box,
 	Button,
 	ButtonGroup,
+	CircularProgress,
 	Container,
 	Grid,
 	Paper,
@@ -57,6 +58,7 @@ const EventPhoto = ({ auth, eventId, updateEventPhoto, openModal }) => {
 	const classes = useStyles();
 	const [files, setFiles] = useState([]);
 	const [image, setImage] = useState(null);
+	const [loading, setLoading] = useState(null);
 
 	const firebase = useFirebase();
 
@@ -84,7 +86,7 @@ const EventPhoto = ({ auth, eventId, updateEventPhoto, openModal }) => {
 			(snapshot) => {
 				const progress =
 					(snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-				console.log("Upload is " + progress + "% done");
+				setLoading(progress);
 			},
 			(error) => {
 				console.log(error);
@@ -95,6 +97,7 @@ const EventPhoto = ({ auth, eventId, updateEventPhoto, openModal }) => {
 					.then((downloadURL) => {
 						updateEventPhoto({ firebase }, downloadURL, eventId)
 							.then(() => {
+								setLoading(null);
 								toastr.success(
 									"Success",
 									"Photo has been uploaded"
@@ -196,7 +199,43 @@ const EventPhoto = ({ auth, eventId, updateEventPhoto, openModal }) => {
 
 							<Box className={classes.inRatio}>
 								<Paper elevation={3} className={classes.secBg}>
-									{files.length > 0 && (
+									{loading !== null && (
+										<Box
+											display="flex"
+											alignItems="center"
+											justifyContent="center"
+											height="100%"
+										>
+											<Box
+												position="relative"
+												display="inline-flex"
+											>
+												<CircularProgress
+													variant="determinate"
+													value={loading}
+												/>
+												<Box
+													top={0}
+													left={0}
+													bottom={0}
+													right={0}
+													position="absolute"
+													display="flex"
+													alignItems="center"
+													justifyContent="center"
+												>
+													<Typography
+														variant="caption"
+														component="div"
+														color="textSecondary"
+													>{`${Math.round(
+														loading
+													)}%`}</Typography>
+												</Box>
+											</Box>
+										</Box>
+									)}
+									{loading === null && files.length > 0 && (
 										<Fragment>
 											<Box className={classes.inRatio}>
 												<div

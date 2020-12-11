@@ -20,14 +20,14 @@ const styles = (theme) => ({
 
 class UserDetailedHeader extends Component {
 	render() {
-		const { classes } = this.props;
+		const { classes, user } = this.props;
 		return (
 			<Box my="1rem">
 				<Paper elevation={3}>
 					<Box display="flex" p="1rem" alignItems="center">
 						<Avatar
-							alt="User Name"
-							src={"https://source.unsplash.com/random"}
+							alt={user.displayName}
+							src={user.photoURL}
 							className={classes.avatar}
 						></Avatar>
 						<Box mx="1rem">
@@ -39,20 +39,20 @@ class UserDetailedHeader extends Component {
 								<Box>
 									<Box mb="0.5rem">
 										<Typography component="h1" variant="h5">
-											User Displayname
+											{user.displayName}
 										</Typography>
 									</Box>
 									<Typography
 										variant="body1"
 										color="textSecondary"
 									>
-										Occupation
+										{user.occupation}
 									</Typography>
 									<Typography
 										variant="body1"
 										color="textSecondary"
 									>
-										Age , Hometown
+										{user.homeTown}
 									</Typography>
 								</Box>
 							</Grid>

@@ -47,15 +47,15 @@ class AboutPage extends React.Component {
 	};
 
 	updateBasicDetails = (values) => {
-		const { reset } = this.props;
-		console.log(reset);
+		const { reset, auth } = this.props;
 		const firebase = getFirebase();
-		const user = firebase.auth().currentUser;
+		const { createdAt, lastLoginAt } = auth;
+
 		firebase
 			.firestore()
 			.collection("users")
-			.doc(user.uid)
-			.update({ ...values })
+			.doc(auth.uid)
+			.update({ createdAt, lastLoginAt, ...values })
 			.then(() => {
 				this.setState({ err: null });
 				reset();
@@ -164,6 +164,7 @@ class AboutPage extends React.Component {
 const mapStateToProps = (state) => {
 	return {
 		initialValues: state.firebase.profile,
+		auth: state.firebase.auth,
 	};
 };
 
