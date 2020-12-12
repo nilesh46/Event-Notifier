@@ -12,6 +12,7 @@ import {
 import React, { Fragment } from "react";
 import { connect } from "react-redux";
 import { openModal } from "../../../../redux/actions";
+import UserPhotosSkelton from "./UserPhotosSkeleton";
 
 const openImageOnFullScreen = (photo, openModal) => {
 	openModal("ImageModal", { photo });
@@ -65,11 +66,12 @@ const UserPhotos = ({
 						</CardActions>
 					</Card>
 				</Grid>
+				{!photos && <UserPhotosSkelton />}
 				{photos &&
 					filteredPhotos.map((photo) => {
 						return (
 							<Grid item key={photo.id} xs={12} md={3}>
-								<Card className={classes.root} key={photo.id}>
+								<Card className={classes.root}>
 									<CardActionArea>
 										<CardMedia
 											className={classes.media}

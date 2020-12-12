@@ -13,6 +13,7 @@ import { formatDistance } from "date-fns";
 import CommentForm from "./CommentForm";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
 	root: {},
@@ -22,6 +23,10 @@ const useStyles = makeStyles((theme) => ({
 		"&:hover": {
 			color: grey["700"],
 		},
+	},
+	linksSimple: {
+		textDecoration: "none",
+		color: "#000",
 	},
 }));
 
@@ -103,18 +108,27 @@ const Comment = ({
 			<Box display="flex" alignItems="center">
 				{/* Avatar of the user */}
 				<Box m="1rem">
-					<Avatar
-						alt="Username"
-						src={comment.photoURL}
-						variant="rounded"
-					/>
+					<Link to={`/profile/${comment.uid}`}>
+						<Avatar
+							alt="Username"
+							src={comment.photoURL}
+							variant="rounded"
+						/>
+					</Link>
 				</Box>
 				<Box>
 					<Box display="flex" alignItems="center">
 						{/* Username */}
 						<Box>
 							<Typography variant="body1">
-								<b>{comment.displayName}</b>
+								<b>
+									<Link
+										to={`/profile/${comment.uid}`}
+										className={classes.linksSimple}
+									>
+										{comment.displayName}
+									</Link>
+								</b>
 							</Typography>
 						</Box>
 						{/* Time span of the comment */}

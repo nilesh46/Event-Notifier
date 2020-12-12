@@ -3,12 +3,12 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { firebaseConnect, getFirebase, isEmpty } from "react-redux-firebase";
 import { compose } from "redux";
-import LoadingComponent from "../../../App/Layout/LoadingComponent";
 import { createDataTree } from "../../../App/Util/helpers";
 import { addEventComment } from "../../../redux/actions";
 import EventDetailedChat from "./EventDetailedChat";
 import EventDetailedHeader from "./EventDetailedHeader";
 import EventDetailedInfo from "./EventDetailedInfo";
+import EventDetailedPageSkeleton from "./EventDetailedPageSkeleton";
 import EventDetailedSidebar from "./EventDetailedSidebar";
 
 const style = {
@@ -52,7 +52,7 @@ class EventDetailedPage extends Component {
 
 		return (
 			<>
-				{event === null && <LoadingComponent />}
+				{event === null && <EventDetailedPageSkeleton />}
 				{event === undefined && (
 					<Box textAlign="center" my="3rem">
 						<Typography component="h1" variant="h5">

@@ -1,11 +1,11 @@
 import { Box, Grid, Typography, withStyles } from "@material-ui/core";
 import React, { Component } from "react";
 import { getFirebase } from "react-redux-firebase";
-import LoadingComponent from "../../../App/Layout/LoadingComponent";
 import UserDeatailedSidebar from "./UserDeatailedSidebar";
 import UserDetailedAbout from "./UserDetailedAbout";
 import UserDetailedEvents from "./UserDetailedEvents";
 import UserDetailedHeader from "./UserDetailedHeader";
+import UserDetailedPageSkeleton from "./UserDetailedPageSkeleton";
 import UserDetailedPhotos from "./UserDetailedPhotos";
 
 const style = {
@@ -41,7 +41,7 @@ class UserDetailedPage extends Component {
 		const { user } = this.state;
 		return (
 			<>
-				{user === null && <LoadingComponent />}
+				{user === null && <UserDetailedPageSkeleton />}
 				{user === undefined && (
 					<Box textAlign="center" my="3rem">
 						<Typography component="h1" variant="h5">

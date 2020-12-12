@@ -15,6 +15,7 @@ import { ExpandLess, ExpandMore } from "@material-ui/icons";
 import GroupIcon from "@material-ui/icons/Group";
 import React, { Component } from "react";
 import indigo from "@material-ui/core/colors/indigo";
+import { Link } from "react-router-dom";
 
 const style = (theme) => ({
 	root: {
@@ -28,6 +29,10 @@ const style = (theme) => ({
 		"&:hover": {
 			backgroundColor: indigo[600],
 		},
+	},
+	linksSimple: {
+		textDecoration: "none",
+		color: "#000",
 	},
 });
 
@@ -68,27 +73,37 @@ class EventDetailedSidebar extends Component {
 						<List component="div" disablePadding>
 							{
 								<div key={host.id}>
-									<ListItem button className={classes.nested}>
-										<ListItemIcon>
-											<Avatar
-												alt={host.displayName}
-												src={host.photoURL}
+									<Link
+										to={`/profile/${host.id}`}
+										className={classes.linksSimple}
+									>
+										<ListItem
+											button
+											className={classes.nested}
+										>
+											<ListItemIcon>
+												<Avatar
+													alt={host.displayName}
+													src={host.photoURL}
+												/>
+											</ListItemIcon>
+											<ListItemText>
+												<Typography
+													variant="body2"
+													color="textSecondary"
+												>
+													<strong>
+														{host.displayName}
+													</strong>
+												</Typography>
+											</ListItemText>
+
+											<Chip
+												label="HOST"
+												color="secondary"
 											/>
-										</ListItemIcon>
-										<ListItemText>
-											<Typography
-												variant="body2"
-												color="textSecondary"
-											>
-												<strong>
-													{host.displayName}
-												</strong>
-											</Typography>
-										</ListItemText>
-
-										<Chip label="HOST" color="secondary" />
-									</ListItem>
-
+										</ListItem>
+									</Link>
 									<Divider />
 								</div>
 							}
@@ -96,32 +111,38 @@ class EventDetailedSidebar extends Component {
 								if (!attendee.host)
 									return (
 										<div key={attendee.id}>
-											<ListItem
-												button
-												className={classes.nested}
+											<Link
+												to={`/profile/${attendee.id}`}
+												className={classes.linksSimple}
 											>
-												<ListItemIcon>
-													<Avatar
-														alt={
-															attendee.displayName
-														}
-														src={attendee.photoURL}
-													/>
-												</ListItemIcon>
-												<ListItemText>
-													<Typography
-														variant="body2"
-														color="textSecondary"
-													>
-														<strong>
-															{
+												<ListItem
+													button
+													className={classes.nested}
+												>
+													<ListItemIcon>
+														<Avatar
+															alt={
 																attendee.displayName
 															}
-														</strong>
-													</Typography>
-												</ListItemText>
-											</ListItem>
-
+															src={
+																attendee.photoURL
+															}
+														/>
+													</ListItemIcon>
+													<ListItemText>
+														<Typography
+															variant="body2"
+															color="textSecondary"
+														>
+															<strong>
+																{
+																	attendee.displayName
+																}
+															</strong>
+														</Typography>
+													</ListItemText>
+												</ListItem>
+											</Link>
 											<Divider />
 										</div>
 									);
