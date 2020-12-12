@@ -81,23 +81,28 @@ class UserDetailedAbout extends Component {
 								</Box>
 								<Box mx="0.5rem">
 									{user.interests &&
-										user.interests.map((interest) => (
-											<Box
-												my="0.5rem"
-												display="flex"
-												alignItems="center"
-											>
-												<FavoriteIcon
-													fontSize="small"
-													style={{ color: red[700] }}
-												/>
-												<Box ml="0.5rem">
-													<Typography>
-														{interest}
-													</Typography>
+										user.interests.map(
+											(interest, index) => (
+												<Box
+													my="0.5rem"
+													display="flex"
+													alignItems="center"
+													key={index}
+												>
+													<FavoriteIcon
+														fontSize="small"
+														style={{
+															color: red[700],
+														}}
+													/>
+													<Box ml="0.5rem">
+														<Typography>
+															{interest}
+														</Typography>
+													</Box>
 												</Box>
-											</Box>
-										))}
+											)
+										)}
 								</Box>
 							</Grid>
 						</Grid>

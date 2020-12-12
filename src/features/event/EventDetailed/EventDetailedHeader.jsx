@@ -35,6 +35,10 @@ const styles = (theme) => ({
 		marginLeft: "0.3rem",
 		marginRight: "0.3rem",
 	},
+	linksSec: {
+		textDecoration: "none",
+		color: "#f50057",
+	},
 });
 
 class EventDetailedHeader extends Component {
@@ -57,11 +61,13 @@ class EventDetailedHeader extends Component {
 			<Card className={classes.root}>
 				<CardHeader
 					avatar={
-						<Avatar
-							alt="Host Name"
-							src={event.hostPhotoURL}
-							className={classes.avatar}
-						></Avatar>
+						<Link to={`/profile/${event.hostUid}`}>
+							<Avatar
+								alt="Host Name"
+								src={event.hostPhotoURL}
+								className={classes.avatar}
+							></Avatar>
+						</Link>
 					}
 					title={event.title}
 					subheader={`${
@@ -86,7 +92,15 @@ class EventDetailedHeader extends Component {
 						color="textSecondary"
 						component="p"
 					>
-						Hosted By <strong>{event.hostedBy}</strong>
+						Hosted By{" "}
+						<strong>
+							<Link
+								to={`/profile/${event.hostUid}`}
+								className={classes.linksSec}
+							>
+								{event.hostedBy}
+							</Link>
+						</strong>
 					</Typography>
 					<Box
 						display="flex"

@@ -8,11 +8,11 @@ class EventAttendee extends Component {
 		return (
 			<AvatarGroup max={4} style={{ paddingLeft: "10px" }}>
 				{attendees &&
-					Object.values(attendees).map((attendee, index) => (
+					Object.values(attendees).map((attendee) => (
 						<Avatar
 							alt="Remy Sharp"
-							key={index}
 							src={attendee.photoURL}
+							key={attendee.id}
 						/>
 					))}
 			</AvatarGroup>

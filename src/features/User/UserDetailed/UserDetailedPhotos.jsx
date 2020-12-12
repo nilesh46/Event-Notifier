@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import PhotosGridList from "../../Menus/PhotosGridList";
 import PhotoAlbumIcon from "@material-ui/icons/PhotoAlbum";
 import { getFirebase } from "react-redux-firebase";
-import LoadingComponent from "../../../App/Layout/LoadingComponent";
+import { Skeleton } from "@material-ui/lab";
 
 class UserDetailedPhotos extends Component {
 	state = { photos: null };
@@ -38,7 +38,9 @@ class UserDetailedPhotos extends Component {
 								<b>About User Displayname</b>
 							</Typography>
 						</Box>
-						{photos === null && <LoadingComponent />}
+						{photos === null && (
+							<Skeleton animation="wave" height={300} />
+						)}
 						{photos && <PhotosGridList photos={photos} />}
 					</Box>
 				</Paper>

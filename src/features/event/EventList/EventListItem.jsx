@@ -52,6 +52,10 @@ const styles = {
 		height: "4.5rem",
 		width: "4.5rem",
 	},
+	linksPri: {
+		textDecoration: "none",
+		color: "#2196f3",
+	},
 };
 
 class EventListItem extends Component {
@@ -104,11 +108,15 @@ class EventListItem extends Component {
 								<Grid item>
 									<Box display="flex" alignItems="center">
 										<Box>
-											<Avatar
-												alt="Remy Sharp"
-												src={event.hostPhotoURL}
-												className={classes.large}
-											/>
+											<Link
+												to={`/profile/${event.hostUid}`}
+											>
+												<Avatar
+													alt="Remy Sharp"
+													src={event.hostPhotoURL}
+													className={classes.large}
+												/>
+											</Link>
 										</Box>
 										<Box ml="1rem">
 											<Typography
@@ -122,7 +130,14 @@ class EventListItem extends Component {
 												variant="body2"
 												color="textSecondary"
 											>
-												Hosted by {event.hostedBy}
+												Hosted by{" "}
+												<Link
+													to={`/profile/${event.hostUid}`}
+													className={classes.linksPri}
+												>
+													{" "}
+													{event.hostedBy}
+												</Link>
 											</Typography>
 										</Box>
 									</Box>

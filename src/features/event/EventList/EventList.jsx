@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from "react";
 import EventListItem from "./EventListItem";
+import EventListItemSkeleton from "./EventListItemSkeleton";
 
 class EventList extends Component {
 	render() {
@@ -7,6 +8,10 @@ class EventList extends Component {
 
 		return (
 			<Fragment>
+				{!events &&
+					[...new Array(5)].map((obj, index) => {
+						return <EventListItemSkeleton key={index} />;
+					})}
 				{events &&
 					events.map((event) => (
 						<EventListItem key={event.id} event={event} />
