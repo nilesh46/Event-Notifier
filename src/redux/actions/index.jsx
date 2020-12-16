@@ -160,18 +160,51 @@ export const deleteEvent = (eventId) => {
 	};
 };
 
-export const loadEvents = () => {
-	return async (dispatch) => {
-		try {
-			dispatch(asyncActionStart());
-			const events = await fetchSampleData();
-			dispatch({ type: FETCH_EVENTS, payload: { events } });
+export const getEventsForDashboard = (lastEvent) => async (
+	dispatch,
+	getState
+) => {
+	let today = new Date();
+	const firestore = getFirebase().firestore();
+	const eventRef = firestore.collection("events");
+	try {
+		dispatch(asyncActionStart());
+		let startAfter = lastEvent && (await eventRef.doc(lastEvent.id).get());
+		let query;
+		if (lastEvent)
+			query = eventRef
+				.where("date", ">=", today)
+				.orderBy("date")
+				.startAfter(startAfter)
+				.limit(2);
+		else
+			query = eventRef
+				.where("date", ">=", today)
+				.orderBy("date")
+				.limit(2);
+
+		let querySnap = await query.get();
+
+		if (querySnap.docs.length === 0) {
 			dispatch(asyncActionFinish());
-		} catch (error) {
-			console.log(error);
-			dispatch(asyncActionError());
+			return querySnap;
 		}
-	};
+
+		let events = [];
+		for (let index = 0; index < querySnap.docs.length; index++) {
+			const event = {
+				...querySnap.docs[index].data(),
+				id: querySnap.docs[index].id,
+			};
+			events.push(event);
+		}
+		dispatch({ type: FETCH_EVENTS, payload: { events } });
+		dispatch(asyncActionFinish());
+		return querySnap;
+	} catch (error) {
+		console.log(error);
+		dispatch(asyncActionError());
+	}
 };
 
 // Modal Actions
@@ -262,14 +295,15 @@ export const registerUser = ({ firebase, firestore }, creds) => async (
 
 		//updates the auth profile
 		await createdUser.user.updateProfile({
-			displayName: creds.firstName + creds.lastName,
+			displayName: creds.firstName + " " + creds.lastName,
 		});
 
 		//creating new profile in firestore
 		let newUser = {
 			displayName: createdUser.user.displayName,
 			email: createdUser.user.email,
-			createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+			createdAt: Date.now(),
+			uid: createdUser.user.uid,
 		};
 
 		// adding new user in users collection
@@ -296,18 +330,19 @@ export const socialLogin = ({ firebase }, selectedProvider) => async (
 			provider: selectedProvider,
 			type: "popup",
 		});
-		if (user.additionalUserInfo.isNewUser) {
-			const newuser = await firebase
+
+		if (user !== undefined && user.additionalUserInfo.isNewUser) {
+			await firebase
 				.firestore()
 				.collection("users")
-				.doc(user.uid)
+				.doc(user.user.uid)
 				.set({
 					displayName: user.user.displayName,
 					email: user.user.email,
 					photoURL: user.user.photoURL || null,
-					createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+					createdAt: Date.now(),
+					uid: user.user.uid,
 				});
-			console.log(newuser);
 		}
 
 		history.push("/events");
@@ -395,14 +430,15 @@ export const updateEventPhoto = ({ firebase }, downloadURL, eventId) => async (
 };
 
 export const addEventComment = (firebase, eventId, values, parentId) => async (
-	dispatch
+	dispatch,
+	getState
 ) => {
 	try {
-		const user = firebase.auth().currentUser;
-		// const photoURL = getState().firebase.profile.photoURL;
-		// const displayName = getState().firebase.profile.displayName;
-		const photoURL = user.photoURL || userPNG;
+		const user = getState().firebase.profile;
+		const photoURL = user.photoURL;
 		const displayName = user.displayName;
+		// const photoURL = user.photoURL || userPNG;
+		// const displayName = user.displayName;
 
 		const newComment = {
 			displayName,

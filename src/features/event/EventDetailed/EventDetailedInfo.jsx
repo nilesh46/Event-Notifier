@@ -125,8 +125,8 @@ class EventDetailedInfo extends Component {
 						Event Date and Timing
 						<Typography variant="body2" color="textSecondary">
 							<strong>Date</strong> :{" "}
-							{format(event.date.toDate(), "EEEE do, LLL")} <br />{" "}
-							<strong>Timing</strong> :
+							{format(event.date.toDate(), "EEEE do, LLL, yyyy")}{" "}
+							<br /> <strong>Timing</strong> :
 							{format(event.date.toDate(), "h:mm a")}
 						</Typography>
 					</Typography>
