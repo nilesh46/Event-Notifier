@@ -72,7 +72,7 @@ class EventDetailedHeader extends Component {
 					title={event.title}
 					subheader={`${
 						event.date &&
-						format(event.date.toDate(), "EEEE do, LLL")
+						format(event.date.toDate(), "EEEE do, LLL, yyyy")
 					} at ${format(event.date.toDate(), "h:mm a")}`}
 				/>
 				<CardMedia

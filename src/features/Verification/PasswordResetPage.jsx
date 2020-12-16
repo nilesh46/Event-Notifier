@@ -79,7 +79,6 @@ class SignInPanel extends Component {
 							result[0].split(".")[0]
 						} account auth button to sign in`,
 					});
-					this.resetPassword(auth, emailAddress);
 				}
 			}
 		} catch (error) {}
