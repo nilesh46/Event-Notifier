@@ -6,6 +6,8 @@ import GridListTileBar from "@material-ui/core/GridListTileBar";
 import ListSubheader from "@material-ui/core/ListSubheader";
 import IconButton from "@material-ui/core/IconButton";
 import InfoIcon from "@material-ui/icons/Info";
+import { Link } from "react-router-dom";
+import { Skeleton } from "@material-ui/lab";
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -24,24 +26,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-/**
- * The example data is structured as follows:
- *
- * import image from 'path/to/image.jpg';
- * [etc...]
- *
- * const tileData = [
- *   {
- *     img: image,
- *     title: 'Image',
- *     author: 'author',
- *   },
- *   {
- *     [etc...]
- *   },
- * ];
- */
-const EventsGridList = ({ header, events }) => {
+const EventsGridList = ({ header, events, loading }) => {
 	const classes = useStyles();
 
 	return (
@@ -54,23 +39,38 @@ const EventsGridList = ({ header, events }) => {
 				>
 					<ListSubheader component="div">{header}</ListSubheader>
 				</GridListTile>
-				{events.map((event) => (
-					<GridListTile key={event.img} cols={2}>
-						<img src={event.img} alt={event.title} />
-						<GridListTileBar
-							title={event.title}
-							subtitle={<span>by: {event.hostedBy}</span>}
-							actionIcon={
-								<IconButton
-									aria-label={`info about ${event.title}`}
-									className={classes.icon}
-								>
-									<InfoIcon />
-								</IconButton>
-							}
-						/>
-					</GridListTile>
-				))}
+				{loading &&
+					[...new Array(3)].map((obj, index) => (
+						<GridListTile key={index} cols={2}>
+							<Skeleton
+								animation="wave"
+								variant="rect"
+								width="100%"
+								height={100}
+							/>
+						</GridListTile>
+					))}
+				{!loading &&
+					events.map((event) => (
+						<GridListTile key={event.id} cols={2}>
+							<img src={event.photoURL} alt={event.title} />
+
+							<GridListTileBar
+								title={event.title}
+								subtitle={<span>by: {event.hostedBy}</span>}
+								actionIcon={
+									<Link to={`/events/${event.id}`}>
+										<IconButton
+											aria-label={`info about ${event.title}`}
+											className={classes.icon}
+										>
+											<InfoIcon />
+										</IconButton>
+									</Link>
+								}
+							/>
+						</GridListTile>
+					))}
 			</GridList>
 		</div>
 	);

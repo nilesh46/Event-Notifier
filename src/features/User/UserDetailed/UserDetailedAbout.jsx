@@ -25,7 +25,7 @@ class UserDetailedAbout extends Component {
 								>
 									<SentimentVerySatisfiedIcon fontSize="large" />
 									<Typography variant="body1">
-										<b>About User</b>
+										<b>About</b>
 									</Typography>
 								</Box>
 								<Box mx="1rem">
