@@ -29,9 +29,9 @@ class EventDashboard extends Component {
 		if (next && next.docs && next.docs.length > 0) {
 			this.setState({
 				moreEvents: true,
-				loadingInitial: false,
 			});
 		}
+		this.setState({ loadingInitial: false });
 	}
 
 	componentDidUpdate = (prevProps) => {

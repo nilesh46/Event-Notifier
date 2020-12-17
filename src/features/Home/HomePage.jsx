@@ -31,7 +31,7 @@ class HomePage extends Component {
 			<div className={classes.Bg}>
 				<div className={classes.darkOverlay}>
 					<NavBar />
-					<Container maxWidth="lg">
+					<Container maxWidth="lg" style={{ paddingTop: "6rem" }}>
 						{/* Content */}
 						<Grid container spacing={2}>
 							<Grid item md xs={12}>

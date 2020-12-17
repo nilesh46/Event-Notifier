@@ -32,13 +32,13 @@ const EventActivityItem = ({ activity }) => {
 					</>
 				}
 				secondary={
-					<div>
+					<span>
 						{formatDistance(
 							activity.timestamp && activity.timestamp.toDate(),
 							Date.now()
 						)}{" "}
 						ago
-					</div>
+					</span>
 				}
 			></ListItemText>
 		</ListItem>

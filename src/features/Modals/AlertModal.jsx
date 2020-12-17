@@ -7,64 +7,101 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { connect } from "react-redux";
 import { closeModal } from "../../redux/actions";
-import { Slide } from "@material-ui/core";
+import { Box, CircularProgress, Slide } from "@material-ui/core";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
-    return <Slide direction="up" ref={ref} {...props} />;
+	return <Slide direction="up" ref={ref} {...props} />;
 });
 
 class AlertModal extends Component {
-    handleClose = () => {
-        this.props.closeModal();
-    };
+	state = { initialLoad: true };
+	handleClose = () => {
+		this.props.closeModal();
+	};
 
-    handleAgree = () => {
-        const { action, closeModal } = this.props;
-        action();
-        closeModal();
-    };
+	handleAgree = () => {
+		const { action } = this.props;
+		action();
+		this.setState({ initialLoad: false });
+	};
 
-    render() {
-        const {
-            title,
-            description,
-            agreeBtnText,
-            disagreeBtnText,
-        } = this.props;
+	render() {
+		const {
+			title,
+			description,
+			agreeBtnText,
+			disagreeBtnText,
+			loading,
+		} = this.props;
 
-        return (
-            <div>
-                <Dialog
-                    open={true}
-                    onClose={this.handleClose}
-                    TransitionComponent={Transition}
-                    aria-labelledby="alert-dialog-title"
-                    aria-describedby="alert-dialog-description"
-                >
-                    <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
-                    <DialogContent>
-                        <DialogContentText id="alert-dialog-description">
-                            {description}
-                        </DialogContentText>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={this.handleClose} color="primary">
-                            {disagreeBtnText}
-                        </Button>
-                        <Button
-                            onClick={this.handleAgree}
-                            color="primary"
-                            autoFocus
-                        >
-                            {agreeBtnText}
-                        </Button>
-                    </DialogActions>
-                </Dialog>
-            </div>
-        );
-    }
+		const { initialLoad } = this.state;
+
+		if (!initialLoad && !loading) {
+			this.handleClose();
+		}
+
+		return (
+			<div>
+				<Dialog
+					open={true}
+					onClose={this.handleClose}
+					TransitionComponent={Transition}
+					aria-labelledby="alert-dialog-title"
+					aria-describedby="alert-dialog-description"
+				>
+					{loading && (
+						<>
+							<DialogTitle id="alert-dialog-title">
+								Deleting...
+							</DialogTitle>
+							<DialogContent>
+								<Box
+									display="flex"
+									alignItems="center"
+									justifyContent="center"
+								>
+									<CircularProgress />
+								</Box>
+							</DialogContent>
+						</>
+					)}
+					{!loading && (
+						<>
+							<DialogTitle id="alert-dialog-title">
+								{title}
+							</DialogTitle>
+							<DialogContent>
+								<DialogContentText id="alert-dialog-description">
+									{description}
+								</DialogContentText>
+							</DialogContent>
+							<DialogActions>
+								<Button
+									onClick={this.handleClose}
+									color="primary"
+								>
+									{disagreeBtnText}
+								</Button>
+								<Button
+									onClick={this.handleAgree}
+									color="primary"
+									autoFocus
+								>
+									{agreeBtnText}
+								</Button>
+							</DialogActions>
+						</>
+					)}
+				</Dialog>
+			</div>
+		);
+	}
 }
 
 const actions = { closeModal };
 
-export default connect(null, actions)(AlertModal);
+const mapStateToProps = (state) => {
+	return { loading: state.async.loading };
+};
+
+export default connect(mapStateToProps, actions)(AlertModal);
