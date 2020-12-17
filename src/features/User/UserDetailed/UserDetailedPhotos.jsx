@@ -13,7 +13,7 @@ class UserDetailedPhotos extends Component {
 		const firestore = getFirebase().firestore();
 		firestore
 			.collection("users")
-			.doc(`${user.id}`)
+			.doc(`${user.uid}`)
 			.collection("photos")
 			.get()
 			.then((querySnapshot) => {
@@ -35,7 +35,7 @@ class UserDetailedPhotos extends Component {
 						<Box mb="1rem" display="flex" alignItems="center">
 							<PhotoAlbumIcon fontSize="large" />
 							<Typography variant="body1">
-								<b>About User Displayname</b>
+								<b>Gallery</b>
 							</Typography>
 						</Box>
 						{photos === null && (

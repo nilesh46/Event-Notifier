@@ -8,24 +8,23 @@ import Box from "@material-ui/core/Box";
 import EventsGridList from "../../Menus/EventsGridList";
 import { Paper } from "@material-ui/core";
 import EventNoteIcon from "@material-ui/icons/EventNote";
+import { getUserEvents } from "../../../redux/actions";
+import { connect } from "react-redux";
 
 const TabPanel = (props) => {
 	const { children, value, index, ...other } = props;
 
 	return (
-		<div
+		<Box
 			role="tabpanel"
 			hidden={value !== index}
 			id={`vertical-tabpanel-${index}`}
 			aria-labelledby={`vertical-tab-${index}`}
 			{...other}
+			width="100%"
 		>
-			{value === index && (
-				<Box p={3}>
-					<Typography>{children}</Typography>
-				</Box>
-			)}
-		</div>
+			{value === index && <Box px={3}>{children}</Box>}
+		</Box>
 	);
 };
 
@@ -44,57 +43,31 @@ const a11yProps = (index) => {
 
 const Styles = (theme) => ({
 	root: {
-		flexGrow: 1,
 		backgroundColor: theme.palette.background.paper,
 		display: "flex",
+		width: "100%",
 	},
 	tabs: {
 		borderRight: `1px solid ${theme.palette.divider}`,
 	},
 });
 
-const events = [
-	{
-		img: "https://source.unsplash.com/random",
-		title: "event",
-		hostedBy: "Username",
-	},
-	{
-		img: "https://source.unsplash.com/random",
-		title: "event",
-		hostedBy: "Username",
-	},
-	{
-		img: "https://source.unsplash.com/random",
-		title: "event",
-		hostedBy: "Username",
-	},
-	{
-		img: "https://source.unsplash.com/random",
-		title: "event",
-		hostedBy: "Username",
-	},
-	{
-		img: "https://source.unsplash.com/random",
-		title: "event",
-		hostedBy: "Username",
-	},
-	{
-		img: "https://source.unsplash.com/random",
-		title: "event",
-		hostedBy: "Username",
-	},
-];
-
 class UserDetailedEvents extends Component {
 	state = { value: 0 };
 
+	componentDidMount() {
+		const { getUserEvents, user } = this.props;
+		getUserEvents(user.uid);
+	}
+
 	handleChange = (event, newValue) => {
+		const { getUserEvents, user } = this.props;
 		this.setState({ value: newValue });
+		getUserEvents(user.uid, newValue);
 	};
 
 	render() {
-		const { classes } = this.props;
+		const { classes, events, loading } = this.props;
 
 		return (
 			<Box mb="1rem">
@@ -106,7 +79,7 @@ class UserDetailedEvents extends Component {
 								<b>Events</b>
 							</Typography>
 						</Box>
-						<div className={classes.root}>
+						<Box className={classes.root}>
 							<Box>
 								<Tabs
 									orientation="vertical"
@@ -131,31 +104,38 @@ class UserDetailedEvents extends Component {
 									/>
 								</Tabs>
 							</Box>
-							<TabPanel value={this.state.value} index={0}>
-								<EventsGridList
-									events={events}
-									header="All Events"
-								/>
-							</TabPanel>
-							<TabPanel value={this.state.value} index={1}>
-								<EventsGridList
-									events={events}
-									header="Past Events"
-								/>
-							</TabPanel>
-							<TabPanel value={this.state.value} index={2}>
-								<EventsGridList
-									events={events}
-									header="Future Events"
-								/>
-							</TabPanel>
-							<TabPanel value={this.state.value} index={3}>
-								<EventsGridList
-									events={events}
-									header="Events Hosted"
-								/>
-							</TabPanel>
-						</div>
+							<Box flexGrow="1">
+								<TabPanel value={this.state.value} index={0}>
+									<EventsGridList
+										events={events}
+										header="All Events"
+										loading={loading}
+									/>
+								</TabPanel>
+
+								<TabPanel value={this.state.value} index={1}>
+									<EventsGridList
+										events={events}
+										header="Past Events"
+										loading={loading}
+									/>
+								</TabPanel>
+								<TabPanel value={this.state.value} index={2}>
+									<EventsGridList
+										events={events}
+										header="Future Events"
+										loading={loading}
+									/>
+								</TabPanel>
+								<TabPanel value={this.state.value} index={3}>
+									<EventsGridList
+										events={events}
+										header="Events Hosted"
+										loading={loading}
+									/>
+								</TabPanel>
+							</Box>
+						</Box>
 					</Box>
 				</Paper>
 			</Box>
@@ -163,4 +143,15 @@ class UserDetailedEvents extends Component {
 	}
 }
 
-export default withStyles(Styles)(UserDetailedEvents);
+const actions = {
+	getUserEvents,
+};
+
+const mapStateToProps = (state) => {
+	return { events: state.events, loading: state.async.loading };
+};
+
+export default connect(
+	mapStateToProps,
+	actions
+)(withStyles(Styles)(UserDetailedEvents));

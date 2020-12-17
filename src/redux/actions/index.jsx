@@ -207,6 +207,46 @@ export const getEventsForDashboard = (lastEvent) => async (
 	}
 };
 
+export const updateEventPhoto = ({ firebase }, downloadURL, eventId) => async (
+	dispatch
+) => {
+	try {
+		await firebase.firestore().collection("events").doc(eventId).update({
+			photoURL: downloadURL,
+		});
+	} catch (error) {
+		console.log(error);
+		toastr.error("Oops", "Something went wrong");
+	}
+};
+
+export const addEventComment = (firebase, eventId, values, parentId) => async (
+	dispatch,
+	getState
+) => {
+	try {
+		const user = getState().firebase.profile;
+		const photoURL = user.photoURL;
+		const displayName = user.displayName;
+
+		const newComment = {
+			displayName,
+			photoURL,
+			parentId,
+			uid: user.uid,
+			text: values.comment,
+			date: Date.now(),
+			id: user.uid + Date.now(),
+		};
+
+		await firebase.push(`event_chat/${eventId}`, newComment);
+		toastr.success("Success!!! ", "Comment added successfully");
+	} catch (error) {
+		console.log(error);
+		toastr.error("Oops", "Something went wrong");
+	}
+};
+
 // Modal Actions
 export const openModal = (modalType, modalProps) => {
 	return {
@@ -244,7 +284,6 @@ export const asyncActionError = () => {
 };
 
 // Auth Actions
-// Auth Actions
 export const login = ({ firebase }, creds) => async (dispatch) => {
 	try {
 		await firebase
@@ -252,7 +291,6 @@ export const login = ({ firebase }, creds) => async (dispatch) => {
 			.signInWithEmailAndPassword(creds.email, creds.password);
 
 		history.push("/events");
-		// history.go(0);
 	} catch (error) {
 		let msg;
 		const cases = [
@@ -314,7 +352,6 @@ export const registerUser = ({ firebase, firestore }, creds) => async (
 			.set(newUser);
 
 		history.push("/events");
-		// history.go(0);
 	} catch (error) {
 		throw new SubmissionError({
 			_error: error.message,
@@ -346,10 +383,10 @@ export const socialLogin = ({ firebase }, selectedProvider) => async (
 		}
 
 		history.push("/events");
-		// history.go(0);
 	} catch (error) {}
 };
 
+//User Actions
 export const updateUserProfilePhoto = (
 	{ firebase },
 	downloadURL,
@@ -416,45 +453,62 @@ export const setMainPhoto = ({ firebase }, url) => async (dispatch) => {
 	}
 };
 
-export const updateEventPhoto = ({ firebase }, downloadURL, eventId) => async (
-	dispatch
-) => {
-	try {
-		await firebase.firestore().collection("events").doc(eventId).update({
-			photoURL: downloadURL,
-		});
-	} catch (error) {
-		console.log(error);
-		toastr.error("Oops", "Something went wrong");
-	}
-};
-
-export const addEventComment = (firebase, eventId, values, parentId) => async (
+export const getUserEvents = (userUid, activeTab) => async (
 	dispatch,
 	getState
 ) => {
+	dispatch(asyncActionStart());
+	const firestore = getFirebase().firestore();
+	const today = new Date();
+	const eventsRef = firestore.collection("event_attendee");
+	let query;
+	switch (activeTab) {
+		case 1:
+			//past events
+			query = eventsRef
+				.where("userUid", "==", userUid)
+				.where("eventDate", "<=", today)
+				.orderBy("eventDate", "desc");
+			break;
+		case 2:
+			//future events
+			query = eventsRef
+				.where("userUid", "==", userUid)
+				.where("eventDate", ">=", today)
+				.orderBy("eventDate");
+			break;
+		case 3:
+			//hosted events
+			query = eventsRef
+				.where("userUid", "==", userUid)
+				.where("host", "==", true)
+				.orderBy("eventDate", "desc");
+			break;
+		default:
+			//all events
+			query = eventsRef
+				.where("userUid", "==", userUid)
+				.orderBy("eventDate", "desc");
+			break;
+	}
+
 	try {
-		const user = getState().firebase.profile;
-		const photoURL = user.photoURL;
-		const displayName = user.displayName;
-		// const photoURL = user.photoURL || userPNG;
-		// const displayName = user.displayName;
+		let querySnap = await query.get();
+		let events = [];
 
-		const newComment = {
-			displayName,
-			photoURL,
-			parentId,
-			uid: user.uid,
-			text: values.comment,
-			date: Date.now(),
-			id: user.uid + Date.now(),
-		};
+		for (let index = 0; index < querySnap.docs.length; index++) {
+			const event = await firestore
+				.collection("events")
+				.doc(querySnap.docs[index].data().eventId)
+				.get();
 
-		await firebase.push(`event_chat/${eventId}`, newComment);
-		toastr.success("Success!!! ", "Comment added successfully");
+			events.push({ ...event.data(), id: event.id });
+		}
+		dispatch({ type: FETCH_EVENTS, payload: { events } });
+		dispatch(asyncActionFinish());
 	} catch (error) {
 		console.log(error);
-		toastr.error("Oops", "Something went wrong");
+		dispatch(asyncActionError());
 	}
 };
 

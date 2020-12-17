@@ -27,7 +27,7 @@ class UserDetailedPage extends Component {
 			.collection("users")
 			.doc(userId)
 			.onSnapshot((doc) => {
-				this.setState({ user: { id: userId, ...doc.data() } });
+				this.setState({ user: { ...doc.data() } });
 			});
 
 		this.setState({ unsubscribe });
@@ -62,7 +62,7 @@ class UserDetailedPage extends Component {
 							<UserDetailedPhotos user={user} />
 						</Grid>
 						<Grid item md={8} xs={12}>
-							<UserDetailedEvents />
+							<UserDetailedEvents user={user} />
 						</Grid>
 					</Grid>
 				)}
