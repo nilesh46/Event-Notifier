@@ -5,6 +5,7 @@ import EventList from "../EventList/EventList";
 import { getEventsForDashboard } from "../../../redux/actions";
 import { firestoreConnect } from "react-redux-firebase";
 import EventListItemSkeleton from "../EventList/EventListItemSkeleton";
+import EventActivity from "../EventActivity/EventActivity";
 
 const style = {
 	"@global": {
@@ -62,7 +63,7 @@ class EventDashboard extends Component {
 			},
 		}));
 
-		const { loading } = this.props;
+		const { loading, activities } = this.props;
 		const { loadedEvents, moreEvents } = this.state;
 
 		if (this.state.loadingInitial) {
@@ -76,8 +77,8 @@ class EventDashboard extends Component {
 		}
 		return (
 			<div className={classes.root}>
-				<Grid container spacing={3}>
-					<Grid item md={8} xs={12}>
+				<Grid container spacing={2}>
+					<Grid item lg={7} md={8} xs={12}>
 						<EventList
 							events={loadedEvents}
 							getNextEvents={this.getNextEvents}
@@ -90,8 +91,8 @@ class EventDashboard extends Component {
 							})}
 					</Grid>
 
-					<Grid item md={4} xs={12}>
-						<h1>Recent Activity</h1>
+					<Grid item lg={5} md={4} xs={12}>
+						<EventActivity activities={activities} />
 					</Grid>
 				</Grid>
 			</div>
@@ -99,20 +100,25 @@ class EventDashboard extends Component {
 	}
 }
 
+const query = [
+	{
+		collection: "activity",
+		orderBy: ["timestamp", "desc"],
+		limit: 5,
+	},
+];
+
 const mapStateToProps = (state) => ({
 	events: state.events,
 	loading: state.async.loading,
+	activities: state.firestore.ordered.activity,
 });
 
 const actions = {
 	getEventsForDashboard,
 };
 
-EventDashboard = firestoreConnect([
-	{
-		collection: "events",
-	},
-])(EventDashboard);
+EventDashboard = firestoreConnect(query)(EventDashboard);
 
 export default connect(
 	mapStateToProps,

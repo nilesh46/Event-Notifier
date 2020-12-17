@@ -59,7 +59,10 @@ class App extends React.Component {
 						render={() => (
 							<>
 								<NavBar />
-								<Container maxWidth="lg">
+								<Container
+									maxWidth="lg"
+									style={{ marginTop: "6rem" }}
+								>
 									<Switch key={this.props.location.key}>
 										<>
 											<Route

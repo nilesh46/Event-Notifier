@@ -24,3 +24,5 @@ yarn-error.log*
 
 #testFiles
 /src/App/Config/firebase.js
+
+/functions/node_modules/**
