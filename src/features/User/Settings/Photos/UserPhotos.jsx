@@ -59,6 +59,7 @@ const UserPhotos = ({
 										openModal
 									)
 								}
+								component="span"
 							/>
 						</CardActionArea>
 						<CardActions>
@@ -83,6 +84,7 @@ const UserPhotos = ({
 												)
 											}
 											title="My Photo"
+											component="span"
 										/>
 									</CardActionArea>
 									<CardActions>
