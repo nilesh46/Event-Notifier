@@ -83,7 +83,7 @@ class EventListItem extends Component {
 
 	render() {
 		const { classes } = this.props;
-		const { event } = this.props;
+		const { event, uid } = this.props;
 
 		return (
 			<Card className={classes.root} variant="outlined">
@@ -216,13 +216,15 @@ class EventListItem extends Component {
 					>
 						View
 					</Button>
-					<Button
-						size="small"
-						color="secondary"
-						onClick={this.handleDeleteEvent}
-					>
-						Delete
-					</Button>
+					{uid === event.hostUid && (
+						<Button
+							size="small"
+							color="secondary"
+							onClick={this.handleDeleteEvent}
+						>
+							Delete
+						</Button>
+					)}
 				</CardActions>
 			</Card>
 		);
@@ -235,4 +237,8 @@ const actions = {
 	deleteEvent,
 };
 
-export default connect(null, actions)(ComponentWithStyles);
+const mapStateToProps = (state) => {
+	return { uid: state.firebase.profile.uid };
+};
+
+export default connect(mapStateToProps, actions)(ComponentWithStyles);

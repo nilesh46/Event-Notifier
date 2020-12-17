@@ -65,7 +65,7 @@ class MenuAppBar extends React.Component {
 
 		return (
 			<div className={classes.root}>
-				<AppBar position="fixed" style={{ background: "#2E3B55" }}>
+				<AppBar style={{ background: "#2E3B55" }}>
 					<Toolbar>
 						{/* Logo */}
 						<Link to="/events">
