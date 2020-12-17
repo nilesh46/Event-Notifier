@@ -21,6 +21,7 @@ import { useFirebase } from "react-redux-firebase";
 import { toastr } from "react-redux-toastr";
 import { updateEventPhoto, openModal } from "../../../redux/actions";
 import history from "../../../history";
+import imageCompression from "browser-image-compression";
 
 const useStyles = makeStyles((theme) => ({
 	"@global": {
@@ -60,6 +61,7 @@ const EventPhoto = ({ auth, eventId, updateEventPhoto, openModal }) => {
 	const [files, setFiles] = useState([]);
 	const [image, setImage] = useState(null);
 	const [loading, setLoading] = useState(null);
+	const [compressing, setCompressing] = useState(null);
 
 	const firebase = useFirebase();
 
@@ -74,7 +76,30 @@ const EventPhoto = ({ auth, eventId, updateEventPhoto, openModal }) => {
 		setImage(null);
 	};
 
-	const handleUploadImage = () => {
+	const compressAndUpload = async () => {
+		const imageFile = image;
+		let finalImage = image;
+		const options = {
+			maxSizeMB: 1,
+			useWebWorker: true,
+			onProgress: (compression) => {
+				setCompressing(compression);
+			},
+		};
+		try {
+			const compressedFile = await imageCompression(imageFile, options);
+			setCompressing(null);
+
+			if (compressedFile.size < imageFile.size) {
+				finalImage = compressedFile;
+			}
+			handleUploadImage(finalImage);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	const handleUploadImage = (image) => {
 		const name = cuid();
 		const fileName = name;
 		const uploadedFile = uploadFileToFirebaseStorage(
@@ -144,7 +169,7 @@ const EventPhoto = ({ auth, eventId, updateEventPhoto, openModal }) => {
 			agreeBtnText: "Set Photo",
 			disagreeBtnText: "Cancel",
 			action: () => {
-				handleUploadImage();
+				compressAndUpload();
 			},
 		});
 	};
@@ -211,38 +236,75 @@ const EventPhoto = ({ auth, eventId, updateEventPhoto, openModal }) => {
 
 							<Box className={classes.inRatio}>
 								<Paper elevation={3} className={classes.secBg}>
-									{loading !== null && (
+									{(loading !== null ||
+										compressing !== null) && (
 										<Box
 											display="flex"
 											alignItems="center"
 											justifyContent="center"
 											height="100%"
 										>
-											<Box
-												position="relative"
-												display="inline-flex"
-											>
-												<CircularProgress
-													variant="determinate"
-													value={loading}
-												/>
+											<Box textAlign="center">
 												<Box
-													top={0}
-													left={0}
-													bottom={0}
-													right={0}
-													position="absolute"
-													display="flex"
-													alignItems="center"
-													justifyContent="center"
+													position="relative"
+													display="inline-flex"
 												>
-													<Typography
-														variant="caption"
-														component="div"
-														color="textSecondary"
-													>{`${Math.round(
-														loading
-													)}%`}</Typography>
+													<CircularProgress
+														variant="determinate"
+														value={
+															loading
+																? loading
+																: compressing
+														}
+													/>
+													<Box
+														top={0}
+														left={0}
+														bottom={0}
+														right={0}
+														position="absolute"
+														display="flex"
+														alignItems="center"
+														justifyContent="center"
+													>
+														{compressing !==
+															null && (
+															<Typography
+																variant="caption"
+																component="div"
+																color="textSecondary"
+															>{`${Math.round(
+																compressing
+															)}%`}</Typography>
+														)}
+														{loading !== null && (
+															<Typography
+																variant="caption"
+																component="div"
+																color="textSecondary"
+															>{`${Math.round(
+																loading
+															)}%`}</Typography>
+														)}
+													</Box>
+												</Box>
+												<Box>
+													{compressing !== null && (
+														<Typography
+															variant="body1"
+															color="primary"
+														>
+															Compressing...
+														</Typography>
+													)}
+													{compressing === null && (
+														<Typography
+															variant="body1"
+															color="primary"
+														>
+															Uploading...
+														</Typography>
+													)}
 												</Box>
 											</Box>
 										</Box>
@@ -266,27 +328,29 @@ const EventPhoto = ({ auth, eventId, updateEventPhoto, openModal }) => {
 										</Fragment>
 									)}
 								</Paper>
-								{loading === null && files.length > 0 && (
-									<ButtonGroup
-										variant="contained"
-										aria-label="contained secondary button group"
-										fullWidth
-										style={{ margin: "1rem 0" }}
-									>
-										<Button
-											color="primary"
-											onClick={handleClickTick}
+								{loading === null &&
+									compressing === null &&
+									files.length > 0 && (
+										<ButtonGroup
+											variant="contained"
+											aria-label="contained secondary button group"
+											fullWidth
+											style={{ margin: "1rem 0" }}
 										>
-											<DoneAllIcon />
-										</Button>
-										<Button
-											color="secondary"
-											onClick={handleCancelCrop}
-										>
-											<CancelIcon />
-										</Button>
-									</ButtonGroup>
-								)}
+											<Button
+												color="primary"
+												onClick={handleClickTick}
+											>
+												<DoneAllIcon />
+											</Button>
+											<Button
+												color="secondary"
+												onClick={handleCancelCrop}
+											>
+												<CancelIcon />
+											</Button>
+										</ButtonGroup>
+									)}
 							</Box>
 						</Box>
 					</Grid>
