@@ -62,11 +62,12 @@ class EventListItem extends Component {
 	handleDeleteEvent = () => {
 		const { event, deleteEvent, openModal } = this.props;
 		openModal("AlertModal", {
-			title: "Delete this Event ?",
+			title: `Delete ${event.title} ?`,
 			description:
 				"Deleting this event from here will remove it completely from your account. All the current attendees will be removed and will get notifications of so.",
 			agreeBtnText: "Delete",
 			disagreeBtnText: "Cancel",
+			actionName: "Deleting Event",
 			action: () => {
 				deleteEvent(event.id);
 			},

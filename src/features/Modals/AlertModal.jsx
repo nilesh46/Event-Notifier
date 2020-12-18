@@ -32,6 +32,7 @@ class AlertModal extends Component {
 			agreeBtnText,
 			disagreeBtnText,
 			loading,
+			actionName,
 		} = this.props;
 
 		const { initialLoad } = this.state;
@@ -52,7 +53,7 @@ class AlertModal extends Component {
 					{loading && (
 						<>
 							<DialogTitle id="alert-dialog-title">
-								Deleting...
+								{actionName}
 							</DialogTitle>
 							<DialogContent>
 								<Box

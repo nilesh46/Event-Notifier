@@ -488,15 +488,73 @@ export const deletePhoto = ({ firebase }, fileName, id) => async (dispatch) => {
 	}
 };
 
-export const setMainPhoto = ({ firebase }, url) => async (dispatch) => {
+export const setMainPhoto = (url) => async (dispatch) => {
+	const firebase = getFirebase();
+	const firestore = firebase.firestore();
+	const user = firebase.auth().currentUser;
+	let userDocRef = firestore.collection("users").doc(user.uid);
+	let eventAttendeeRef = firestore.collection("event_attendee");
+	let activityRef = firestore.collection("activity");
+	const today = new Date();
+
 	try {
-		const user = firebase.auth().currentUser;
-		await firebase.firestore().collection("users").doc(user.uid).update({
-			photoURL: url,
-		});
+		dispatch(asyncActionStart());
+		let batch = firestore.batch();
+		//upadting the user profile photo
+		batch.update(userDocRef, { photoURL: url });
+
+		//updating the user photo in events
+		let eventQuery = eventAttendeeRef
+			.where("userUid", "==", user.uid)
+			.where("eventDate", ">=", today);
+
+		let eventQuerySnap = await eventQuery.get();
+
+		for (let index = 0; index < eventQuerySnap.docs.length; index++) {
+			let eventId = await eventQuerySnap.docs[index].data().eventId;
+			let eventDocRef = firestore.collection("events").doc(eventId);
+			let event = await eventDocRef.get();
+			if (event.data().hostUid === user.uid) {
+				batch.update(eventDocRef, {
+					hostPhotoURL: url,
+					[`attendees.${user.uid}.photoURL`]: url,
+				});
+			} else {
+				batch.update(eventDocRef, {
+					[`attendees.${user.uid}.photoURL`]: url,
+				});
+			}
+
+			//updating comment photoURL in RTDB
+			let eventCommentsRef = firebase
+				.database()
+				.ref(`event_chat/${eventId}`);
+
+			eventCommentsRef
+				.orderByChild("uid")
+				.equalTo(user.uid)
+				.on("child_added", async (commentSnap) => {
+					await commentSnap.ref.update({ photoURL: url });
+					commentSnap.ref.off();
+				});
+		}
+
+		//updating the user photo in activity
+		let activityQuery = activityRef.where("hostUid", "==", user.uid);
+
+		let activityQuerySnap = await activityQuery.get();
+
+		for (let index = 0; index < activityQuerySnap.docs.length; index++) {
+			let activityDocRef = activityQuerySnap.docs[index].ref;
+			batch.update(activityDocRef, { hostPhotoURL: url });
+		}
+
+		await batch.commit();
+		dispatch(asyncActionFinish());
+		toastr.success("Success!!! ", "Your Profile Photo has been updated");
 	} catch (error) {
 		toastr.error(error.message);
-		throw error;
+		console.log(error);
 	}
 };
 

@@ -168,6 +168,7 @@ const EventPhoto = ({ auth, eventId, updateEventPhoto, openModal }) => {
 				"Setting this image to the event means if you have any previous image attached to the event will be deleted permanently",
 			agreeBtnText: "Set Photo",
 			disagreeBtnText: "Cancel",
+			actionName: "Updating Event Photo",
 			action: () => {
 				compressAndUpload();
 			},
