@@ -23,6 +23,7 @@ import {
 	updateUserProfilePhoto,
 	deletePhoto,
 	setMainPhoto,
+	openModal,
 } from "../../../../redux/actions";
 import { compose } from "redux";
 import { firestoreConnect } from "react-redux-firebase";
@@ -82,6 +83,7 @@ const PhotosPage = ({
 	photos,
 	deletePhoto,
 	setMainPhoto,
+	openModal,
 }) => {
 	const classes = useStyles();
 	const [files, setFiles] = useState([]);
@@ -107,9 +109,16 @@ const PhotosPage = ({
 	};
 
 	const handleSetMainPhoto = async (url) => {
-		const firebase = getFirebase();
-		await setMainPhoto({ firebase }, url).catch((error) => {
-			toastr.error(error);
+		openModal("AlertModal", {
+			title: `Set Profile Picture ?`,
+			description:
+				"Setting this profile picture will unset your current profile picture",
+			agreeBtnText: "Set",
+			disagreeBtnText: "Cancel",
+			actionName: "Setting Profile Picture",
+			action: () => {
+				setMainPhoto(url);
+			},
 		});
 	};
 
@@ -395,6 +404,7 @@ const actions = {
 	updateUserProfilePhoto,
 	deletePhoto,
 	setMainPhoto,
+	openModal,
 };
 
 const mapStateToProps = (state) => ({

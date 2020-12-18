@@ -13,7 +13,8 @@ import { format } from "date-fns";
 import { cancelJoiningEvent, joinEvent } from "../../../redux/actions";
 import { connect } from "react-redux";
 import noImage from "../../../Assets/noImage.svg";
-import { openModal } from "../../../redux/actions";
+import { openModal, deleteEvent } from "../../../redux/actions";
+import history from "../../../history";
 
 const styles = (theme) => ({
 	root: {
@@ -47,6 +48,22 @@ class EventDetailedHeader extends Component {
 		openModal("ImageModal", { photo });
 	};
 
+	handleDeleteEvent = () => {
+		const { event, deleteEvent, openModal } = this.props;
+		history.push("/events");
+		openModal("AlertModal", {
+			title: `Delete ${event.title} ?`,
+			description:
+				"Deleting this event from here will remove it completely from your account. All the current attendees will be removed and will get notifications of so.",
+			agreeBtnText: "Delete",
+			disagreeBtnText: "Cancel",
+			actionName: "Deleting Event",
+			action: () => {
+				deleteEvent(event.id);
+			},
+		});
+	};
+
 	render() {
 		const {
 			classes,
@@ -55,6 +72,7 @@ class EventDetailedHeader extends Component {
 			isHost,
 			joinEvent,
 			cancelJoiningEvent,
+			uid,
 		} = this.props;
 
 		return (
@@ -148,8 +166,19 @@ class EventDetailedHeader extends Component {
 								>
 									Manage This Event
 								</Button>
+								{uid === event.hostUid && (
+									<Button
+										variant="outlined"
+										size="small"
+										color="secondary"
+										onClick={this.handleDeleteEvent}
+									>
+										Delete
+									</Button>
+								)}
 							</Box>
 						)}
+
 						{isHost && (
 							<Box>
 								<Button
@@ -175,6 +204,14 @@ const actions = {
 	joinEvent,
 	cancelJoiningEvent,
 	openModal,
+	deleteEvent,
 };
 
-export default connect(null, actions)(withStyles(styles)(EventDetailedHeader));
+const mapStateToProps = (state) => {
+	return { uid: state.firebase.profile.uid };
+};
+
+export default connect(
+	mapStateToProps,
+	actions
+)(withStyles(styles)(EventDetailedHeader));
