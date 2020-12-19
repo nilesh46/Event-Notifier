@@ -7,7 +7,7 @@ import CardContent from "@material-ui/core/CardContent";
 import Avatar from "@material-ui/core/Avatar";
 import Typography from "@material-ui/core/Typography";
 import { deepOrange } from "@material-ui/core/colors";
-import { Box, Button } from "@material-ui/core";
+import { Box, Button, CircularProgress } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import { format } from "date-fns";
 import { cancelJoiningEvent, joinEvent } from "../../../redux/actions";
@@ -73,6 +73,7 @@ class EventDetailedHeader extends Component {
 			joinEvent,
 			cancelJoiningEvent,
 			uid,
+			loading,
 		} = this.props;
 
 		return (
@@ -149,7 +150,15 @@ class EventDetailedHeader extends Component {
 											joinEvent(event);
 										}}
 									>
-										Join This Event
+										{!loading && (
+											<span>Join This Event</span>
+										)}
+										{loading && (
+											<CircularProgress
+												color="inherit"
+												size="2rem"
+											/>
+										)}
 									</Button>
 								)}
 							</Box>
@@ -208,7 +217,7 @@ const actions = {
 };
 
 const mapStateToProps = (state) => {
-	return { uid: state.firebase.profile.uid };
+	return { uid: state.firebase.profile.uid, loading: state.async.loading };
 };
 
 export default connect(

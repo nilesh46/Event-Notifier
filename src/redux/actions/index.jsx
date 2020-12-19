@@ -120,25 +120,30 @@ export const joinEvent = (event) => {
 			host: false,
 		};
 
+		const eventDocRef = firestore.collection("events").doc(event.id);
+		const eventAttendeeDocRef = firestore
+			.collection("event_attendee")
+			.doc(`${event.id}_${user.id}`);
 		try {
-			await firestore
-				.collection("events")
-				.doc(`${event.id}`)
-				.update({ [`attendees.${user.uid}`]: newAttendee });
-
-			await firestore
-				.collection("event_attendee")
-				.doc(`${event.id}_${user.uid}`)
-				.set({
+			dispatch(asyncActionStart());
+			await firestore.runTransaction(async (transaction) => {
+				await transaction.get(eventDocRef);
+				transaction.update(eventDocRef, {
+					[`attendees.${user.uid}`]: newAttendee,
+				});
+				transaction.set(eventAttendeeDocRef, {
 					eventId: event.id,
 					userUid: user.uid,
 					eventDate: event.date,
 					host: false,
 					category: event.category,
 				});
+			});
 
+			dispatch(asyncActionFinish());
 			toastr.success("Success!!! ", "You successfully joined the event");
 		} catch (error) {
+			dispatch(asyncActionError());
 			toastr.error("Oops", "Something went wrong");
 		}
 	};
