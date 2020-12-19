@@ -54,9 +54,12 @@ class MenuButton extends React.Component {
 						color="inherit"
 					>
 						{<Wrapper />}
+
+						<Hidden mdUp>
+							<Box ml="1.1rem">{this.BtnText(menuName)}</Box>
+						</Hidden>
+						{name && this.BtnText(name)}
 					</IconButton>
-					<Hidden mdUp>{this.BtnText(menuName)}</Hidden>
-					{name && this.BtnText(name)}
 				</Grid>
 				<Menu
 					id="menu-appbar"

@@ -8,7 +8,7 @@ import {
 	Typography,
 } from "@material-ui/core/";
 import { connect } from "react-redux";
-import { createEvent, updateEvent } from "../../../redux/actions";
+import { createEvent, updateEvent, openModal } from "../../../redux/actions";
 import {
 	combineValidators,
 	composeValidators,
@@ -89,19 +89,33 @@ class EventForm extends React.Component {
 	}
 
 	onFormSubmit = async (values) => {
+		const { openModal, updateEvent, createEvent } = this.props;
 		const eventId = values.id;
 		delete values.id;
 
 		if (eventId) {
-			try {
-				await this.props.updateEvent(values, eventId);
-				this.props.history.push(`/events/${eventId}`);
-			} catch (error) {}
+			openModal("AlertModal", {
+				title: `Update ${values.title} ?`,
+				description:
+					"Updating this event will make the rquested the changes and will notify to all your current attendees",
+				agreeBtnText: "Update",
+				disagreeBtnText: "Cancel",
+				actionName: "Updating Event",
+				action: () => {
+					updateEvent(values, eventId);
+				},
+			});
 		} else {
-			try {
-				let createdEvent = await this.props.createEvent(values);
-				this.props.history.push(`/events/${createdEvent.id}`);
-			} catch (error) {}
+			openModal("AlertModal", {
+				title: `Create ${values.title} ?`,
+				description: "Way to create your event in EvNet",
+				agreeBtnText: "Create",
+				disagreeBtnText: "Cancel",
+				actionName: "Creating Event",
+				action: () => {
+					createEvent(values);
+				},
+			});
 		}
 	};
 
@@ -530,6 +544,7 @@ const mapStateToProps = (state, ownProps) => {
 const actions = {
 	createEvent,
 	updateEvent,
+	openModal,
 };
 
 const validate = combineValidators({

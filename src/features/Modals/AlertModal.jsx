@@ -21,8 +21,8 @@ class AlertModal extends Component {
 
 	handleAgree = () => {
 		const { action } = this.props;
-		action();
 		this.setState({ initialLoad: false });
+		action();
 	};
 
 	render() {
