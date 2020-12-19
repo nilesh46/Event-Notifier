@@ -647,6 +647,44 @@ export const getUserEvents = (userUid, activeTab) => async (
 	}
 };
 
+export const followUser = (userToBeFollowed) => async (dispatch) => {
+	const firebase = getFirebase();
+	const firestore = firebase.firestore();
+	const user = firebase.auth().currentUser;
+	const userRef = firestore.collection("users");
+	const userDocRef = userRef.doc(user.uid);
+	try {
+		await userDocRef
+			.collection("following")
+			.doc(userToBeFollowed.uid)
+			.set({
+				city: userToBeFollowed.city || "Unknown City",
+				displayName: userToBeFollowed.displayName,
+				photoURL: userToBeFollowed.photoURL,
+			});
+	} catch (err) {
+		console.error(err);
+	}
+};
+
+export const unfollowUser = (userToBeUnfollowed) => async (dispatch) => {
+	const firebase = getFirebase();
+	const firestore = firebase.firestore();
+	const user = firebase.auth().currentUser;
+	const userRef = firestore.collection("users");
+	const userDocRef = userRef.doc(user.uid);
+	try {
+		await userDocRef
+			.collection("following")
+			.doc(userToBeUnfollowed.uid)
+			.delete();
+
+		console.log("deleted");
+	} catch (err) {
+		console.error(err);
+	}
+};
+
 const delay = (ms) => {
 	return new Promise((resolve) => setTimeout(resolve, ms));
 };

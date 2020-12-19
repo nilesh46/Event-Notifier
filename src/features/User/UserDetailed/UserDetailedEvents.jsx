@@ -70,7 +70,7 @@ class UserDetailedEvents extends Component {
 		const { classes, events, loading } = this.props;
 
 		return (
-			<Box mb="1rem">
+			<Box mb="1rem" style={{ maxWidth: 800 }}>
 				<Paper elevation={2}>
 					<Box py="1rem" pl="1rem">
 						<Box mb="1rem" display="flex" alignItems="center">

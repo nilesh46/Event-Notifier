@@ -12,7 +12,7 @@ class UserDetailedAbout extends Component {
 		const { user } = this.props;
 
 		return (
-			<Box my="1rem">
+			<Box my="1rem" style={{ maxWidth: 800 }}>
 				<Paper elevation={2}>
 					<Box p="1rem">
 						<Grid container spacing={3}>

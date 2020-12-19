@@ -1,12 +1,14 @@
 import { Box, Grid, Typography, withStyles } from "@material-ui/core";
 import React, { Component } from "react";
-import { getFirebase } from "react-redux-firebase";
-import UserDeatailedSidebar from "./UserDeatailedSidebar";
+import { firestoreConnect, getFirebase, isEmpty } from "react-redux-firebase";
+import UserDetailedSidebar from "./UserDetailedSidebar";
 import UserDetailedAbout from "./UserDetailedAbout";
 import UserDetailedEvents from "./UserDetailedEvents";
 import UserDetailedHeader from "./UserDetailedHeader";
 import UserDetailedPageSkeleton from "./UserDetailedPageSkeleton";
 import UserDetailedPhotos from "./UserDetailedPhotos";
+import { connect } from "react-redux";
+import { compose } from "redux";
 
 const style = {
 	"@global": {
@@ -17,10 +19,15 @@ const style = {
 };
 
 class UserDetailedPage extends Component {
-	state = { user: null, unsubscribe: null };
+	state = {
+		user: null,
+		unsubscribe: null,
+		isCurrentUser: false,
+	};
 
 	componentDidMount = () => {
 		const userId = this.props.match.params.id;
+		const currentUserId = getFirebase().auth().currentUser.uid;
 		const firestore = getFirebase().firestore();
 
 		const unsubscribe = firestore
@@ -30,7 +37,10 @@ class UserDetailedPage extends Component {
 				this.setState({ user: { ...doc.data() } });
 			});
 
-		this.setState({ unsubscribe });
+		let isCurrentUser = false;
+		if (userId === currentUserId) isCurrentUser = true;
+
+		this.setState({ unsubscribe, isCurrentUser });
 	};
 
 	componentWillUnmount = () => {
@@ -38,7 +48,9 @@ class UserDetailedPage extends Component {
 	};
 
 	render() {
-		const { user } = this.state;
+		const { user, isCurrentUser } = this.state;
+		let isFollowing = false;
+		if (!isEmpty(this.props.isFollowing)) isFollowing = true;
 		return (
 			<>
 				{user === null && <UserDetailedPageSkeleton />}
@@ -51,17 +63,24 @@ class UserDetailedPage extends Component {
 				)}
 				{user && (
 					<Grid container spacing={3}>
-						<Grid item md={8} xs={12}>
-							<UserDetailedHeader user={user} />
+						<Grid item md={7} xs={12}>
+							<UserDetailedHeader
+								user={user}
+								isCurrentUser={isCurrentUser}
+								isFollowing={isFollowing}
+							/>
 							<UserDetailedAbout user={user} />
 						</Grid>
-						<Grid item md xs={12}>
-							<UserDeatailedSidebar />
-						</Grid>
-						<Grid item md={8} xs={12}>
+						{isCurrentUser && (
+							<Grid item md xs={12}>
+								<UserDetailedSidebar />
+							</Grid>
+						)}
+
+						<Grid item md={7} xs={12}>
 							<UserDetailedPhotos user={user} />
 						</Grid>
-						<Grid item md={8} xs={12}>
+						<Grid item md={7} xs={12}>
 							<UserDetailedEvents user={user} />
 						</Grid>
 					</Grid>
@@ -71,4 +90,35 @@ class UserDetailedPage extends Component {
 	}
 }
 
-export default withStyles(style)(UserDetailedPage);
+const query = ({ auth, userUid, match }) => {
+	if (userUid !== null) {
+		return [
+			{
+				collection: "users",
+				doc: auth.uid,
+				subcollections: [
+					{ collection: "following", doc: match.params.id },
+				],
+				storeAs: "isFollowing",
+			},
+		];
+	}
+};
+
+const mapStateToProps = (state, ownProps) => {
+	let userUid = null;
+	if (ownProps.match.params.id !== state.auth.uid)
+		userUid = ownProps.match.params.id;
+
+	return {
+		userUid,
+		auth: state.firebase.auth,
+		isFollowing: state.firestore.ordered.isFollowing,
+	};
+};
+
+export default compose(
+	connect(mapStateToProps),
+	firestoreConnect((props) => query(props)),
+	withStyles(style)
+)(UserDetailedPage);

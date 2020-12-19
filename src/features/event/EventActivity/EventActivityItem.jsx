@@ -19,13 +19,17 @@ const EventActivityItem = ({ activity }) => {
 					<>
 						{activity.type === "newEvent"
 							? "New Event!"
-							: "Event Updated!"}{" "}
+							: activity.type === "updatedEvent"
+							? "Event Updated!"
+							: "Event Deleted!"}{" "}
 						<Link href={`profile/${activity.hostUid}`}>
 							{activity.hostedBy}
 						</Link>{" "}
 						{activity.type === "newEvent"
 							? "is hosting"
-							: "has updated"}{" "}
+							: activity.type === "updatedEvent"
+							? "has updated"
+							: "has deleted"}{" "}
 						<Link href={`events/${activity.eventId}`}>
 							{activity.title}
 						</Link>

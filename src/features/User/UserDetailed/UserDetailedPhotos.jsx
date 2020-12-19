@@ -29,7 +29,7 @@ class UserDetailedPhotos extends Component {
 	render() {
 		const photos = this.state.photos;
 		return (
-			<Box>
+			<Box style={{ maxWidth: 800 }}>
 				<Paper elevation={2}>
 					<Box p="1rem">
 						<Box mb="1rem" display="flex" alignItems="center">
