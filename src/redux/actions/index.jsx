@@ -41,6 +41,7 @@ export const createEvent = (event) => {
 		const photoURL = user.photoURL;
 		const newEvent = createNewEvent(user, photoURL, event);
 		try {
+			dispatch(asyncActionStart());
 			let createdEvent = await firestore
 				.collection("events")
 				.add(newEvent);
@@ -56,8 +57,9 @@ export const createEvent = (event) => {
 					category: event.category,
 				});
 
+			dispatch(asyncActionFinish());
+			history.push(`/events/${createdEvent.id}`);
 			toastr.success("Success!!! ", "Event has been created");
-			return createdEvent;
 		} catch (error) {
 			toastr.error("Oops", "Something went wrong");
 		}
@@ -68,11 +70,35 @@ export const updateEvent = (event, eventId) => {
 	return async (dispatch) => {
 		const firebase = getFirebase();
 		const firestore = firebase.firestore();
+		const eventDocRef = firestore.collection("events").doc(eventId);
+		const eventAttendeeRef = firestore.collection("event_attendee");
 
 		try {
-			await firestore.collection("events").doc(`${eventId}`).set(event);
+			dispatch(asyncActionStart());
+			let batch = firestore.batch();
+
+			//updating event in events collection
+			batch.update(eventDocRef, { ...event });
+
+			//updating data related to event in event_attendee collection
+			let eventQuery = eventAttendeeRef.where("eventId", "==", eventId);
+			let eventQuerySnap = await eventQuery.get();
+
+			for (let index = 0; index < eventQuerySnap.docs.length; index++) {
+				let eventAttendeeDocRef = eventQuerySnap.docs[index].ref;
+				batch.update(eventAttendeeDocRef, {
+					eventDate: event.date,
+					category: event.category,
+				});
+			}
+
+			await batch.commit();
+
+			dispatch(asyncActionFinish());
+			history.push(`/events/${eventId}`);
 			toastr.success("Success!!! ", "Event has been updated");
 		} catch (error) {
+			dispatch(asyncActionError());
 			toastr.error("Oops", "Something went wrong");
 		}
 	};
@@ -83,7 +109,6 @@ export const joinEvent = (event) => {
 		const firebase = getFirebase();
 		const firestore = firebase.firestore();
 		const user = firebase.auth().currentUser;
-		// const photoURL = getState().firebase.profile.photoURL;
 		const photoURL = user.photoURL;
 
 		const newAttendee = {

@@ -13,6 +13,7 @@ import {
 import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
 import EventOutlinedIcon from "@material-ui/icons/EventOutlined";
 import LocationOnOutlinedIcon from "@material-ui/icons/LocationOnOutlined";
+import CategoryOutlinedIcon from "@material-ui/icons/CategoryOutlined";
 import React, { Component } from "react";
 import Mapbox from "../../Maps/Mapbox";
 import HttpIcon from "@material-ui/icons/Http";
@@ -129,6 +130,20 @@ class EventDetailedInfo extends Component {
 							<br /> <strong>Timing</strong> :
 							{format(event.date.toDate(), "h:mm a")}
 						</Typography>
+					</Typography>
+				</ListItem>
+
+				<Divider />
+				<ListItem>
+					<ListItemIcon>
+						<CategoryOutlinedIcon color="disabled" />
+					</ListItemIcon>
+					<Typography
+						variant="body1"
+						color="textPrimary"
+						component={"div"}
+					>
+						{event.category}
 					</Typography>
 				</ListItem>
 

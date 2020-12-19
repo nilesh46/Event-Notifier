@@ -23,14 +23,19 @@ class SignedInMenu extends React.Component {
 							classes={this.props.classes.IconButton}
 						>
 							<NotificationsNoneRoundedIcon fontSize="small" />
+
+							<Hidden mdUp>
+								<Box
+									display="flex"
+									alignItems="center"
+									ml="1.1rem"
+								>
+									<Typography variant="body2">
+										Notifications
+									</Typography>
+								</Box>
+							</Hidden>
 						</IconButton>
-						<Hidden mdUp>
-							<Box display="flex" alignItems="center">
-								<Typography variant="body2">
-									Notifications
-								</Typography>
-							</Box>
-						</Hidden>
 					</Grid>
 				</div>
 
