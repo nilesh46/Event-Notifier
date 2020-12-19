@@ -3,17 +3,17 @@ import PropTypes from "prop-types";
 import SwipeableViews from "react-swipeable-views";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
-import { Grid } from "@material-ui/core";
+import { Divider, List, ListItem } from "@material-ui/core";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import { Paper } from "@material-ui/core";
-import { deepOrange } from "@material-ui/core/colors";
 import Person from "./Friends/Person";
 import { compose } from "redux";
 import { connect } from "react-redux";
 import { firestoreConnect } from "react-redux-firebase";
+import { Link } from "react-router-dom";
 
 function TabPanel(props) {
 	const { children, value, index, ...other } = props;
@@ -27,8 +27,8 @@ function TabPanel(props) {
 			{...other}
 		>
 			{value === index && (
-				<Box p={3}>
-					<Typography>{children}</Typography>
+				<Box p={1}>
+					<div>{children}</div>
 				</Box>
 			)}
 		</div>
@@ -51,18 +51,11 @@ function a11yProps(index) {
 const useStyles = makeStyles((theme) => ({
 	root: {
 		backgroundColor: theme.palette.background.paper,
-		maxWidth: 800,
-		overFlow: "scrollY",
 	},
-	avatar: {
-		color: theme.palette.getContrastText(deepOrange[500]),
-		backgroundColor: deepOrange[500],
-		height: "5rem",
-		width: "5rem",
-	},
-	marginX: {
-		marginLeft: "1rem",
-		marginRight: "1rem",
+
+	linksSimple: {
+		textDecoration: "none",
+		color: "#000",
 	},
 }));
 
@@ -80,12 +73,14 @@ const UserDetailedSidebar = ({ followers, followings }) => {
 	};
 
 	return (
-		<Box my="1rem" style={{ maxWidth: 800 }}>
+		<Box my="1rem">
 			<Paper elevation={2}>
-				<Typography component="h1" variant="h5">
-					Friends
-				</Typography>
-				<Box my="1rem">
+				<Box textAlign="center" p="1rem">
+					<Typography component="h1" variant="h5" color="primary">
+						<b>FRIENDS</b>
+					</Typography>
+				</Box>
+				<Box>
 					<div className={classes.root}>
 						<AppBar position="static" color="default">
 							<Tabs
@@ -110,40 +105,66 @@ const UserDetailedSidebar = ({ followers, followings }) => {
 								index={0}
 								dir={theme.direction}
 							>
-								<Grid
-									container
-									direction="row"
-									alignItems="center"
-									justify="space-between"
+								<Box
+									style={{
+										maxHeight: "40vh",
+										overflowY: "auto",
+									}}
 								>
-									{followings &&
-										followings.map((following) => (
-											<Person
-												user={following}
-												key={following.id}
-											/>
-										))}
-								</Grid>
+									<List component="div" disablePadding>
+										{followings &&
+											followings.map((following) => (
+												<div key={following.id}>
+													<Link
+														to={`/profile/${following.id}`}
+														className={
+															classes.linksSimple
+														}
+													>
+														<ListItem button>
+															<Person
+																user={following}
+															/>
+														</ListItem>
+													</Link>
+													<Divider />
+												</div>
+											))}
+									</List>
+								</Box>
 							</TabPanel>
 							<TabPanel
 								value={value}
 								index={1}
 								dir={theme.direction}
 							>
-								<Grid
-									container
-									direction="row"
-									alignItems="center"
-									justify="space-between"
+								<Box
+									style={{
+										maxHeight: "40vh",
+										overflowY: "auto",
+									}}
 								>
-									{followers &&
-										followers.map((following) => (
-											<Person
-												user={following}
-												key={following.id}
-											/>
-										))}
-								</Grid>
+									<List component="div" disablePadding>
+										{followers &&
+											followers.map((follower) => (
+												<div key={follower.id}>
+													<Link
+														to={`/profile/${follower.id}`}
+														className={
+															classes.linksSimple
+														}
+													>
+														<ListItem button>
+															<Person
+																user={follower}
+															/>
+														</ListItem>
+													</Link>
+													<Divider />
+												</div>
+											))}
+									</List>
+								</Box>
 							</TabPanel>
 						</SwipeableViews>
 					</div>
@@ -153,17 +174,17 @@ const UserDetailedSidebar = ({ followers, followings }) => {
 	);
 };
 
-const query = ({ auth }) => {
+const query = () => {
 	return [
 		{
 			collection: "users",
-			doc: auth.uid,
+			doc: window.location.pathname.split("/")[2],
 			subcollections: [{ collection: "following" }],
 			storeAs: "following",
 		},
 		{
 			collection: "users",
-			doc: auth.uid,
+			doc: window.location.pathname.split("/")[2],
 			subcollections: [{ collection: "followers" }],
 			storeAs: "followers",
 		},

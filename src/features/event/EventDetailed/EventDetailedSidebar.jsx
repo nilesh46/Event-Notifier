@@ -69,7 +69,7 @@ class EventDetailedSidebar extends Component {
 				</ListItem>
 
 				<Collapse in={this.state.open} timeout="auto" unmountOnExit>
-					<Box style={{ height: "40vh", overflowY: "auto" }}>
+					<Box style={{ maxHeight: "40vh", overflowY: "auto" }}>
 						<List component="div" disablePadding>
 							{
 								<div key={host.id}>
@@ -77,10 +77,7 @@ class EventDetailedSidebar extends Component {
 										to={`/profile/${host.id}`}
 										className={classes.linksSimple}
 									>
-										<ListItem
-											button
-											className={classes.nested}
-										>
+										<ListItem button>
 											<ListItemIcon>
 												<Avatar
 													alt={host.displayName}

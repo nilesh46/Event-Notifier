@@ -71,11 +71,10 @@ class UserDetailedPage extends Component {
 							/>
 							<UserDetailedAbout user={user} />
 						</Grid>
-						{isCurrentUser && (
-							<Grid item md xs={12}>
-								<UserDetailedSidebar />
-							</Grid>
-						)}
+
+						<Grid item md xs={12}>
+							<UserDetailedSidebar />
+						</Grid>
 
 						<Grid item md={7} xs={12}>
 							<UserDetailedPhotos user={user} />

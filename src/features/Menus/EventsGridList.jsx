@@ -8,6 +8,7 @@ import IconButton from "@material-ui/core/IconButton";
 import InfoIcon from "@material-ui/icons/Info";
 import { Link } from "react-router-dom";
 import { Skeleton } from "@material-ui/lab";
+import noImage from "../../Assets/noImage.svg";
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -53,7 +54,10 @@ const EventsGridList = ({ header, events, loading }) => {
 				{!loading &&
 					events.map((event) => (
 						<GridListTile key={event.id} cols={2}>
-							<img src={event.photoURL} alt={event.title} />
+							<img
+								src={event.photoURL || noImage}
+								alt={event.title}
+							/>
 
 							<GridListTileBar
 								title={event.title}
