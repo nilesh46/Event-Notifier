@@ -1,4 +1,5 @@
-import { Box, Container, Grid, withStyles } from "@material-ui/core";
+import { Box, Container, withStyles } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 import React, { Component } from "react";
 import NavBar from "../NavBar/navbarComponent";
 import AuthenticationPanel from "../Panels/AuthenticationPanel";
