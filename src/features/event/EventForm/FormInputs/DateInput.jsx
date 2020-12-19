@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import {
 	KeyboardDatePicker,
 	MuiPickersUtilsProvider,
 } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import { change } from "redux-form";
+import { useEffect } from "react";
 
 const TextInput = ({
 	input,
@@ -15,7 +16,12 @@ const TextInput = ({
 	meta: { touched, error, dispatch, form },
 	...custom
 }) => {
-	const [selectedDate, setSelectedDate] = React.useState(new Date());
+	const [selectedDate, setSelectedDate] = useState(new Date());
+
+	useEffect(() => {
+		if (input && typeof input.value.toDate === "function")
+			setSelectedDate(input.value.toDate());
+	}, [input]);
 
 	const handleDateChange = (date) => {
 		setSelectedDate(date);

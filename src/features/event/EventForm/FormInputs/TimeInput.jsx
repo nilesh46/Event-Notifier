@@ -1,5 +1,11 @@
-import React from "react";
-import { TextField } from "@material-ui/core";
+import React, { useEffect, useState } from "react";
+import { change } from "redux-form";
+import {
+	KeyboardTimePicker,
+	MuiPickersUtilsProvider,
+} from "@material-ui/pickers";
+import DateFnsUtils from "@date-io/date-fns";
+import ScheduleIcon from "@material-ui/icons/Schedule";
 
 const TextInput = ({
 	input,
@@ -7,22 +13,37 @@ const TextInput = ({
 	type,
 	label,
 	placeholder,
-	meta: { touched, error },
+	meta: { touched, error, dispatch, form },
 	...custom
 }) => {
+	const [selectedTime, setSelectedTime] = useState(new Date());
+
+	useEffect(() => {
+		if (input && typeof input.value.toDate === "function")
+			setSelectedTime(input.value.toDate());
+	}, [input]);
+
+	const handleTimeChange = (time) => {
+		setSelectedTime(time);
+		dispatch(change(form, input.name, time));
+	};
+
 	return (
-		<TextField
-			label={label}
-			type="time"
-			variant="outlined"
-			InputLabelProps={{
-				shrink: true,
-			}}
-			inputProps={{
-				step: 300, // 5 min
-			}}
-			{...input}
-		/>
+		<MuiPickersUtilsProvider utils={DateFnsUtils}>
+			<KeyboardTimePicker
+				inputVariant="outlined"
+				variant="inline"
+				format="hh:mm a"
+				label={label}
+				margin="normal"
+				KeyboardButtonProps={{
+					"aria-label": "change time",
+				}}
+				value={selectedTime}
+				onChange={handleTimeChange}
+				keyboardIcon={<ScheduleIcon />}
+			/>
+		</MuiPickersUtilsProvider>
 	);
 };
 
