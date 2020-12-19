@@ -2,6 +2,7 @@ import {
 	Avatar,
 	Box,
 	Button,
+	CircularProgress,
 	Grid,
 	Paper,
 	Typography,
@@ -35,6 +36,7 @@ class UserDetailedHeader extends Component {
 			unfollowUser,
 			isCurrentUser,
 			isFollowing,
+			loading,
 		} = this.props;
 		return (
 			<Box my="1rem" style={{ maxWidth: 800 }}>
@@ -88,7 +90,13 @@ class UserDetailedHeader extends Component {
 										color="secondary"
 										onClick={() => followUser(user)}
 									>
-										Follow User
+										{!loading && <span>Follow</span>}
+										{loading && (
+											<CircularProgress
+												color="inherit"
+												size="2rem"
+											/>
+										)}
 									</Button>
 								)}
 								{!isCurrentUser && isFollowing && (
@@ -97,7 +105,13 @@ class UserDetailedHeader extends Component {
 										color="secondary"
 										onClick={() => unfollowUser(user)}
 									>
-										Unfollow User
+										{!loading && <span>Unfollow</span>}
+										{loading && (
+											<CircularProgress
+												color="inherit"
+												size="2rem"
+											/>
+										)}
 									</Button>
 								)}
 							</Box>
@@ -114,5 +128,11 @@ const actions = {
 	unfollowUser,
 };
 
-export default connect(null, actions)(withStyles(styles)(UserDetailedHeader));
-// uVrhM23A75SmLikNM4zl6VQeQbw1;
+const mapStateToProps = (state) => {
+	return { loading: state.async.loading };
+};
+
+export default connect(
+	mapStateToProps,
+	actions
+)(withStyles(styles)(UserDetailedHeader));

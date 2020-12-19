@@ -522,9 +522,10 @@ export const setMainPhoto = (url) => async (dispatch) => {
 	const firebase = getFirebase();
 	const firestore = firebase.firestore();
 	const user = firebase.auth().currentUser;
-	let userDocRef = firestore.collection("users").doc(user.uid);
-	let eventAttendeeRef = firestore.collection("event_attendee");
-	let activityRef = firestore.collection("activity");
+	const usersRef = firestore.collection("users");
+	const userDocRef = usersRef.doc(user.uid);
+	const eventAttendeeRef = firestore.collection("event_attendee");
+	const activityRef = firestore.collection("activity");
 	const today = new Date();
 
 	try {
@@ -577,6 +578,26 @@ export const setMainPhoto = (url) => async (dispatch) => {
 		for (let index = 0; index < activityQuerySnap.docs.length; index++) {
 			let activityDocRef = activityQuerySnap.docs[index].ref;
 			batch.update(activityDocRef, { hostPhotoURL: url });
+		}
+
+		//updating the user photo in my followers accounts
+		let followersSnap = await userDocRef.collection("followers").get();
+		for (let index = 0; index < followersSnap.docs.length; index++) {
+			let followerDocRef = usersRef.doc(followersSnap.docs[index].id);
+			let followingDocRef = followerDocRef
+				.collection("following")
+				.doc(user.uid);
+			batch.update(followingDocRef, { photoURL: url });
+		}
+
+		//updating the user photo in my followings accounts
+		let followingSnap = await userDocRef.collection("following").get();
+		for (let index = 0; index < followingSnap.docs.length; index++) {
+			let followingDocRef = usersRef.doc(followingSnap.docs[index].id);
+			let followerDocRef = followingDocRef
+				.collection("followers")
+				.doc(user.uid);
+			batch.update(followerDocRef, { photoURL: url });
 		}
 
 		await batch.commit();
@@ -654,6 +675,7 @@ export const followUser = (userToBeFollowed) => async (dispatch) => {
 	const userRef = firestore.collection("users");
 	const userDocRef = userRef.doc(user.uid);
 	try {
+		dispatch(asyncActionStart());
 		await userDocRef
 			.collection("following")
 			.doc(userToBeFollowed.uid)
@@ -662,8 +684,10 @@ export const followUser = (userToBeFollowed) => async (dispatch) => {
 				displayName: userToBeFollowed.displayName,
 				photoURL: userToBeFollowed.photoURL,
 			});
+		dispatch(asyncActionFinish());
 	} catch (err) {
 		console.error(err);
+		dispatch(asyncActionError());
 	}
 };
 
@@ -674,14 +698,16 @@ export const unfollowUser = (userToBeUnfollowed) => async (dispatch) => {
 	const userRef = firestore.collection("users");
 	const userDocRef = userRef.doc(user.uid);
 	try {
+		dispatch(asyncActionStart());
 		await userDocRef
 			.collection("following")
 			.doc(userToBeUnfollowed.uid)
 			.delete();
 
-		console.log("deleted");
+		dispatch(asyncActionFinish());
 	} catch (err) {
 		console.error(err);
+		dispatch(asyncActionError());
 	}
 };
 
