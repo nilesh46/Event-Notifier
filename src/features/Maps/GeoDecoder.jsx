@@ -6,6 +6,18 @@ import "./GeoDecoder.css";
 mapboxgl.accessToken =
 	"pk.eyJ1IjoiaW5ub3ZhdGl2ZWdhbWVyIiwiYSI6ImNraTR3NDNpNzQ3czcyc2t6NXdsZGM4NDMifQ.J-40nZzqZWAbrruWBNoaBw";
 
+const geocoder = new MapboxGeocoder({
+	accessToken: mapboxgl.accessToken,
+	marker: {
+		color: "orange",
+	},
+	mapboxgl: mapboxgl,
+	proximity: {
+		longitude: 77.216721,
+		latitude: 28.6448,
+	},
+});
+
 class GeoDecoder extends Component {
 	state = {
 		lng: 77.209,
@@ -29,18 +41,6 @@ class GeoDecoder extends Component {
 			});
 		});
 
-		const geocoder = new MapboxGeocoder({
-			accessToken: mapboxgl.accessToken,
-			marker: {
-				color: "orange",
-			},
-			mapboxgl: mapboxgl,
-			proximity: {
-				longitude: 77.216721,
-				latitude: 28.6448,
-			},
-		});
-
 		document.getElementById("geocoder").appendChild(geocoder.onAdd(map));
 
 		if (this.props.location) {
@@ -58,6 +58,10 @@ class GeoDecoder extends Component {
 			);
 		});
 	};
+
+	componentWillUnmount() {
+		geocoder.off("result", () => {});
+	}
 
 	render() {
 		return (

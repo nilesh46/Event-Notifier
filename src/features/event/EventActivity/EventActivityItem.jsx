@@ -10,7 +10,7 @@ import { formatDistance } from "date-fns";
 
 const EventActivityItem = ({ activity }) => {
 	return (
-		<ListItem alignItems="flex-start">
+		<ListItem>
 			<ListItemAvatar>
 				<Avatar alt={activity.hostedBy} src={activity.hostPhotoURL} />
 			</ListItemAvatar>

@@ -11,7 +11,6 @@ const RadioInput = ({ label, input, options, default1 }) => {
 	const handleChange = (event) => {
 		setValue(event.target.value);
 	};
-
 	return (
 		<FormControl component="fieldset" style={{ margin: ".7rem 0" }}>
 			<FormLabel component="legend">{label}</FormLabel>

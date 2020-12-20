@@ -1,52 +1,63 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
-import { Box, Divider, Paper, Typography } from "@material-ui/core";
+import {
+	Collapse,
+	ListItem,
+	ListItemIcon,
+	ListItemText,
+	Typography,
+} from "@material-ui/core";
+import { ExpandLess, ExpandMore, Ballot } from "@material-ui/icons";
 import EventActivityItem from "./EventActivityItem";
+import indigo from "@material-ui/core/colors/indigo";
 
 const useStyles = makeStyles((theme) => ({
 	root: {
-		margin: "2rem",
-		"@media (min-width:960px)": {
-			position: "fixed",
+		marginTop: "1rem",
+	},
+	listItem: {
+		color: theme.palette.getContrastText(indigo[500]),
+		backgroundColor: indigo[500],
+		width: "100%",
+		"&:hover": {
+			backgroundColor: indigo[600],
 		},
-	},
-	inline: {
-		display: "inline",
-	},
-	paper: {
-		backgroundColor: theme.palette.background.paper,
-	},
-	heading: {
-		marginLeft: "1.5rem",
 	},
 }));
 
 const EventActivity = ({ activities }) => {
+	const [open, setOpen] = useState(false);
 	const classes = useStyles();
 
+	const handleClick = () => {
+		setOpen(!open);
+	};
+
 	return (
-		<Box className={classes.root}>
-			<Paper elevation={1} className={classes.paper}>
-				<List>
-					<Typography
-						variant="h6"
-						color="textSecondary"
-						className={classes.heading}
-					>
-						Recent Activity
+		<List className={classes.root}>
+			<ListItem button onClick={handleClick} className={classes.listItem}>
+				<ListItemIcon>
+					<Ballot fontSize="large" style={{ color: "#FFF" }} />
+				</ListItemIcon>
+				<ListItemText>
+					<Typography component="h1" variant="h6">
+						<strong>Recent Activity</strong>
 					</Typography>
-					<Divider />
-					{activities &&
-						activities.map((activity) => (
-							<EventActivityItem
-								key={activity.id}
-								activity={activity}
-							/>
-						))}
-				</List>
-			</Paper>
-		</Box>
+				</ListItemText>
+				{open ? <ExpandLess /> : <ExpandMore />}
+			</ListItem>
+
+			<Collapse in={open} timeout="auto" unmountOnExit>
+				{activities &&
+					activities.map((activity) => (
+						<EventActivityItem
+							key={activity.id}
+							activity={activity}
+						/>
+					))}
+			</Collapse>
+		</List>
 	);
 };
 

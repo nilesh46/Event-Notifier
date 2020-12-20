@@ -17,7 +17,7 @@ import CropperInput from "../../User/Settings/Photos/CropperInput";
 import DropzoneInput from "../../User/Settings/Photos/DropzoneInput";
 import { connect } from "react-redux";
 import cuid from "cuid";
-import { getFirebase, useFirebase } from "react-redux-firebase";
+import { getFirebase } from "react-redux-firebase";
 import { toastr } from "react-redux-toastr";
 import { updateEventPhoto, openModal } from "../../../redux/actions";
 import history from "../../../history";
@@ -124,8 +124,10 @@ const EventPhoto = ({ auth, eventId, updateEventPhoto, openModal }) => {
 					await updateEventPhoto(downloadURL, eventId);
 
 					setLoading(null);
-					toastr.success("Success", "Photo has been uploaded");
 					handleCancelCrop();
+
+					history.push(`/events/${eventId}`);
+					toastr.success("Success", "Photo has been uploaded");
 				} catch (error) {
 					toastr.error(
 						"Oops",

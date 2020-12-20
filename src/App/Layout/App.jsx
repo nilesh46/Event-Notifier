@@ -21,6 +21,7 @@ import AccountPage from "../../features/User/Settings/AccountPage";
 import HelmetMetaData from "../Util/HelmetMetaData";
 import EventPhoto from "../../features/event/EventForm/EventPhoto";
 import MainLoader from "../Util/CustomLoadingComponents/MainLoader";
+import ScrollTopButton from "../Util/ScrollTopButton";
 
 class App extends React.Component {
 	render() {
@@ -126,6 +127,7 @@ class App extends React.Component {
 										</>
 									</Switch>
 								</Container>
+								<ScrollTopButton />
 							</>
 						)}
 					/>

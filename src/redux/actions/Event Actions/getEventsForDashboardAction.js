@@ -2,11 +2,14 @@ import { getFirebase } from "react-redux-firebase";
 import { FETCH_EVENTS } from "../types";
 import { asyncActionFinish, asyncActionStart, asyncActionError } from "..";
 
-export const getEventsForDashboard = (lastEvent) => async (
+export const getEventsForDashboard = (lastEvent, date, sort) => async (
 	dispatch,
 	getState
 ) => {
-	let today = new Date();
+	let fromDate;
+	fromDate = date ? date : new Date();
+	let orderBy;
+	orderBy = sort === "Soonest" ? "asc" : "desc";
 	const firestore = getFirebase().firestore();
 	const eventRef = firestore.collection("events");
 	try {
@@ -15,14 +18,14 @@ export const getEventsForDashboard = (lastEvent) => async (
 		let query;
 		if (lastEvent)
 			query = eventRef
-				.where("date", ">=", today)
-				.orderBy("date")
+				.where("date", ">=", fromDate)
+				.orderBy("date", orderBy)
 				.startAfter(startAfter)
 				.limit(2);
 		else
 			query = eventRef
-				.where("date", ">=", today)
-				.orderBy("date")
+				.where("date", ">=", fromDate)
+				.orderBy("date", orderBy)
 				.limit(2);
 
 		let querySnap = await query.get();
