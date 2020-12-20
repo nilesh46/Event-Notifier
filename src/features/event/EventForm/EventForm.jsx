@@ -43,7 +43,7 @@ const styles = (theme) => ({
 		},
 	},
 	mainBg: {
-		backgroundColor: grey["50"],
+		//backgroundColor: grey["50"],
 		marginTop: "2rem",
 		marginBottom: "2rem",
 		padding: "2rem",

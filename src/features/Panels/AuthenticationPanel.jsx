@@ -11,6 +11,7 @@ import SignInPanel from "./SignInPanel";
 import OAuthPanel from "./OAuthPanel";
 import { socialLogin } from "../../redux/actions";
 import { connect } from "react-redux";
+import { Paper } from "@material-ui/core";
 
 const TabPanel = (props) => {
 	const { children, value, index, ...other } = props;
@@ -48,7 +49,7 @@ const a11yProps = (index) => {
 const styles = {
 	root: { margin: "2rem 0" },
 	panelsBg: {
-		backgroundColor: "#fff",
+		//backgroundColor: "#525255",
 	},
 };
 
@@ -64,41 +65,43 @@ class AuthenticationPanel extends Component {
 		const { value } = this.state;
 		return (
 			<div className={classes.root}>
-				<AppBar position="static" color="default">
-					<Tabs
-						value={value}
-						onChange={this.handleChange}
-						indicatorColor="primary"
-						textColor="primary"
-						variant="fullWidth"
-						aria-label="full width tabs example"
+				<Paper>
+					<AppBar position="static" color="default">
+						<Tabs
+							value={value}
+							onChange={this.handleChange}
+							indicatorColor="primary"
+							textColor="primary"
+							variant="fullWidth"
+							aria-label="full width tabs example"
+						>
+							<Tab label="Sign Up" {...a11yProps(0)} />
+							<Tab label="Log In" {...a11yProps(1)} />
+						</Tabs>
+					</AppBar>
+					<SwipeableViews
+						axis={theme.direction === "rtl" ? "x-reverse" : "x"}
+						index={value}
 					>
-						<Tab label="Sign Up" {...a11yProps(0)} />
-						<Tab label="Log In" {...a11yProps(1)} />
-					</Tabs>
-				</AppBar>
-				<SwipeableViews
-					axis={theme.direction === "rtl" ? "x-reverse" : "x"}
-					index={value}
-				>
-					<TabPanel
-						value={value}
-						index={0}
-						dir={theme.direction}
-						className={classes.panelsBg}
-					>
-						<SignUpPanel handleChange={this.handleChange} />
-					</TabPanel>
-					<TabPanel
-						value={value}
-						index={1}
-						dir={theme.direction}
-						className={classes.panelsBg}
-					>
-						<SignInPanel handleChange={this.handleChange} />
-					</TabPanel>
-				</SwipeableViews>
-				<OAuthPanel socialLogin={socialLogin} />
+						<TabPanel
+							value={value}
+							index={0}
+							dir={theme.direction}
+							className={classes.panelsBg}
+						>
+							<SignUpPanel handleChange={this.handleChange} />
+						</TabPanel>
+						<TabPanel
+							value={value}
+							index={1}
+							dir={theme.direction}
+							className={classes.panelsBg}
+						>
+							<SignInPanel handleChange={this.handleChange} />
+						</TabPanel>
+					</SwipeableViews>
+					<OAuthPanel socialLogin={socialLogin} />
+				</Paper>
 			</div>
 		);
 	}

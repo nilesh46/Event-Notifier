@@ -20,7 +20,7 @@ const styles = (theme) => ({
 	root: {
 		marginTop: "1rem",
 		marginBottom: "1rem",
-		backgroundColor: "#F5F5F5",
+		//backgroundColor: "#F5F5F5",
 	},
 	media: {
 		height: 0,

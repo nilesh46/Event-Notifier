@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
 		},
 	},
 	mainBg: {
-		backgroundColor: grey["50"],
+		//backgroundColor: grey["50"],
 		marginTop: "2rem",
 		marginBottom: "2rem",
 		padding: "2rem",
@@ -60,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
 		left: 0,
 		width: "100%",
 		height: "100%",
-		backgroundColor: blueGrey["800"],
+		//backgroundColor: blueGrey["800"],
 	},
 	secBg: {
 		position: "absolute",

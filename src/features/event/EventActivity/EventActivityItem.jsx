@@ -5,10 +5,20 @@ import {
 	ListItem,
 	ListItemAvatar,
 	ListItemText,
+	Typography,
 } from "@material-ui/core";
 import { formatDistance } from "date-fns";
+import { makeStyles } from "@material-ui/core";
+
+const useStyles = makeStyles((theme) => ({
+	linksSec: {
+		textDecoration: "none",
+		color: "#f50057",
+	},
+}));
 
 const EventActivityItem = ({ activity }) => {
+	const classes = useStyles();
 	return (
 		<ListItem>
 			<ListItemAvatar>
@@ -17,22 +27,38 @@ const EventActivityItem = ({ activity }) => {
 			<ListItemText
 				primary={
 					<>
-						{activity.type === "newEvent"
-							? "New Event!"
-							: activity.type === "updatedEvent"
-							? "Event Updated!"
-							: "Event Deleted!"}{" "}
-						<Link href={`profile/${activity.hostUid}`}>
-							{activity.hostedBy}
-						</Link>{" "}
-						{activity.type === "newEvent"
-							? "is hosting"
-							: activity.type === "updatedEvent"
-							? "has updated"
-							: "has deleted"}{" "}
-						<Link href={`events/${activity.eventId}`}>
-							{activity.title}
-						</Link>
+						<Typography
+							variant="body2"
+							color="textSecondary"
+							component="p"
+						>
+							{activity.type === "newEvent"
+								? "New Event!"
+								: activity.type === "updatedEvent"
+								? "Event Updated!"
+								: "Event Deleted!"}{" "}
+							<strong>
+								<Link
+									href={`profile/${activity.hostUid}`}
+									className={classes.linksSec}
+								>
+									{activity.hostedBy}
+								</Link>
+							</strong>{" "}
+							{activity.type === "newEvent"
+								? "is hosting"
+								: activity.type === "updatedEvent"
+								? "has updated"
+								: "has deleted"}{" "}
+							<strong>
+								<Link
+									href={`events/${activity.eventId}`}
+									className={classes.linksSec}
+								>
+									{activity.title}
+								</Link>
+							</strong>
+						</Typography>
 					</>
 				}
 				secondary={

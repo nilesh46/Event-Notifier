@@ -22,21 +22,62 @@ import HelmetMetaData from "../Util/HelmetMetaData";
 import EventPhoto from "../../features/event/EventForm/EventPhoto";
 import MainLoader from "../Util/CustomLoadingComponents/MainLoader";
 import ScrollTopButton from "../Util/ScrollTopButton";
+import { ThemeProvider } from "@material-ui/styles";
+import { createMuiTheme } from "@material-ui/core";
+import { FormControlLabel } from "@material-ui/core";
+import { Switch as SwitchButton } from "@material-ui/core";
+import { useState } from "react";
 
-class App extends React.Component {
-	render() {
-		const { auth } = this.props;
-		const authenticated = auth.isLoaded && !auth.isEmpty;
-		const emailVerified = auth.emailVerified;
-		const IsOauth =
-			authenticated && auth.providerData[0].providerId !== "password";
-		const verified = emailVerified || IsOauth;
+const themeObject = {
+	palette: {
+		type: "light",
+	},
+	backgr: {
+		backgroundColor: "#eaecfa",
+	},
+};
 
-		const verifiedPaths = ["/", "/resetPassword"];
-		const IsPathVerified =
-			verifiedPaths.indexOf(window.location.pathname) !== -1;
+const useDarkMode = () => {
+	const [theme, setTheme] = useState(themeObject);
 
-		return (
+	const {
+		palette: { type },
+		backgr: { backgroundColor },
+	} = theme;
+	const toggleDarkMode = () => {
+		const updatedTheme = {
+			palette: {
+				...theme.palette,
+				type: type === "light" ? "dark" : "light",
+			},
+			backgr: {
+				...theme.backgr,
+				backgroundColor:
+					backgroundColor === "#eaecfa" ? "#232324" : "#eaecfa",
+			},
+		};
+		setTheme(updatedTheme);
+	};
+	return [theme, toggleDarkMode];
+};
+
+const App = (props) => {
+	const [theme, toggleDarkMode] = useDarkMode();
+	const themeConfig = createMuiTheme(theme);
+
+	const auth = props.auth;
+	const authenticated = auth.isLoaded && !auth.isEmpty;
+	const emailVerified = auth.emailVerified;
+	const IsOauth =
+		authenticated && auth.providerData[0].providerId !== "password";
+	const verified = emailVerified || IsOauth;
+
+	const verifiedPaths = ["/", "/resetPassword"];
+	const IsPathVerified =
+		verifiedPaths.indexOf(window.location.pathname) !== -1;
+
+	return (
+		<ThemeProvider theme={themeConfig}>
 			<>
 				<HelmetMetaData></HelmetMetaData>
 				<ModalManager />
@@ -58,13 +99,25 @@ class App extends React.Component {
 					<Route
 						path="/(.+)"
 						render={() => (
-							<>
+							<div style={themeConfig.backgr}>
 								<NavBar />
+								<FormControlLabel
+									style={{
+										marginTop: "6rem",
+										marginLeft: "1rem",
+									}}
+									control={
+										<SwitchButton
+											onClick={toggleDarkMode}
+											color="secondary"
+										/>
+									}
+								/>
 								<Container
 									maxWidth="lg"
-									style={{ marginTop: "6rem" }}
+									style={{ marginTop: "1rem" }}
 								>
-									<Switch key={this.props.location.key}>
+									<Switch key={props.location.key}>
 										<>
 											<Route
 												path="/events"
@@ -128,14 +181,14 @@ class App extends React.Component {
 									</Switch>
 								</Container>
 								<ScrollTopButton />
-							</>
+							</div>
 						)}
 					/>
 				)}
 			</>
-		);
-	}
-}
+		</ThemeProvider>
+	);
+};
 
 const mapStateToProps = (state) => {
 	return { auth: state.firebase.auth };

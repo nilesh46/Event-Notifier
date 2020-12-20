@@ -54,7 +54,7 @@ const styles = {
 	},
 	linksPri: {
 		textDecoration: "none",
-		color: "#2196f3",
+		color: "#f50057",
 	},
 };
 
@@ -132,13 +132,17 @@ class EventListItem extends Component {
 												color="textSecondary"
 											>
 												Hosted by{" "}
-												<Link
-													to={`/profile/${event.hostUid}`}
-													className={classes.linksPri}
-												>
-													{" "}
-													{event.hostedBy}
-												</Link>
+												<strong>
+													<Link
+														to={`/profile/${event.hostUid}`}
+														className={
+															classes.linksPri
+														}
+													>
+														{" "}
+														{event.hostedBy}
+													</Link>
+												</strong>
 											</Typography>
 										</Box>
 									</Box>
