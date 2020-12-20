@@ -5,6 +5,7 @@ import {
 	CardActions,
 	CardMedia,
 	Chip,
+	CircularProgress,
 	Divider,
 	Grid,
 	makeStyles,
@@ -32,6 +33,7 @@ const UserPhotos = ({
 	handleDeletePhoto,
 	handleSetMainPhoto,
 	openModal,
+	loading,
 }) => {
 	let filteredPhotos;
 	if (photos) {
@@ -121,7 +123,15 @@ const UserPhotos = ({
 														)
 													}
 												>
-													Delete
+													{!loading && (
+														<span>Delete</span>
+													)}
+													{loading && (
+														<CircularProgress
+															color="inherit"
+															size="2rem"
+														/>
+													)}
 												</Button>
 											</Grid>
 										</Grid>
@@ -139,4 +149,8 @@ const actions = {
 	openModal,
 };
 
-export default connect(null, actions)(UserPhotos);
+const mapStateToProps = (state) => {
+	return { loading: state.async.loading };
+};
+
+export default connect(mapStateToProps, actions)(UserPhotos);

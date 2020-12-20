@@ -17,7 +17,7 @@ import CropperInput from "../../User/Settings/Photos/CropperInput";
 import DropzoneInput from "../../User/Settings/Photos/DropzoneInput";
 import { connect } from "react-redux";
 import cuid from "cuid";
-import { useFirebase } from "react-redux-firebase";
+import { getFirebase, useFirebase } from "react-redux-firebase";
 import { toastr } from "react-redux-toastr";
 import { updateEventPhoto, openModal } from "../../../redux/actions";
 import history from "../../../history";
@@ -63,8 +63,6 @@ const EventPhoto = ({ auth, eventId, updateEventPhoto, openModal }) => {
 	const [loading, setLoading] = useState(null);
 	const [compressing, setCompressing] = useState(null);
 
-	const firebase = useFirebase();
-
 	useEffect(() => {
 		return () => {
 			files.forEach((file) => URL.revokeObjectURL(file.preview));
@@ -95,19 +93,18 @@ const EventPhoto = ({ auth, eventId, updateEventPhoto, openModal }) => {
 			}
 			handleUploadImage(finalImage);
 		} catch (error) {
-			console.log(error);
+			toastr.error(
+				"Oops",
+				"Something went wrong. Please retry / Check your internet connection"
+			);
 		}
 	};
 
 	const handleUploadImage = (image) => {
 		const name = cuid();
 		const fileName = name;
-		const uploadedFile = uploadFileToFirebaseStorage(
-			{ firebase },
-			image,
-			fileName
-		);
-		uploadedFile.on(
+		const uploadFileTask = uploadFileToFirebaseStorage(image, fileName);
+		uploadFileTask.on(
 			"state_changed",
 			(snapshot) => {
 				const progress =
@@ -115,31 +112,32 @@ const EventPhoto = ({ auth, eventId, updateEventPhoto, openModal }) => {
 				setLoading(progress);
 			},
 			(error) => {
-				console.log(error);
+				toastr.error(
+					"Oops",
+					"Something went wrong. Please retry / Check your internet connection"
+				);
 			},
-			() => {
-				uploadedFile.snapshot.ref
-					.getDownloadURL()
-					.then((downloadURL) => {
-						updateEventPhoto({ firebase }, downloadURL, eventId)
-							.then(() => {
-								setLoading(null);
-								toastr.success(
-									"Success",
-									"Photo has been uploaded"
-								);
-								handleCancelCrop();
-								history.push(`/events/${eventId}`);
-							})
-							.catch((error) => {
-								console.log(error);
-							});
-					});
+			async () => {
+				try {
+					const downloadURL = await uploadFileTask.snapshot.ref.getDownloadURL();
+
+					await updateEventPhoto(downloadURL, eventId);
+
+					setLoading(null);
+					toastr.success("Success", "Photo has been uploaded");
+					handleCancelCrop();
+				} catch (error) {
+					toastr.error(
+						"Oops",
+						"Something went wrong. Please retry / Check your internet connection"
+					);
+				}
 			}
 		);
 	};
 
-	const uploadFileToFirebaseStorage = ({ firebase }, file, fileName) => {
+	const uploadFileToFirebaseStorage = (file, fileName) => {
+		const firebase = getFirebase();
 		const user = firebase.auth().currentUser;
 		const storageRef = firebase.storage().ref();
 		const folderRef = storageRef.child(

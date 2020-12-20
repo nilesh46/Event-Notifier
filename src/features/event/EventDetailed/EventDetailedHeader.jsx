@@ -137,7 +137,15 @@ class EventDetailedHeader extends Component {
 											cancelJoiningEvent(event);
 										}}
 									>
-										Cancel My Seat
+										{!loading && (
+											<span>Cancel My Seat</span>
+										)}
+										{loading && (
+											<CircularProgress
+												color="inherit"
+												size="2rem"
+											/>
+										)}
 									</Button>
 								)}
 								{!isGoing && (

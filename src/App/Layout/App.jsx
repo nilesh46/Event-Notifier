@@ -13,7 +13,6 @@ import testComponent from "../../Test/Components/testComponent";
 import ModalManager from "../../features/Modals/ModalManager";
 import { connect } from "react-redux";
 import EmailVerificationPage from "../../features/Verification/EmailVerificationPage";
-import WarningPage from "../../features/Verification/WarningPage";
 import PasswordResetPage from "../../features/Verification/PasswordResetPage";
 import BasicPage from "../../features/User/Settings/BasicPage";
 import AboutPage from "../../features/User/Settings/AboutPage";
@@ -21,6 +20,7 @@ import PhotosPage from "../../features/User/Settings/Photos/PhotosPage";
 import AccountPage from "../../features/User/Settings/AccountPage";
 import HelmetMetaData from "../Util/HelmetMetaData";
 import EventPhoto from "../../features/event/EventForm/EventPhoto";
+import MainLoader from "../Util/CustomLoadingComponents/MainLoader";
 
 class App extends React.Component {
 	render() {
@@ -50,7 +50,7 @@ class App extends React.Component {
 					</>
 				)}
 
-				{!IsPathVerified && !authenticated && <WarningPage />}
+				{!IsPathVerified && !authenticated && <MainLoader />}
 
 				{authenticated && !verified && <EmailVerificationPage />}
 				{authenticated && verified && (
