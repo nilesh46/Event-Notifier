@@ -28,8 +28,8 @@ const styles = {
 	root: {
 		minWidth: "15rem",
 		maxWidth: "50rem",
-		padding: 15,
-		margin: 20,
+		padding: "1rem",
+		margin: "1rem",
 	},
 
 	pos: {

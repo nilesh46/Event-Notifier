@@ -7,7 +7,7 @@ import DateFnsUtils from "@date-io/date-fns";
 import { change } from "redux-form";
 import { useEffect } from "react";
 
-const TextInput = ({
+const DateInput = ({
 	input,
 	width,
 	type,
@@ -49,4 +49,4 @@ const TextInput = ({
 	);
 };
 
-export default TextInput;
+export default DateInput;

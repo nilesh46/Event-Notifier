@@ -239,7 +239,7 @@ class EventForm extends React.Component {
 											</Box>
 										</Grid>
 
-										<Grid item sm={10}>
+										<Grid item sm style={{ width: "100%" }}>
 											<Field
 												name="title"
 												component={TextInput}

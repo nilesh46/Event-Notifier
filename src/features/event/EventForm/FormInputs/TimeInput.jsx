@@ -7,7 +7,7 @@ import {
 import DateFnsUtils from "@date-io/date-fns";
 import ScheduleIcon from "@material-ui/icons/Schedule";
 
-const TextInput = ({
+const TimeInput = ({
 	input,
 	width,
 	type,
@@ -47,4 +47,4 @@ const TextInput = ({
 	);
 };
 
-export default TextInput;
+export default TimeInput;

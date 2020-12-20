@@ -64,7 +64,7 @@ class MenuAppBar extends React.Component {
 			authenticated && window.location.pathname !== "/";
 
 		return (
-			<div className={classes.root}>
+			<div className={classes.root} id="back-to-top-anchor">
 				<AppBar style={{ background: "#2E3B55" }}>
 					<Toolbar>
 						{/* Logo */}
