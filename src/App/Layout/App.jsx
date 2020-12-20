@@ -27,6 +27,7 @@ import { createMuiTheme } from "@material-ui/core";
 import { FormControlLabel } from "@material-ui/core";
 import { Switch as SwitchButton } from "@material-ui/core";
 import { useState } from "react";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
 
 const themeObject = {
 	palette: {
@@ -115,70 +116,110 @@ const App = (props) => {
 								/>
 								<Container
 									maxWidth="lg"
-									style={{ marginTop: "1rem" }}
+									style={{
+										marginTop: "1rem",
+										minHeight: "100vh",
+									}}
 								>
-									<Switch key={props.location.key}>
-										<>
-											<Route
-												path="/events"
-												exact
-												component={EventDashboard}
-											/>
-											<Route
-												path="/events/:id"
-												exact
-												component={EventDetailedPage}
-											/>
-											<Route
-												path="/people"
-												exact
-												component={PeopleDashboard}
-											/>
-											<Route
-												path="/profile/:id"
-												exact
-												component={UserDetailedPage}
-											/>
-											<Route
-												path="/settings/basic"
-												exact
-												component={BasicPage}
-											/>
-											<Route
-												path="/settings/about"
-												exact
-												component={AboutPage}
-											/>
-											<Route
-												path="/settings/photos"
-												component={PhotosPage}
-											/>
-											<Route
-												path="/settings/account"
-												component={AccountPage}
-											/>
-											<Route
-												path={[
-													"/createEvent",
-													"/manage/:id",
-												]}
-												exact
-												component={EventForm}
-											/>
-											<Route
-												path="/setPhoto/:id"
-												exact
-												component={EventPhoto}
-											/>
-											{/* <Route path="/myEvents" exact component={MyEvents} />
+									<Route
+										render={({ location }) => (
+											<TransitionGroup>
+												<CSSTransition
+													key={location.key}
+													timeout={450}
+													classNames="fade"
+												>
+													<Switch
+														key={props.location.key}
+														location={location}
+													>
+														<>
+															<Route
+																path="/events"
+																exact
+																component={
+																	EventDashboard
+																}
+															/>
+															<Route
+																path="/events/:id"
+																exact
+																component={
+																	EventDetailedPage
+																}
+															/>
+															<Route
+																path="/people"
+																exact
+																component={
+																	PeopleDashboard
+																}
+															/>
+															<Route
+																path="/profile/:id"
+																exact
+																component={
+																	UserDetailedPage
+																}
+															/>
+															<Route
+																path="/settings/basic"
+																exact
+																component={
+																	BasicPage
+																}
+															/>
+															<Route
+																path="/settings/about"
+																exact
+																component={
+																	AboutPage
+																}
+															/>
+															<Route
+																path="/settings/photos"
+																component={
+																	PhotosPage
+																}
+															/>
+															<Route
+																path="/settings/account"
+																component={
+																	AccountPage
+																}
+															/>
+															<Route
+																path={[
+																	"/createEvent",
+																	"/manage/:id",
+																]}
+																exact
+																component={
+																	EventForm
+																}
+															/>
+															<Route
+																path="/setPhoto/:id"
+																exact
+																component={
+																	EventPhoto
+																}
+															/>
+															{/* <Route path="/myEvents" exact component={MyEvents} />
                             <Route path="/help" exact component={Help} /> */}
-											<Route
-												path="/testing"
-												exact
-												component={testComponent}
-											/>
-										</>
-									</Switch>
+															<Route
+																path="/testing"
+																exact
+																component={
+																	testComponent
+																}
+															/>
+														</>
+													</Switch>
+												</CSSTransition>
+											</TransitionGroup>
+										)}
+									/>
 								</Container>
 								<ScrollTopButton />
 							</div>

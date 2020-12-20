@@ -1,7 +1,6 @@
 import React from "react";
 import {
 	Avatar,
-	Link,
 	ListItem,
 	ListItemAvatar,
 	ListItemText,
@@ -9,6 +8,7 @@ import {
 } from "@material-ui/core";
 import { formatDistance } from "date-fns";
 import { makeStyles } from "@material-ui/core";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
 	linksSec: {
@@ -39,7 +39,7 @@ const EventActivityItem = ({ activity }) => {
 								: "Event Deleted!"}{" "}
 							<strong>
 								<Link
-									href={`profile/${activity.hostUid}`}
+									to={`/profile/${activity.hostUid}`}
 									className={classes.linksSec}
 								>
 									{activity.hostedBy}
@@ -52,7 +52,7 @@ const EventActivityItem = ({ activity }) => {
 								: "has deleted"}{" "}
 							<strong>
 								<Link
-									href={`events/${activity.eventId}`}
+									to={`/events/${activity.eventId}`}
 									className={classes.linksSec}
 								>
 									{activity.title}
