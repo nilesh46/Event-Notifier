@@ -1,6 +1,7 @@
 import { getFirebase } from "react-redux-firebase";
 import { toastr } from "react-redux-toastr";
 import { createNewEvent } from "../../../App/Util/helpers";
+import { extraActivitiesDelete } from "../../../App/Util/helpers";
 import history from "../../../history";
 import { asyncActionFinish, asyncActionStart, asyncActionError } from "..";
 
@@ -28,7 +29,7 @@ export const createEvent = (event) => {
 					host: true,
 					category: event.category,
 				});
-
+			extraActivitiesDelete(firebase);
 			dispatch(asyncActionFinish());
 			history.push(`/events/${createdEvent.id}`);
 			toastr.success("Success!!! ", "Event has been created");

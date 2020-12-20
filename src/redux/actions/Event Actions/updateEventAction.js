@@ -1,6 +1,7 @@
 import { getFirebase } from "react-redux-firebase";
 import { toastr } from "react-redux-toastr";
 import history from "../../../history";
+import { extraActivitiesDelete } from "../../../App/Util/helpers";
 import { asyncActionFinish, asyncActionStart, asyncActionError } from "..";
 
 export const updateEvent = (event, eventId) => {
@@ -30,7 +31,7 @@ export const updateEvent = (event, eventId) => {
 			}
 
 			await batch.commit();
-
+			extraActivitiesDelete(firebase);
 			dispatch(asyncActionFinish());
 			history.push(`/events/${eventId}`);
 			toastr.success("Success!!! ", "Event has been updated");

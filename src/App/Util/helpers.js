@@ -31,3 +31,11 @@ export const createDataTree = (dataset) => {
 	});
 	return dataTree;
 };
+
+export const extraActivitiesDelete = async (firebase) => {
+	let activityRef = firebase.firestore().collection("activity");
+	let query;
+	query = activityRef.orderBy("timestamp", "desc");
+	let querySnap = await query.get();
+	if (querySnap.docs.length > 4) await querySnap.docs[4].ref.delete();
+};

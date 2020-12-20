@@ -1,7 +1,7 @@
 import { getFirebase } from "react-redux-firebase";
 import { toastr } from "react-redux-toastr";
 import { asyncActionFinish, asyncActionStart, asyncActionError } from "..";
-import userPNG from "../../Assets/user.png";
+import userPNG from "../../../Assets/user.png";
 
 export const joinEvent = (event) => {
 	return async (dispatch) => {

@@ -1,6 +1,7 @@
 import { getFirebase } from "react-redux-firebase";
 import { toastr } from "react-redux-toastr";
 import history from "../../../history";
+import { extraActivitiesDelete } from "../../../App/Util/helpers";
 import { asyncActionFinish, asyncActionStart, asyncActionError } from "..";
 
 export const deleteEvent = (eventId) => {
@@ -37,7 +38,7 @@ export const deleteEvent = (eventId) => {
 					await files.items[index].delete();
 				}
 			}
-
+			extraActivitiesDelete(firebase);
 			dispatch(asyncActionFinish());
 			history.push("/events");
 			toastr.success(

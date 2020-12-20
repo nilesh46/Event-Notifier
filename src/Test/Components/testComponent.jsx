@@ -1,13 +1,9 @@
 import { Button, CircularProgress } from "@material-ui/core";
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { testActionAsync, openModal } from "../../redux/actions";
+import { openModal } from "../../redux/actions";
 
 class testComponent extends Component {
-	handleTestAction = () => {
-		this.props.testActionAsync();
-	};
-
 	handleOpenModal = () => {
 		console.log("test");
 		this.props.openModal("AlertModal", { data: "test data" });
@@ -81,11 +77,7 @@ class testComponent extends Component {
 			<div>
 				This is for testing
 				<div>Test Value: {data}</div>
-				<Button
-					variant="contained"
-					color="primary"
-					onClick={this.handleTestAction}
-				>
+				<Button variant="contained" color="primary">
 					{loading && <CircularProgress size={20} />}
 					{!loading && "Test Action"}
 				</Button>
@@ -102,7 +94,7 @@ class testComponent extends Component {
 	}
 }
 
-const actions = { testActionAsync, openModal };
+const actions = { openModal };
 const mapStateToProps = (state) => {
 	return {
 		data: state.test.data,
