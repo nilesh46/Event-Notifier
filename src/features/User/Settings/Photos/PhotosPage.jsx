@@ -97,15 +97,8 @@ const PhotosPage = ({
 		};
 	}, [files]);
 
-	const handleDeletePhoto = async (id, name) => {
-		const firebase = getFirebase();
-		await deletePhoto({ firebase }, name, id)
-			.then(() => {
-				toastr.success("Success", "Photo deleted successfully");
-			})
-			.catch((error) => {
-				toastr.error(error);
-			});
+	const handleDeletePhoto = (id, name) => {
+		deletePhoto(name, id);
 	};
 
 	const handleSetMainPhoto = async (url) => {
@@ -141,20 +134,18 @@ const PhotosPage = ({
 			}
 			handleUploadImage(finalImage);
 		} catch (error) {
-			console.log(error);
+			toastr.error(
+				"Oops",
+				"Something went wrong. Please retry / Check your internet connection"
+			);
 		}
 	};
 
 	const handleUploadImage = (image) => {
 		const name = cuid();
 		const filename = name;
-		const firebase = getFirebase();
-		const uploadedFile = uploadToFirebaseStorage(
-			{ firebase },
-			image,
-			filename
-		);
-		uploadedFile.on(
+		const uploadFileTask = uploadToFirebaseStorage(image, filename);
+		uploadFileTask.on(
 			"state_changed",
 			(snapshot) => {
 				const progress =
@@ -162,34 +153,32 @@ const PhotosPage = ({
 				setLoading(progress);
 			},
 			(error) => {
-				console.log(error);
+				toastr.error(
+					"Oops",
+					"Something went wrong. Please retry / Check your internet connection"
+				);
 			},
-			() => {
-				uploadedFile.snapshot.ref
-					.getDownloadURL()
-					.then((downloadURL) => {
-						updateUserProfilePhoto(
-							{ firebase },
-							downloadURL,
-							filename
-						)
-							.then(() => {
-								setLoading(null);
-								toastr.success(
-									"Success",
-									"Photo has been uploaded"
-								);
-								handleCancelCrop();
-							})
-							.catch((error) => {
-								console.log(error);
-							});
-					});
+			async () => {
+				try {
+					const downloadURL = await uploadFileTask.snapshot.ref.getDownloadURL();
+
+					await updateUserProfilePhoto(downloadURL, filename);
+
+					setLoading(null);
+					toastr.success("Success", "Photo has been uploaded");
+					handleCancelCrop();
+				} catch (error) {
+					toastr.error(
+						"Oops",
+						"Something went wrong. Please retry / Check your internet connection"
+					);
+				}
 			}
 		);
 	};
 
-	const uploadToFirebaseStorage = ({ firebase }, file, fileName) => {
+	const uploadToFirebaseStorage = (file, fileName) => {
+		const firebase = getFirebase();
 		const user = firebase.auth().currentUser;
 		const storageRef = firebase.storage().ref();
 		return storageRef

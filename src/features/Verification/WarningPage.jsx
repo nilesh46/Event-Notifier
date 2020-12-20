@@ -3,7 +3,12 @@ import "../../index.css";
 
 class WarningPage extends Component {
 	render() {
-		return <div className="loader">Loading...</div>;
+		return (
+			<div>
+				Dont be OverSmart <br />
+				You cant explore our app without authentication
+			</div>
+		);
 	}
 }
 
