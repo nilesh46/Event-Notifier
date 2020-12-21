@@ -6,24 +6,30 @@ import { getFirebase } from "react-redux-firebase";
 import { Skeleton } from "@material-ui/lab";
 
 class UserDetailedPhotos extends Component {
-	state = { photos: null };
+	state = { photos: null, unsubscribe: null };
 
-	componentDidMount = () => {
+	async componentDidMount() {
 		const { user } = this.props;
 		const firestore = getFirebase().firestore();
-		firestore
-			.collection("users")
-			.doc(`${user.uid}`)
-			.collection("photos")
-			.get()
-			.then((querySnapshot) => {
-				let arr = [];
-				querySnapshot.forEach(function (doc) {
-					arr.push({ photoId: doc.id, ...doc.data() });
+		try {
+			const unsubscribe = await firestore
+				.collection("users")
+				.doc(`${user.uid}`)
+				.collection("photos")
+				.onSnapshot((querySnap) => {
+					let arr = [];
+					querySnap.forEach(function (doc) {
+						arr.push({ photoId: doc.id, ...doc.data() });
+					});
+					this.setState({ photos: arr });
 				});
-				this.setState({ photos: arr });
-			})
-			.catch((err) => console.log(err));
+
+			this.setState({ unsubscribe });
+		} catch (error) {}
+	}
+
+	componentWillUnmount = () => {
+		this.state.unsubscribe();
 	};
 
 	render() {

@@ -10,6 +10,7 @@ import { Grid } from "@material-ui/core";
 import MenuWithLogout from "../NavBar/MenuWithLogout";
 import SettingsIcon from "@material-ui/icons/Settings";
 import { Switch as SwitchButton } from "@material-ui/core";
+import history from "../../history";
 
 class SignedInMenu extends React.Component {
 	drawerList = () => {
@@ -51,8 +52,11 @@ class SignedInMenu extends React.Component {
 						},
 						{
 							name: "Browse Events",
-							link: "/events",
-							type: "Link",
+							action: () => {
+								history.push("/events");
+								history.go(0);
+							},
+							type: "Button",
 						},
 						{
 							name: "My Events",
