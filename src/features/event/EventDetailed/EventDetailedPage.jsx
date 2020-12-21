@@ -76,6 +76,7 @@ class EventDetailedPage extends Component {
 								<EventDetailedChat
 									eventId={event.id}
 									eventChat={eventChatTree}
+									userId={auth.uid}
 								/>
 							</Grid>
 						</Grid>

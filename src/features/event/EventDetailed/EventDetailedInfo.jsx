@@ -3,6 +3,7 @@ import {
 	Button,
 	Collapse,
 	Divider,
+	IconButton,
 	List,
 	ListItem,
 	ListItemIcon,
@@ -17,7 +18,9 @@ import CategoryOutlinedIcon from "@material-ui/icons/CategoryOutlined";
 import React, { Component } from "react";
 import Mapbox from "../../Maps/Mapbox";
 import HttpIcon from "@material-ui/icons/Http";
+import CloudDownloadIcon from "@material-ui/icons/CloudDownload";
 import { format } from "date-fns";
+import GetAppIcon from "@material-ui/icons/GetApp";
 
 const style = (theme) => ({
 	root: {
@@ -48,6 +51,7 @@ class EventDetailedInfo extends Component {
 		const { classes } = this.props;
 		const { event } = this.props;
 		const { openMap } = this.state;
+		const files = event.files && Object.values(event.files);
 		return (
 			<List className={classes.root}>
 				<ListItem>
@@ -146,6 +150,58 @@ class EventDetailedInfo extends Component {
 						{event.category}
 					</Typography>
 				</ListItem>
+
+				{files && files.length > 0 && (
+					<div>
+						<Divider />
+
+						<ListItem>
+							<ListItemIcon>
+								<CloudDownloadIcon color="disabled" />
+							</ListItemIcon>
+							<Typography
+								variant="body1"
+								color="textPrimary"
+								component={"div"}
+							>
+								<Typography
+									variant="body1"
+									color="textPrimary"
+									component={"div"}
+								>
+									Downloads
+									{files &&
+										files.map((file, index) => (
+											<Box
+												key={file.id}
+												display="flex"
+												justifyContent="space-between"
+												alignItems="center"
+											>
+												<Typography
+													variant="body2"
+													color="textSecondary"
+												>
+													{index + 1}.
+													{file.name.length > 20
+														? file.name.substr(
+																0,
+																20
+														  ) + "..."
+														: file.name}
+												</Typography>
+												<IconButton>
+													<a href={file.url}>
+														<GetAppIcon color="secondary" />
+													</a>
+												</IconButton>
+											</Box>
+										))}
+								</Typography>
+							</Typography>
+						</ListItem>
+					</div>
+				)}
 
 				<Divider />
 				<ListItem>

@@ -40,6 +40,7 @@ class EventDetailedChat extends Component {
 			eventChat,
 			deleteEventComment,
 			updateEventComment,
+			userId,
 		} = this.props;
 
 		return (
@@ -89,6 +90,7 @@ class EventDetailedChat extends Component {
 										commentIdForUpdate={
 											this.state.commentIdForUpdate
 										}
+										userId={userId}
 									/>
 									{this.state.showReplyForm &&
 										this.state.selectedComment ===

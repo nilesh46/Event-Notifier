@@ -43,7 +43,10 @@ export const joinEvent = (event) => {
 			toastr.success("Success!!! ", "You successfully joined the event");
 		} catch (error) {
 			dispatch(asyncActionError());
-			toastr.error("Oops", "Something went wrong");
+			toastr.error(
+				"Oops",
+				"Something went wrong. Please retry / Check your internet connection"
+			);
 		}
 	};
 };

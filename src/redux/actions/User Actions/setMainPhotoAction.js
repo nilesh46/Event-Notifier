@@ -89,6 +89,7 @@ export const setMainPhoto = (url) => async (dispatch) => {
 		toastr.success("Success!!! ", "Your Profile Photo has been updated");
 	} catch (error) {
 		dispatch(asyncActionError());
+		console.log(error);
 		toastr.error(
 			"Oops",
 			"Something went wrong. Please retry / Check your internet connection"
