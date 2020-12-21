@@ -44,7 +44,8 @@ const RenderReplies = (
 	updateEventComment,
 	dispatch,
 	setInUpdate,
-	commentIdForUpdate
+	commentIdForUpdate,
+	userId
 ) => {
 	if (replies && replies.length >= 1)
 		return (
@@ -66,6 +67,7 @@ const RenderReplies = (
 									dispatch={dispatch}
 									setInUpdate={setInUpdate}
 									commentIdForUpdate={commentIdForUpdate}
+									userId={userId}
 								/>
 							</Box>
 							{showReplyForm && selectedComment === comment.id && (
@@ -104,6 +106,7 @@ const Comment = ({
 	dispatch,
 	setInUpdate,
 	commentIdForUpdate,
+	userId,
 }) => {
 	const [open, setOpen] = React.useState(false);
 
@@ -197,23 +200,25 @@ const Comment = ({
 							)}
 						</ButtonBase>
 						{/* Options Menu Button*/}
-						<Box display="inline-block">
-							<MenuButton
-								iconType={MoreVertIcon}
-								items={[
-									{
-										name: "Edit",
-										action: handleUpdateComment,
-										type: "Button",
-									},
-									{
-										name: "Delete",
-										action: handleDeleteComment,
-										type: "Button",
-									},
-								]}
-							/>
-						</Box>
+						{userId === comment.uid && (
+							<Box display="inline-block">
+								<MenuButton
+									iconType={MoreVertIcon}
+									items={[
+										{
+											name: "Edit",
+											action: handleUpdateComment,
+											type: "Button",
+										},
+										{
+											name: "Delete",
+											action: handleDeleteComment,
+											type: "Button",
+										},
+									]}
+								/>
+							</Box>
+						)}
 					</Box>
 				</Box>
 			</Box>
@@ -231,7 +236,8 @@ const Comment = ({
 						updateEventComment,
 						dispatch,
 						setInUpdate,
-						commentIdForUpdate
+						commentIdForUpdate,
+						userId
 					)}
 				</Box>
 			</Collapse>

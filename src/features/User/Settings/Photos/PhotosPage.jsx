@@ -143,7 +143,7 @@ const PhotosPage = ({
 		const name = cuid();
 		const filename = name;
 		const uploadFileTask = uploadToFirebaseStorage(image, filename);
-		uploadFileTask.on(
+		let task = uploadFileTask.on(
 			"state_changed",
 			(snapshot) => {
 				const progress =
@@ -162,7 +162,9 @@ const PhotosPage = ({
 
 					await updateUserProfilePhoto(downloadURL, filename);
 
+					task();
 					setLoading(null);
+
 					toastr.success("Success", "Photo has been uploaded");
 					handleCancelCrop();
 				} catch (error) {

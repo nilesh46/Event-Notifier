@@ -7,7 +7,7 @@ import CardContent from "@material-ui/core/CardContent";
 import Avatar from "@material-ui/core/Avatar";
 import Typography from "@material-ui/core/Typography";
 import { deepOrange } from "@material-ui/core/colors";
-import { Box, Button, CircularProgress } from "@material-ui/core";
+import { Box, Button, CircularProgress, IconButton } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import { format } from "date-fns";
 import { cancelJoiningEvent, joinEvent } from "../../../redux/actions";
@@ -15,6 +15,7 @@ import { connect } from "react-redux";
 import noImage from "../../../Assets/noImage.svg";
 import { openModal, deleteEvent } from "../../../redux/actions";
 import history from "../../../history";
+import AttachFileIcon from "@material-ui/icons/AttachFile";
 
 const styles = (theme) => ({
 	root: {
@@ -172,7 +173,7 @@ class EventDetailedHeader extends Component {
 							</Box>
 						)}
 						{isHost && (
-							<Box>
+							<Box display="flex" alignItems="center">
 								<Button
 									variant="outlined"
 									size="small"
@@ -181,7 +182,7 @@ class EventDetailedHeader extends Component {
 									component={Link}
 									to={`/manage/${event.id}`}
 								>
-									Manage This Event
+									Manage
 								</Button>
 								{uid === event.hostUid && (
 									<Button
@@ -197,7 +198,7 @@ class EventDetailedHeader extends Component {
 						)}
 
 						{isHost && (
-							<Box>
+							<Box display="flex" alignItems="center">
 								<Button
 									variant="outlined"
 									size="small"
@@ -208,6 +209,11 @@ class EventDetailedHeader extends Component {
 								>
 									Set Photo
 								</Button>
+								<Link to={`/setFiles/${event.id}`}>
+									<IconButton>
+										<AttachFileIcon />
+									</IconButton>
+								</Link>
 							</Box>
 						)}
 					</Box>

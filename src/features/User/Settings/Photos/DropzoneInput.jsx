@@ -1,7 +1,6 @@
 import React, { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import AddAPhotoIcon from "@material-ui/icons/AddAPhoto";
-import grey from "@material-ui/core/colors/grey";
 import { IconButton } from "@material-ui/core";
 
 const DropzoneInput = ({ setFiles, marg }) => {
@@ -27,7 +26,7 @@ const DropzoneInput = ({ setFiles, marg }) => {
 		<div {...getRootProps()}>
 			<input {...getInputProps()} />
 			<IconButton>
-				<AddAPhotoIcon fontSize="large" style={{ color: grey[50] }} />
+				<AddAPhotoIcon fontSize="large" color="inherit" />
 			</IconButton>
 		</div>
 	);

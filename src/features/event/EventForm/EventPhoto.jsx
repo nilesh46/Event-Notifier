@@ -100,11 +100,14 @@ const EventPhoto = ({ auth, eventId, updateEventPhoto, openModal }) => {
 		}
 	};
 
-	const handleUploadImage = (image) => {
+	const handleUploadImage = async (image) => {
 		const name = cuid();
 		const fileName = name;
-		const uploadFileTask = uploadFileToFirebaseStorage(image, fileName);
-		uploadFileTask.on(
+		const uploadFileTask = await uploadFileToFirebaseStorage(
+			image,
+			fileName
+		);
+		let task = uploadFileTask.task.on(
 			"state_changed",
 			(snapshot) => {
 				const progress =
@@ -119,13 +122,14 @@ const EventPhoto = ({ auth, eventId, updateEventPhoto, openModal }) => {
 			},
 			async () => {
 				try {
-					const downloadURL = await uploadFileTask.snapshot.ref.getDownloadURL();
+					const downloadURL = await uploadFileTask.task.snapshot.ref.getDownloadURL();
 
 					await updateEventPhoto(downloadURL, eventId);
 
 					setLoading(null);
 					handleCancelCrop();
 
+					task();
 					history.push(`/events/${eventId}`);
 					toastr.success("Success", "Photo has been uploaded");
 				} catch (error) {
@@ -138,24 +142,18 @@ const EventPhoto = ({ auth, eventId, updateEventPhoto, openModal }) => {
 		);
 	};
 
-	const uploadFileToFirebaseStorage = (file, fileName) => {
+	const uploadFileToFirebaseStorage = async (file, fileName) => {
 		const firebase = getFirebase();
 		const user = firebase.auth().currentUser;
 		const storageRef = firebase.storage().ref();
 		const folderRef = storageRef.child(
 			`${user.uid}/myEvents/${eventId}/Image`
 		);
-		folderRef
-			.listAll()
-			.then((result) => {
-				result.items.forEach(function (file) {
-					file.delete();
-				});
-			})
-			.catch((error) => {
-				console.error(error);
-			});
-		//}
+		const photos = await folderRef.listAll();
+		for (let index = 0; index < photos.items.length; index++) {
+			await photos.items[index].delete();
+		}
+
 		return storageRef
 			.child(`${user.uid}/myEvents/${eventId}/Image/${fileName}`)
 			.put(file);

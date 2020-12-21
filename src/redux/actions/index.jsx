@@ -28,6 +28,8 @@ export * from "./Event Actions/updateEventPhoto";
 export * from "./Event Actions/getEventsForDashboardAction";
 export * from "./Event Actions/cancelJoiningEventAction";
 export * from "./Event Actions/joinEventAction";
+export * from "./Event Actions/setFilesInEventAction";
+export * from "./Event Actions/deleteFileInEventAction";
 //Event Comments
 export * from "./Event Actions/addEventCommentAction";
 export * from "./Event Actions/deleteEventCommentAction";

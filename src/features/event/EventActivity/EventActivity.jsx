@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import {
+	Box,
 	Collapse,
 	ListItem,
 	ListItemIcon,
@@ -49,6 +50,13 @@ const EventActivity = ({ activities }) => {
 			</ListItem>
 
 			<Collapse in={open} timeout="auto" unmountOnExit>
+				{activities && activities.length === 0 && (
+					<Box textAlign="center">
+						<Typography component="h1" variant="h6">
+							No Activities 😑
+						</Typography>
+					</Box>
+				)}
 				{activities &&
 					activities.map((activity) => (
 						<EventActivityItem
