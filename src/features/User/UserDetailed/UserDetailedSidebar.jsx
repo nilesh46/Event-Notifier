@@ -9,7 +9,6 @@ import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import { Paper } from "@material-ui/core";
 import Person from "./Friends/Person";
-import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { Component } from "react";
 import { getFirebase } from "react-redux-firebase";
@@ -224,12 +223,4 @@ class UserDetailedSidebar extends Component {
 	}
 }
 
-const mapStateToProps = (state) => ({
-	followings: state.firestore.ordered.following,
-	followers: state.firestore.ordered.followers,
-	auth: state.firebase.auth,
-});
-
-export default connect(mapStateToProps)(
-	withStyles(styles, { withTheme: true })(UserDetailedSidebar)
-);
+export default withStyles(styles, { withTheme: true })(UserDetailedSidebar);
