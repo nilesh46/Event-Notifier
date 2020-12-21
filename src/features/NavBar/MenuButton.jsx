@@ -1,9 +1,16 @@
 import React from "react";
-import { Box, Hidden, Menu, MenuItem, Typography } from "@material-ui/core";
+import {
+	Box,
+	Button,
+	Hidden,
+	Menu,
+	MenuItem,
+	Typography,
+} from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 import Divider from "@material-ui/core/Divider";
-import { Link } from "react-router-dom";
 import { Grid } from "@material-ui/core";
+import history from "../../history";
 
 class MenuButton extends React.Component {
 	state = {
@@ -26,24 +33,40 @@ class MenuButton extends React.Component {
 		);
 	};
 
+	handleClick = (item) => {
+		switch (item.type) {
+			case "Link":
+				history.push(item.link);
+				break;
+			case "Button":
+				item.action();
+				break;
+			default:
+				break;
+		}
+		this.handleClose();
+	};
+
 	render() {
 		const { anchorEl } = this.state;
+		const { iconType, items, menuName, name } = this.props;
 		const open = Boolean(anchorEl);
-		const Wrapper = this.props.iconType;
-		const listItems = this.props.items.map((link) => (
-			<Box key={link.name}>
+		const Wrapper = iconType;
+		const listItems = items.map((item) => (
+			<Box key={item.name} width="100%">
 				<MenuItem
-					onClick={this.handleClose}
-					component={Link}
-					to={link.link}
+					onClick={() => {
+						this.handleClick(item);
+					}}
+					component={Button}
+					style={{ width: "100%" }}
 				>
-					{link.name}
+					{item.name}
 				</MenuItem>
 				<Divider light />
 			</Box>
 		));
 
-		const { menuName, name } = this.props;
 		return (
 			<Box>
 				<Grid container direction="row" alignItems="center">
@@ -58,6 +81,7 @@ class MenuButton extends React.Component {
 						<Hidden mdUp>
 							<Box ml="1.1rem">{this.BtnText(menuName)}</Box>
 						</Hidden>
+
 						{name && this.BtnText(name)}
 					</IconButton>
 				</Grid>

@@ -5,25 +5,36 @@ import { combineValidators, isRequired } from "revalidate";
 import TextArea from "../../EventForm/FormInputs/TextArea";
 import CreateIcon from "@material-ui/icons/Create";
 import ClearIcon from "@material-ui/icons/Clear";
+import { addEventComment, updateEventComment } from "../../../../redux/actions";
+import { connect } from "react-redux";
 
 class CommentForm extends Component {
 	handleCommentSubmit = (values) => {
 		const {
-			reset,
 			addEventComment,
 			eventId,
-			firebase,
 			handleCloseReplyForm,
 			parentId,
+			commentIdForUpdate,
+			updateEventComment,
+			setCommentIdForUpdateNull,
 		} = this.props;
 
-		addEventComment(firebase, eventId, values, parentId);
-		reset();
+		if (commentIdForUpdate !== null) {
+			updateEventComment(eventId, values, commentIdForUpdate);
+			if (parentId === 0) setCommentIdForUpdateNull();
+		} else addEventComment(eventId, values, parentId);
+
 		if (parentId !== 0) handleCloseReplyForm();
 	};
 
 	render() {
-		const { handleCloseReplyForm, reset, parentId } = this.props;
+		const {
+			handleCloseReplyForm,
+			reset,
+			parentId,
+			commentIdForUpdate,
+		} = this.props;
 		return (
 			<Box>
 				<form
@@ -43,7 +54,9 @@ class CommentForm extends Component {
 							type="submit"
 							startIcon={<CreateIcon />}
 						>
-							Add reply
+							{commentIdForUpdate !== null
+								? "Update"
+								: "Add Reply"}
 						</Button>
 						{parentId !== 0 && (
 							<Box ml="0.2rem">
@@ -69,10 +82,15 @@ class CommentForm extends Component {
 	}
 }
 
+const actions = {
+	addEventComment,
+	updateEventComment,
+};
+
 const validate = combineValidators({
 	comment: isRequired({ message: "Please enter a comment to add" }),
 });
 
 const commentForm = reduxForm({ Fields: "comment", validate })(CommentForm);
 
-export default commentForm;
+export default connect(null, actions)(commentForm);

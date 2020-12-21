@@ -57,8 +57,8 @@ class MenuAppBar extends React.Component {
 	};
 
 	render() {
-		const { classes } = this.props;
-		const { auth, profile } = this.props;
+		const { classes, auth, profile, toggleDarkMode } = this.props;
+
 		const authenticated = auth.isLoaded && !auth.isEmpty;
 		const showSignedInMenu =
 			authenticated && window.location.pathname !== "/";
@@ -91,6 +91,7 @@ class MenuAppBar extends React.Component {
 								classes={classes}
 								auth={auth}
 								profile={profile}
+								toggleDarkMode={toggleDarkMode}
 							/>
 						) : (
 							<SignedOutMenu

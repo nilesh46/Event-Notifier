@@ -1,10 +1,12 @@
+import { getFirebase } from "react-redux-firebase";
 import { toastr } from "react-redux-toastr";
 
-export const addEventComment = (firebase, eventId, values, parentId) => async (
+export const addEventComment = (eventId, values, parentId) => async (
 	dispatch,
 	getState
 ) => {
 	try {
+		const firebase = getFirebase();
 		const user = getState().firebase.profile;
 		const photoURL = user.photoURL;
 		const displayName = user.displayName;

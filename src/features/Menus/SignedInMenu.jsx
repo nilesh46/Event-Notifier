@@ -4,11 +4,12 @@ import IconButton from "@material-ui/core/IconButton";
 import AddRoundedIcon from "@material-ui/icons/AddRounded";
 import NotificationsNoneRoundedIcon from "@material-ui/icons/NotificationsNoneRounded";
 import MenuButton from "../NavBar/MenuButton";
-import { Box, Hidden, Typography } from "@material-ui/core";
+import { Box, FormControlLabel, Hidden, Typography } from "@material-ui/core";
 import SideDrawer from "./SideDrawer";
 import { Grid } from "@material-ui/core";
 import MenuWithLogout from "../NavBar/MenuWithLogout";
 import SettingsIcon from "@material-ui/icons/Settings";
+import { Switch as SwitchButton } from "@material-ui/core";
 
 class SignedInMenu extends React.Component {
 	drawerList = () => {
@@ -46,14 +47,17 @@ class SignedInMenu extends React.Component {
 						{
 							name: "Create Event",
 							link: "/createEvent",
+							type: "Link",
 						},
 						{
 							name: "Browse Events",
 							link: "/events",
+							type: "Link",
 						},
 						{
 							name: "My Events",
 							link: "/createEvent",
+							type: "Link",
 						},
 					]}
 					menuName="Events"
@@ -65,18 +69,22 @@ class SignedInMenu extends React.Component {
 						{
 							name: "Basic Details",
 							link: "/settings/basic",
+							type: "Link",
 						},
 						{
 							name: "About Me",
 							link: "/settings/about",
+							type: "Link",
 						},
 						{
 							name: "My Photos",
 							link: "/settings/photos",
+							type: "Link",
 						},
 						{
 							name: "Account",
 							link: "/settings/account",
+							type: "Link",
 						},
 					]}
 					menuName="Settings"
@@ -92,6 +100,16 @@ class SignedInMenu extends React.Component {
 		return (
 			<Fragment>
 				<MainButton buttonTitle="Create Event" link="/createEvent" />
+				<FormControlLabel
+					control={
+						<SwitchButton
+							onClick={this.props.toggleDarkMode}
+							color="secondary"
+							size="small"
+						/>
+					}
+					style={{ marginLeft: "0.2rem" }}
+				/>
 				<Hidden smDown>{this.drawerList()}</Hidden>
 				<Hidden mdUp>
 					<SideDrawer drawerList={this.drawerList} />

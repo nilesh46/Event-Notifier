@@ -39,7 +39,6 @@ class EventFilterForm extends Component {
 	};
 
 	onFormSubmit = (values) => {
-		console.log(values);
 		this.props.changeFilter(values.date, values.sort);
 	};
 
@@ -68,25 +67,20 @@ class EventFilterForm extends Component {
 				<Collapse in={this.state.open} timeout="auto" unmountOnExit>
 					<form onSubmit={this.props.handleSubmit(this.onFormSubmit)}>
 						<Box textAlign="center">
-							<Typography
-								variant="body2"
-								color="textSecondary"
-								component="p"
-							>
-								<Field
-									name="sort"
-									component={RadioInput}
-									options={this.sortingOptions}
-									default1="Farthest"
-									label="Sort In"
-								/>
-								<Field
-									name="date"
-									component={DateInput}
-									label="From Date"
-									fullView={false}
-								/>
-							</Typography>
+							<Field
+								name="sort"
+								component={RadioInput}
+								options={this.sortingOptions}
+								default1="Farthest"
+								label="Sort In"
+							/>
+							<Field
+								name="date"
+								component={DateInput}
+								label="From Date"
+								fullView={false}
+							/>
+
 							<Button
 								type="submit"
 								fullWidth

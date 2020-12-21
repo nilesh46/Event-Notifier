@@ -24,8 +24,6 @@ import MainLoader from "../Util/CustomLoadingComponents/MainLoader";
 import ScrollTopButton from "../Util/ScrollTopButton";
 import { ThemeProvider } from "@material-ui/styles";
 import { createMuiTheme } from "@material-ui/core";
-import { FormControlLabel } from "@material-ui/core";
-import { Switch as SwitchButton } from "@material-ui/core";
 import { useState } from "react";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 
@@ -101,23 +99,13 @@ const App = (props) => {
 						path="/(.+)"
 						render={() => (
 							<div style={themeConfig.backgr}>
-								<NavBar />
-								<FormControlLabel
-									style={{
-										marginTop: "6rem",
-										marginLeft: "1rem",
-									}}
-									control={
-										<SwitchButton
-											onClick={toggleDarkMode}
-											color="secondary"
-										/>
-									}
-								/>
+								<NavBar toggleDarkMode={toggleDarkMode} />
+
 								<Container
 									maxWidth="lg"
 									style={{
-										marginTop: "1rem",
+										paddingTop: "5rem",
+										paddingBottom: "5rem",
 										minHeight: "100vh",
 									}}
 								>

@@ -10,8 +10,6 @@ import {
 	Typography,
 } from "@material-ui/core/";
 import { makeStyles } from "@material-ui/core";
-import grey from "@material-ui/core/colors/grey";
-import blueGrey from "@material-ui/core/colors/blueGrey";
 import DropzoneInput from "./DropzoneInput";
 import CropperInput from "./CropperInput";
 import { connect } from "react-redux";
