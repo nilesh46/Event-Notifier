@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import EventList from "../EventList/EventList";
 import { getEventsForDashboard } from "../../../redux/actions";
-import { firestoreConnect } from "react-redux-firebase";
+import { getFirebase } from "react-redux-firebase";
 import EventListItemSkeleton from "../EventList/EventListItemSkeleton";
 import EventActivity from "../EventActivity/EventActivity";
 import EventFilterForm from "../Event Filters/EventFilterForm";
@@ -36,6 +36,8 @@ class EventDashboard extends Component {
 		loadedEvents: [],
 		fromDate: null,
 		orderBy: null,
+		unsubscribe: null,
+		activities: [],
 	};
 
 	getEventsAtTheStart = async (date, sort) => {
@@ -51,17 +53,53 @@ class EventDashboard extends Component {
 		this.setState({ loadingInitial: false });
 	};
 
+	getEventActivity = () => {
+		const firestore = getFirebase().firestore();
+
+		const unsubscribe = firestore
+			.collection("activity")
+			.orderBy("timestamp", "desc")
+			.onSnapshot((querySnap) => {
+				let arr = [];
+				querySnap.forEach(function (doc) {
+					arr.push({ id: doc.id, ...doc.data() });
+				});
+				this.setState({ activities: arr });
+			});
+
+		this.setState({ unsubscribe });
+	};
+
 	componentDidMount() {
+		this.getEventActivity();
 		this.getEventsAtTheStart();
 	}
 
+	componentWillUnmount = () => {
+		this.state.unsubscribe();
+	};
+
 	componentDidUpdate = (prevProps) => {
 		if (this.props.events !== prevProps.events) {
+			let setIds = new Set();
+			let events = [];
+			let buffer = [...this.state.loadedEvents, ...this.props.events];
+			for (let index = 0; index < this.state.loadedEvents.length; index++)
+				setIds.add(this.state.loadedEvents[index].id);
+
+			for (let index = 0; index < this.props.events.length; index++)
+				setIds.add(this.props.events[index].id);
+
+			setIds.forEach((id) => {
+				for (let index = 0; index < buffer.length; index++)
+					if (buffer[index].id === id) {
+						events.push(buffer[index]);
+						break;
+					}
+			});
+
 			this.setState({
-				loadedEvents: [
-					...this.state.loadedEvents,
-					...this.props.events,
-				],
+				loadedEvents: events,
 			});
 		}
 	};
@@ -82,9 +120,8 @@ class EventDashboard extends Component {
 	};
 
 	render() {
-		const { classes } = this.props;
-		const { loading, activities } = this.props;
-		const { loadedEvents, moreEvents } = this.state;
+		const { classes, loading } = this.props;
+		const { loadedEvents, moreEvents, activities } = this.state;
 
 		if (this.state.loadingInitial) {
 			return (
@@ -135,25 +172,14 @@ class EventDashboard extends Component {
 	}
 }
 
-const query = [
-	{
-		collection: "activity",
-		orderBy: ["timestamp", "desc"],
-		limit: 5,
-	},
-];
-
 const mapStateToProps = (state) => ({
 	events: state.events,
 	loading: state.async.loading,
-	activities: state.firestore.ordered.activity,
 });
 
 const actions = {
 	getEventsForDashboard,
 };
-
-EventDashboard = firestoreConnect(query)(EventDashboard);
 
 export default connect(
 	mapStateToProps,
