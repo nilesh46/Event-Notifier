@@ -29,7 +29,6 @@ import DateInput from "./FormInputs/DateInput";
 import TimeInput from "./FormInputs/TimeInput";
 import { Grid } from "@material-ui/core";
 import { withStyles } from "@material-ui/core";
-import grey from "@material-ui/core/colors/grey";
 import GeoDecoder from "../../Maps/GeoDecoder";
 import SwitchInput from "./FormInputs/SwitchInput";
 import { getFirebase } from "react-redux-firebase";

@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 import { firebaseConnect, getFirebase, isEmpty } from "react-redux-firebase";
 import { compose } from "redux";
 import { createDataTree } from "../../../App/Util/helpers";
-import { addEventComment } from "../../../redux/actions";
 import EventDetailedChat from "./EventDetailedChat";
 import EventDetailedHeader from "./EventDetailedHeader";
 import EventDetailedInfo from "./EventDetailedInfo";
@@ -42,12 +41,11 @@ class EventDetailedPage extends Component {
 
 	render() {
 		const { event } = this.state;
-		const { auth, addEventComment, eventChat } = this.props;
+		const { auth, eventChat } = this.props;
 		const attendees =
 			event && event.attendees && Object.values(event.attendees);
 		const isHost = event && event.hostUid === auth.uid;
 		const isGoing = attendees && attendees.some((a) => a.id === auth.uid);
-		const firebase = getFirebase();
 		const eventChatTree = eventChat && createDataTree(eventChat);
 
 		return (
@@ -76,9 +74,7 @@ class EventDetailedPage extends Component {
 							</Grid>
 							<Grid item md={8} xs={12}>
 								<EventDetailedChat
-									addEventComment={addEventComment}
 									eventId={event.id}
-									firebase={firebase}
 									eventChat={eventChatTree}
 								/>
 							</Grid>
@@ -89,8 +85,6 @@ class EventDetailedPage extends Component {
 		);
 	}
 }
-
-const actions = { addEventComment };
 
 const mapStateToProps = (state, ownProps) => {
 	return {
@@ -105,6 +99,6 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 export default compose(
-	connect(mapStateToProps, actions),
+	connect(mapStateToProps),
 	firebaseConnect((props) => [`event_chat/${props.match.params.id}`])
 )(withStyles(style)(EventDetailedPage));

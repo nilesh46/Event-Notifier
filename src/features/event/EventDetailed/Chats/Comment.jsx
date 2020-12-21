@@ -14,6 +14,9 @@ import CommentForm from "./CommentForm";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
 import { Link } from "react-router-dom";
+import MoreVertIcon from "@material-ui/icons/MoreVert";
+import MenuButton from "../../../NavBar/MenuButton";
+import { initialize, reduxForm } from "redux-form";
 
 const useStyles = makeStyles((theme) => ({
 	root: {},
@@ -35,10 +38,13 @@ const RenderReplies = (
 	handleShowReplyForm,
 	showReplyForm,
 	selectedComment,
-	addEventComment,
 	eventId,
 	handleCloseReplyForm,
-	firebase
+	deleteEventComment,
+	updateEventComment,
+	dispatch,
+	setInUpdate,
+	commentIdForUpdate
 ) => {
 	if (replies && replies.length >= 1)
 		return (
@@ -53,23 +59,25 @@ const RenderReplies = (
 									handleShowReplyForm={handleShowReplyForm}
 									showReplyForm={showReplyForm}
 									selectedComment={selectedComment}
-									addEventComment={addEventComment}
 									eventId={eventId}
-									firebase={firebase}
 									handleCloseReplyForm={handleCloseReplyForm}
+									deleteEventComment={deleteEventComment}
+									updateEventComment={updateEventComment}
+									dispatch={dispatch}
+									setInUpdate={setInUpdate}
+									commentIdForUpdate={commentIdForUpdate}
 								/>
 							</Box>
 							{showReplyForm && selectedComment === comment.id && (
 								<Box p="1rem" style={{ width: "65vw" }}>
 									<CommentForm
-										addEventComment={addEventComment}
 										eventId={eventId}
-										firebase={firebase}
 										parentId={comment.id}
 										form={`reply_${comment.id}`}
 										handleCloseReplyForm={
 											handleCloseReplyForm
 										}
+										commentIdForUpdate={commentIdForUpdate}
 									/>
 								</Box>
 							)}
@@ -90,14 +98,32 @@ const Comment = ({
 	handleCloseReplyForm,
 	showReplyForm,
 	selectedComment,
-	addEventComment,
 	eventId,
-	firebase,
+	deleteEventComment,
+	updateEventComment,
+	dispatch,
+	setInUpdate,
+	commentIdForUpdate,
 }) => {
 	const [open, setOpen] = React.useState(false);
 
 	const handleClick = () => {
 		setOpen(!open);
+	};
+
+	const handleDeleteComment = () => {
+		deleteEventComment(comment, eventId);
+	};
+
+	const handleUpdateComment = () => {
+		setInUpdate(comment.id);
+		if (comment.parentId !== 0) handleShowReplyForm(comment.id)();
+
+		let formName;
+		formName =
+			comment.parentId === 0 ? "mainComment" : `reply_${comment.id}`;
+
+		dispatch(initialize(formName, { comment: comment.text }));
 	};
 
 	const classes = useStyles();
@@ -141,7 +167,7 @@ const Comment = ({
 					{/* Comment */}
 					<Box style={{ maxWidth: "50vw" }}>{comment.text}</Box>
 					{/* Reply Button */}
-					<Box>
+					<Box display="flex" alignItems="center">
 						<ButtonBase
 							className={classes.replyBtn}
 							onClick={handleShowReplyForm(comment.id)}
@@ -170,6 +196,24 @@ const Comment = ({
 								</Box>
 							)}
 						</ButtonBase>
+						{/* Options Menu Button*/}
+						<Box display="inline-block">
+							<MenuButton
+								iconType={MoreVertIcon}
+								items={[
+									{
+										name: "Edit",
+										action: handleUpdateComment,
+										type: "Button",
+									},
+									{
+										name: "Delete",
+										action: handleDeleteComment,
+										type: "Button",
+									},
+								]}
+							/>
+						</Box>
 					</Box>
 				</Box>
 			</Box>
@@ -181,10 +225,13 @@ const Comment = ({
 						handleShowReplyForm,
 						showReplyForm,
 						selectedComment,
-						addEventComment,
 						eventId,
 						handleCloseReplyForm,
-						firebase
+						deleteEventComment,
+						updateEventComment,
+						dispatch,
+						setInUpdate,
+						commentIdForUpdate
 					)}
 				</Box>
 			</Collapse>
@@ -192,4 +239,6 @@ const Comment = ({
 	);
 };
 
-export default Comment;
+const BufferSolution = reduxForm({ form: "BufferFormForComment" })(Comment);
+
+export default BufferSolution;

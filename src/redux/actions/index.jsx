@@ -24,8 +24,11 @@ export * from "./User Actions/getUserEventsAction";
 export * from "./Event Actions/createEventAction";
 export * from "./Event Actions/updateEventAction";
 export * from "./Event Actions/deleteEventAction";
-export * from "./Event Actions/addEventCommentAction";
 export * from "./Event Actions/updateEventPhoto";
 export * from "./Event Actions/getEventsForDashboardAction";
 export * from "./Event Actions/cancelJoiningEventAction";
 export * from "./Event Actions/joinEventAction";
+//Event Comments
+export * from "./Event Actions/addEventCommentAction";
+export * from "./Event Actions/deleteEventCommentAction";
+export * from "./Event Actions/updateEventCommentAction";

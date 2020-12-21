@@ -4,20 +4,43 @@ import Comment from "./Chats/Comment";
 import indigo from "@material-ui/core/colors/indigo";
 import CommentForm from "./Chats/CommentForm";
 import CommentIcon from "@material-ui/icons/Comment";
+import { connect } from "react-redux";
+import { deleteEventComment } from "../../../redux/actions/";
 
 class EventDetailedChat extends Component {
-	state = { showReplyForm: false, selectedComment: null };
+	state = {
+		showReplyForm: false,
+		selectedComment: null,
+		commentIdForUpdate: null,
+	};
 
 	handleShowReplyForm = (id) => () => {
 		this.setState({ showReplyForm: true, selectedComment: id });
 	};
 
 	handleCloseReplyForm = () => {
-		this.setState({ showReplyForm: false, selectedComment: null });
+		this.setState({
+			showReplyForm: false,
+			selectedComment: null,
+			commentIdForUpdate: null,
+		});
+	};
+
+	setInUpdate = (commentId) => {
+		this.setState({ commentIdForUpdate: commentId });
+	};
+
+	setCommentIdForUpdateNull = () => {
+		this.setState({ commentIdForUpdate: null });
 	};
 
 	render() {
-		const { addEventComment, eventId, firebase, eventChat } = this.props;
+		const {
+			eventId,
+			eventChat,
+			deleteEventComment,
+			updateEventComment,
+		} = this.props;
 
 		return (
 			<Paper variant="outlined">
@@ -56,11 +79,15 @@ class EventDetailedChat extends Component {
 										selectedComment={
 											this.state.selectedComment
 										}
-										addEventComment={addEventComment}
 										eventId={eventId}
-										firebase={firebase}
 										handleCloseReplyForm={
 											this.handleCloseReplyForm
+										}
+										deleteEventComment={deleteEventComment}
+										updateEventComment={updateEventComment}
+										setInUpdate={this.setInUpdate}
+										commentIdForUpdate={
+											this.state.commentIdForUpdate
 										}
 									/>
 									{this.state.showReplyForm &&
@@ -68,16 +95,16 @@ class EventDetailedChat extends Component {
 											comment.id && (
 											<Box p="1rem">
 												<CommentForm
-													addEventComment={
-														addEventComment
-													}
 													eventId={eventId}
-													firebase={firebase}
 													parentId={comment.id}
 													form={`reply_${comment.id}`}
 													handleCloseReplyForm={
 														this
 															.handleCloseReplyForm
+													}
+													commentIdForUpdate={
+														this.state
+															.commentIdForUpdate
 													}
 												/>
 											</Box>
@@ -90,11 +117,13 @@ class EventDetailedChat extends Component {
 						))}
 					<Box p="1rem">
 						<CommentForm
-							addEventComment={addEventComment}
 							eventId={eventId}
-							firebase={firebase}
 							form="mainComment"
 							parentId={0}
+							commentIdForUpdate={this.state.commentIdForUpdate}
+							setCommentIdForUpdateNull={
+								this.setCommentIdForUpdateNull
+							}
 						/>
 					</Box>
 				</Box>
@@ -103,4 +132,8 @@ class EventDetailedChat extends Component {
 	}
 }
 
-export default EventDetailedChat;
+const actions = {
+	deleteEventComment,
+};
+
+export default connect(null, actions)(EventDetailedChat);
