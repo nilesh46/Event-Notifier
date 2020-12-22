@@ -27,6 +27,7 @@ import { createMuiTheme } from "@material-ui/core";
 import { useState } from "react";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import EventFiles from "../../features/event/EventForm/EventFiles";
+import StickyFooter from "../../features/Footer/StickyFooter";
 
 const themeObject = {
 	palette: {
@@ -99,7 +100,15 @@ const App = (props) => {
 					<Route
 						path="/(.+)"
 						render={() => (
-							<div style={themeConfig.backgr}>
+							<div
+								style={{
+									backgroundColor:
+										themeConfig.backgr.backgroundColor,
+									display: "flex",
+									flexDirection: "column",
+									minHeight: "100vh",
+								}}
+							>
 								<NavBar toggleDarkMode={toggleDarkMode} />
 
 								<Container
@@ -107,7 +116,6 @@ const App = (props) => {
 									style={{
 										paddingTop: "5rem",
 										paddingBottom: "5rem",
-										minHeight: "100vh",
 									}}
 								>
 									<Route
@@ -217,6 +225,7 @@ const App = (props) => {
 										)}
 									/>
 								</Container>
+								<StickyFooter />
 								<ScrollTopButton />
 							</div>
 						)}
