@@ -26,6 +26,7 @@ import { ThemeProvider } from "@material-ui/styles";
 import { createMuiTheme } from "@material-ui/core";
 import { useState } from "react";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
+import EventFiles from "../../features/event/EventForm/EventFiles";
 
 const themeObject = {
 	palette: {
@@ -191,6 +192,13 @@ const App = (props) => {
 																exact
 																component={
 																	EventPhoto
+																}
+															/>
+															<Route
+																path="/setFiles/:id"
+																exact
+																component={
+																	EventFiles
 																}
 															/>
 															{/* <Route path="/myEvents" exact component={MyEvents} />
