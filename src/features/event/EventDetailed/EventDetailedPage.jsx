@@ -1,4 +1,4 @@
-import { Box, Grid, Typography, withStyles } from "@material-ui/core";
+import { Grid, withStyles } from "@material-ui/core";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { firebaseConnect, getFirebase, isEmpty } from "react-redux-firebase";
@@ -30,7 +30,9 @@ class EventDetailedPage extends Component {
 			.collection("events")
 			.doc(eventId)
 			.onSnapshot((doc) => {
-				this.setState({ event: { id: eventId, ...doc.data() } });
+				if (doc.data())
+					this.setState({ event: { id: eventId, ...doc.data() } });
+				else this.setState({ event: undefined });
 			});
 
 		this.setState({ unsubscribe });
@@ -48,17 +50,10 @@ class EventDetailedPage extends Component {
 		const isHost = event && event.hostUid === auth.uid;
 		const isGoing = attendees && attendees.some((a) => a.id === auth.uid);
 		const eventChatTree = eventChat && createDataTree(eventChat);
-
 		return (
 			<>
 				{event === null && <EventDetailedPageSkeleton />}
-				{event === undefined && (
-					<Box textAlign="center" my="3rem">
-						<Typography component="h1" variant="h5">
-							Please check your url or go back and try again
-						</Typography>
-					</Box>
-				)}
+				{event === undefined && <NotFound />}
 				{event && (
 					<div>
 						<Grid container spacing={3}>

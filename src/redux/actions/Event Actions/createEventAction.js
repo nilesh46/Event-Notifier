@@ -25,7 +25,7 @@ export const createEvent = (event) => {
 				.set({
 					eventId: createdEvent.id,
 					userUid: user.uid,
-					eventDate: event.date,
+					eventDate: newEvent.date,
 					host: true,
 					category: event.category,
 				});

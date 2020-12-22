@@ -28,7 +28,6 @@ import { useState } from "react";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import EventFiles from "../../features/event/EventForm/EventFiles";
 import StickyFooter from "../../features/Footer/StickyFooter";
-import NotFound from "./NotFound";
 
 const themeObject = {
 	palette: {
@@ -218,12 +217,6 @@ const App = (props) => {
 																exact
 																component={
 																	testComponent
-																}
-															/>
-															<Route
-																exact
-																component={
-																	NotFound
 																}
 															/>
 														</>

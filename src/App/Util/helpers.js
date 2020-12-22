@@ -1,8 +1,22 @@
 import userPNG from "../../Assets/user.png";
 
 export const createNewEvent = (user, photoURL, event) => {
+	let eventDate = event.date ? event.date : new Date();
+	let eventTime = event.time ? event.time : new Date();
+	let completeEventDate = new Date();
+	completeEventDate.setDate(eventDate.getDate());
+	completeEventDate.setHours(
+		eventTime.getHours(),
+		eventTime.getMinutes(),
+		eventTime.getSeconds()
+	);
+
+	delete event.date;
+	delete event.time;
 	return {
 		...event,
+		date: completeEventDate,
+		time: eventTime,
 		hostUid: user.uid,
 		hostPhotoURL: photoURL || userPNG,
 		hostedBy: user.displayName,

@@ -1,4 +1,4 @@
-import { Box, Grid, Typography, withStyles } from "@material-ui/core";
+import { Grid, withStyles } from "@material-ui/core";
 import React, { Component } from "react";
 import { firestoreConnect, getFirebase, isEmpty } from "react-redux-firebase";
 import UserDetailedSidebar from "./UserDetailedSidebar";
@@ -9,6 +9,7 @@ import UserDetailedPageSkeleton from "./UserDetailedPageSkeleton";
 import UserDetailedPhotos from "./UserDetailedPhotos";
 import { connect } from "react-redux";
 import { compose } from "redux";
+import NotFound from "../../../App/Layout/NotFound";
 
 const style = {
 	"@global": {
@@ -34,7 +35,8 @@ class UserDetailedPage extends Component {
 			.collection("users")
 			.doc(userId)
 			.onSnapshot((doc) => {
-				this.setState({ user: { ...doc.data() } });
+				if (doc.data()) this.setState({ user: { ...doc.data() } });
+				else this.setState({ user: undefined });
 			});
 
 		let isCurrentUser = false;
@@ -54,13 +56,7 @@ class UserDetailedPage extends Component {
 		return (
 			<>
 				{user === null && <UserDetailedPageSkeleton />}
-				{user === undefined && (
-					<Box textAlign="center" my="3rem">
-						<Typography component="h1" variant="h5">
-							Please check your url or go back and try again
-						</Typography>
-					</Box>
-				)}
+				{user === undefined && <NotFound />}
 				{user && (
 					<Grid container spacing={3}>
 						<Grid item md={7} xs={12}>
