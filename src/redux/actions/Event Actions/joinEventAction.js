@@ -22,7 +22,7 @@ export const joinEvent = (event) => {
 		const eventDocRef = firestore.collection("events").doc(event.id);
 		const eventAttendeeDocRef = firestore
 			.collection("event_attendee")
-			.doc(`${event.id}_${user.id}`);
+			.doc(`${event.id}_${user.uid}`);
 		try {
 			dispatch(asyncActionStart());
 			await firestore.runTransaction(async (transaction) => {
