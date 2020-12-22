@@ -2,6 +2,7 @@ import {
 	Box,
 	Button,
 	Collapse,
+	Container,
 	List,
 	ListItem,
 	ListItemIcon,
@@ -47,53 +48,59 @@ class EventFilterForm extends Component {
 	render() {
 		const { classes, invalid, pristine, submitting } = this.props;
 		return (
-			<List className={classes.root}>
-				<ListItem
-					button
-					onClick={this.handleClick}
-					className={classes.listItem}
-				>
-					<ListItemIcon>
-						<FilterList fontSize="large" color="primary" />
-					</ListItemIcon>
-					<ListItemText>
-						<Typography component="h1" variant="h6">
-							<strong>Filters</strong>
-						</Typography>
-					</ListItemText>
-					{this.state.open ? <ExpandLess /> : <ExpandMore />}
-				</ListItem>
+			<Container>
+				<List className={classes.root}>
+					<ListItem
+						button
+						onClick={this.handleClick}
+						className={classes.listItem}
+					>
+						<ListItemIcon>
+							<FilterList fontSize="large" color="primary" />
+						</ListItemIcon>
+						<ListItemText>
+							<Typography component="h1" variant="h6">
+								<strong>Filters</strong>
+							</Typography>
+						</ListItemText>
+						{this.state.open ? <ExpandLess /> : <ExpandMore />}
+					</ListItem>
 
-				<Collapse in={this.state.open} timeout="auto" unmountOnExit>
-					<form onSubmit={this.props.handleSubmit(this.onFormSubmit)}>
-						<Box textAlign="center">
-							<Field
-								name="sort"
-								component={RadioInput}
-								options={this.sortingOptions}
-								default1="Farthest"
-								label="Sort In"
-							/>
-							<Field
-								name="date"
-								component={DateInput}
-								label="From Date"
-								fullView={false}
-							/>
+					<Collapse in={this.state.open} timeout="auto" unmountOnExit>
+						<form
+							onSubmit={this.props.handleSubmit(
+								this.onFormSubmit
+							)}
+						>
+							<Box textAlign="center">
+								<Field
+									name="sort"
+									component={RadioInput}
+									options={this.sortingOptions}
+									default1="Farthest"
+									label="Sort In"
+								/>
+								<Field
+									name="date"
+									component={DateInput}
+									label="From Date"
+									fullView={false}
+								/>
 
-							<Button
-								type="submit"
-								fullWidth
-								variant="contained"
-								color="primary"
-								disabled={invalid || submitting || pristine}
-							>
-								Apply Filters
-							</Button>
-						</Box>
-					</form>
-				</Collapse>
-			</List>
+								<Button
+									type="submit"
+									fullWidth
+									variant="contained"
+									color="primary"
+									disabled={invalid || submitting || pristine}
+								>
+									Apply Filters
+								</Button>
+							</Box>
+						</form>
+					</Collapse>
+				</List>
+			</Container>
 		);
 	}
 }

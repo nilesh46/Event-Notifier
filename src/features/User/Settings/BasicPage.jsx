@@ -1,5 +1,4 @@
 import React from "react";
-import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
 import { Avatar, Button, Typography, withStyles } from "@material-ui/core";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
@@ -64,7 +63,6 @@ class BasicPage extends React.Component {
 
 		return (
 			<Container component="main" maxWidth="sm">
-				<CssBaseline />
 				<div className={classes.paper}>
 					<Avatar className={classes.avatar}>
 						<AccountCircleIcon />

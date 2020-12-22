@@ -4,6 +4,7 @@ import List from "@material-ui/core/List";
 import {
 	Box,
 	Collapse,
+	Container,
 	ListItem,
 	ListItemIcon,
 	ListItemText,
@@ -36,36 +37,42 @@ const EventActivity = ({ activities }) => {
 	};
 
 	return (
-		<List className={classes.root}>
-			<ListItem button onClick={handleClick} className={classes.listItem}>
-				<ListItemIcon>
-					<Ballot fontSize="large" style={{ color: "#FFF" }} />
-				</ListItemIcon>
-				<ListItemText>
-					<Typography component="h1" variant="h6">
-						<strong>Recent Activity</strong>
-					</Typography>
-				</ListItemText>
-				{open ? <ExpandLess /> : <ExpandMore />}
-			</ListItem>
-
-			<Collapse in={open} timeout="auto" unmountOnExit>
-				{activities && activities.length === 0 && (
-					<Box textAlign="center">
+		<Container>
+			<List className={classes.root}>
+				<ListItem
+					button
+					onClick={handleClick}
+					className={classes.listItem}
+				>
+					<ListItemIcon>
+						<Ballot fontSize="large" style={{ color: "#FFF" }} />
+					</ListItemIcon>
+					<ListItemText>
 						<Typography component="h1" variant="h6">
-							No Activities 😑
+							<strong>Recent Activity</strong>
 						</Typography>
-					</Box>
-				)}
-				{activities &&
-					activities.map((activity) => (
-						<EventActivityItem
-							key={activity.id}
-							activity={activity}
-						/>
-					))}
-			</Collapse>
-		</List>
+					</ListItemText>
+					{open ? <ExpandLess /> : <ExpandMore />}
+				</ListItem>
+
+				<Collapse in={open} timeout="auto" unmountOnExit>
+					{activities && activities.length === 0 && (
+						<Box textAlign="center">
+							<Typography component="h1" variant="h6">
+								No Activities 😑
+							</Typography>
+						</Box>
+					)}
+					{activities &&
+						activities.map((activity) => (
+							<EventActivityItem
+								key={activity.id}
+								activity={activity}
+							/>
+						))}
+				</Collapse>
+			</List>
+		</Container>
 	);
 };
 

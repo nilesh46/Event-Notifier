@@ -1,4 +1,4 @@
-import { Container } from "@material-ui/core";
+import { Container, CssBaseline } from "@material-ui/core";
 import React from "react";
 import { Route, Switch, withRouter } from "react-router-dom";
 import EventDashboard from "../../features/event/EventDashboard/EventDashboard";
@@ -110,7 +110,7 @@ const App = (props) => {
 								}}
 							>
 								<NavBar toggleDarkMode={toggleDarkMode} />
-
+								<CssBaseline />
 								<Container
 									maxWidth="lg"
 									style={{

@@ -3,7 +3,7 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import Link from "@material-ui/core/Link";
-import { Box, Divider, Grid, IconButton } from "@material-ui/core";
+import { Box, Grid, IconButton } from "@material-ui/core";
 import GitHubIcon from "@material-ui/icons/GitHub";
 
 function Copyright() {
