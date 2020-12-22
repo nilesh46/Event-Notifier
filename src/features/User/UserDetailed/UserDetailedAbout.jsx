@@ -36,8 +36,12 @@ class UserDetailedAbout extends Component {
 									</Box>
 									<Box mb="0.5rem">
 										<Typography variant="body2">
-											Originally from :{" "}
-											<b>{user.homeTown}</b>
+											Status : <b>{user.status}</b>
+										</Typography>
+									</Box>
+									<Box mb="0.5rem">
+										<Typography variant="body2">
+											Originally from : <b>{user.city}</b>
 										</Typography>
 									</Box>
 									<Box mb="0.5rem">

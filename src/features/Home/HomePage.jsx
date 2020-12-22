@@ -4,7 +4,7 @@ import React, { Component } from "react";
 import NavBar from "../NavBar/navbarComponent";
 import AuthenticationPanel from "../Panels/AuthenticationPanel";
 import HomePageBg from "../../Assets/HomePage/BGImage.png";
-import MainText from "../../Assets/HomePage/Welcome.svg";
+//import MainText from "../../Assets/HomePage/Welcome.svg";
 
 const styles = {
 	"@global": {

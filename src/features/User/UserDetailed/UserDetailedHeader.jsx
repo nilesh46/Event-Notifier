@@ -70,7 +70,7 @@ class UserDetailedHeader extends Component {
 									variant="body1"
 									color="textSecondary"
 								>
-									{user.homeTown}
+									{user.city}
 								</Typography>
 							</Box>
 							<Box>
