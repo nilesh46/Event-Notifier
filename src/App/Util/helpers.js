@@ -5,6 +5,8 @@ export const createNewEvent = (user, photoURL, event) => {
 	let eventTime = event.time ? event.time : new Date();
 	let completeEventDate = new Date();
 	completeEventDate.setDate(eventDate.getDate());
+	completeEventDate.setMonth(eventDate.getMonth());
+	completeEventDate.setFullYear(eventDate.getFullYear());
 	completeEventDate.setHours(
 		eventTime.getHours(),
 		eventTime.getMinutes(),
