@@ -10,13 +10,29 @@ export const updateEvent = (event, eventId) => {
 		const firestore = firebase.firestore();
 		const eventDocRef = firestore.collection("events").doc(eventId);
 		const eventAttendeeRef = firestore.collection("event_attendee");
+		let eventDate = event.date ? event.date : new Date();
+		let eventTime = event.time ? event.time : new Date();
+		let completeEventDate = new Date();
+		completeEventDate.setDate(eventDate.getDate());
+		completeEventDate.setHours(
+			eventTime.getHours(),
+			eventTime.getMinutes(),
+			eventTime.getSeconds()
+		);
+
+		delete event.date;
+		delete event.time;
 
 		try {
 			dispatch(asyncActionStart());
 			let batch = firestore.batch();
 
 			//updating event in events collection
-			batch.update(eventDocRef, { ...event });
+			batch.update(eventDocRef, {
+				date: completeEventDate,
+				time: eventTime,
+				...event,
+			});
 
 			//updating data related to event in event_attendee collection
 			let eventQuery = eventAttendeeRef.where("eventId", "==", eventId);
@@ -25,7 +41,7 @@ export const updateEvent = (event, eventId) => {
 			for (let index = 0; index < eventQuerySnap.docs.length; index++) {
 				let eventAttendeeDocRef = eventQuerySnap.docs[index].ref;
 				batch.update(eventAttendeeDocRef, {
-					eventDate: event.date,
+					eventDate: completeEventDate,
 					category: event.category,
 				});
 			}
