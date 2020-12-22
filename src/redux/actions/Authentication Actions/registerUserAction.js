@@ -21,6 +21,8 @@ export const registerUser = ({ firebase, firestore }, creds) => async (
 			email: createdUser.user.email,
 			createdAt: Date.now(),
 			uid: createdUser.user.uid,
+			photoURL:
+				"https://firebasestorage.googleapis.com/v0/b/event-notifier-22469.appspot.com/o/user.png?alt=media&token=7dd7e82f-bd41-4944-9782-a9af04237000",
 		};
 
 		// adding new user in users collection

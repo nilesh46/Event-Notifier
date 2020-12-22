@@ -59,11 +59,7 @@ class MenuWithLogout extends React.Component {
 					>
 						<Avatar
 							alt={profile.displayName && profile.displayName}
-							src={
-								profile.photoURL
-									? profile.photoURL
-									: profile.avatarUrl
-							}
+							src={profile.photoURL}
 							className={classes.small}
 						/>
 						{profile.displayName &&
