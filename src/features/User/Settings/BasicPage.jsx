@@ -9,9 +9,8 @@ import DateInput from "../../event/EventForm/FormInputs/DateInput";
 import RadioInput from "../../event/EventForm/FormInputs/RadioInput";
 import { connect } from "react-redux";
 import { addYears } from "date-fns";
-import { getFirebase } from "react-redux-firebase";
+import { setMainProfileUpdate } from "../../../redux/actions";
 import { Alert } from "@material-ui/lab";
-import { toastr } from "react-redux-toastr";
 
 const styles = (theme) => ({
 	"@global": {
@@ -47,25 +46,13 @@ class BasicPage extends React.Component {
 	};
 
 	updateBasicDetails = (values) => {
-		const firebase = getFirebase();
-		const user = firebase.auth().currentUser;
-		firebase
-			.firestore()
-			.collection("users")
-			.doc(user.uid)
-			.update({ ...values })
-			.then(() => {
-				this.setState({ err: null });
-				toastr.success("Success!!! ", "Profile has been updated");
-			})
-			.catch((error) => {
-				this.setState({ err: error.message });
-			});
+		this.props.setMainProfileUpdate(values);
 	};
 
 	onFormSubmit = (values) => {
 		this.updateBasicDetails(values);
 	};
+
 	render() {
 		const { classes } = this.props;
 		const { err } = this.state;
@@ -94,7 +81,7 @@ class BasicPage extends React.Component {
 						<Field
 							name="displayName"
 							component={TextInput}
-							label="Full Name"
+							label="UserName"
 							className={classes.field}
 						/>
 						<Field
@@ -116,9 +103,9 @@ class BasicPage extends React.Component {
 							maxDate={addYears(new Date(), -18)}
 						/>
 						<Field
-							name="homeTown"
+							name="city"
 							component={TextInput}
-							label="Home Town"
+							label="City"
 							className={classes.field}
 						/>
 						{err && <Alert severity="error">{err}</Alert>}
@@ -139,6 +126,10 @@ class BasicPage extends React.Component {
 	}
 }
 
+const actions = {
+	setMainProfileUpdate,
+};
+
 const mapStateToProps = (state) => {
 	return {
 		initialValues: state.firebase.profile,
@@ -151,4 +142,4 @@ const BasicDetailsForm = reduxForm({
 	destroyOnUnmount: false,
 })(withStyles(styles)(BasicPage));
 
-export default connect(mapStateToProps, null)(BasicDetailsForm);
+export default connect(mapStateToProps, actions)(BasicDetailsForm);

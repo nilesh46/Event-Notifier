@@ -14,6 +14,7 @@ export * from "./Authentication Actions/customLogInAction";
 
 //User Actions
 export * from "./User Actions/setMainPhotoAction";
+export * from "./User Actions/setMainProfileUpdate";
 export * from "./User Actions/unfollowUserAction";
 export * from "./User Actions/followUserAction";
 export * from "./User Actions/deletePhotoAction";
@@ -30,6 +31,7 @@ export * from "./Event Actions/cancelJoiningEventAction";
 export * from "./Event Actions/joinEventAction";
 export * from "./Event Actions/setFilesInEventAction";
 export * from "./Event Actions/deleteFileInEventAction";
+
 //Event Comments
 export * from "./Event Actions/addEventCommentAction";
 export * from "./Event Actions/deleteEventCommentAction";

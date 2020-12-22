@@ -21,6 +21,9 @@ export const socialLogin = ({ firebase }, selectedProvider) => async (
 					photoURL: user.user.photoURL || null,
 					createdAt: Date.now(),
 					uid: user.user.uid,
+					dob: "Unknown",
+					city: "Unknown",
+					gender: "Unknown",
 				});
 		}
 
