@@ -1,4 +1,4 @@
-import { Box, Container, withStyles } from "@material-ui/core";
+import { Box, Container, Typography, withStyles } from "@material-ui/core";
 import { Grid } from "@material-ui/core";
 import React, { Component } from "react";
 import NavBar from "../NavBar/navbarComponent";
@@ -35,15 +35,23 @@ class HomePage extends Component {
 					<Container maxWidth="lg" style={{ paddingTop: "6rem" }}>
 						{/* Content */}
 						<Grid container spacing={2}>
-							<Grid item md xs={12}>
-								<Box
-									display="flex"
-									justifyContent="center"
-									alignItems="center"
-									style={{ height: "100%" }}
+							<Grid item md xs={10}>
+								<Container
+									maxWidth="sm"
+									style={{
+										marginTop: "7rem",
+										color: "#ffffff",
+									}}
 								>
-									Left Col
-								</Box>
+									<Typography component="h1" variant="h2">
+										<strong>Ev-Net</strong>
+									</Typography>
+									<br />
+									<Typography component="h1" variant="h3">
+										Don't Miss Anything, Remember
+										Everything.
+									</Typography>
+								</Container>
 							</Grid>
 
 							<Grid item md xs={12}>

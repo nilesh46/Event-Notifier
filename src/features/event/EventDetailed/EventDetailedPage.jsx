@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { firebaseConnect, getFirebase, isEmpty } from "react-redux-firebase";
 import { compose } from "redux";
+import NotFound from "../../../App/Layout/NotFound";
 import { createDataTree } from "../../../App/Util/helpers";
 import EventDetailedChat from "./EventDetailedChat";
 import EventDetailedHeader from "./EventDetailedHeader";

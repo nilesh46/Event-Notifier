@@ -28,6 +28,7 @@ import { useState } from "react";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import EventFiles from "../../features/event/EventForm/EventFiles";
 import StickyFooter from "../../features/Footer/StickyFooter";
+import NotFound from "./NotFound";
 
 const themeObject = {
 	palette: {
@@ -119,6 +120,7 @@ const App = (props) => {
 									}}
 								>
 									<Route
+										exact
 										render={({ location }) => (
 											<TransitionGroup>
 												<CSSTransition
@@ -132,8 +134,8 @@ const App = (props) => {
 													>
 														<>
 															<Route
-																path="/events"
 																exact
+																path="/events"
 																component={
 																	EventDashboard
 																}
@@ -216,6 +218,12 @@ const App = (props) => {
 																exact
 																component={
 																	testComponent
+																}
+															/>
+															<Route
+																exact
+																component={
+																	NotFound
 																}
 															/>
 														</>
