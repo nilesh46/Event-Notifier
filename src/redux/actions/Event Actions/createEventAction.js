@@ -10,7 +10,7 @@ export const createEvent = (event) => {
 		const firebase = getFirebase();
 		const firestore = firebase.firestore();
 
-		const user = firebase.auth().currentUser;
+		const user = getState().firebase.profile;
 		const photoURL = user.photoURL;
 		const newEvent = createNewEvent(user, photoURL, event);
 		try {
@@ -39,6 +39,7 @@ export const createEvent = (event) => {
 				"Oops",
 				"Something went wrong. Please retry / Check your internet connection"
 			);
+			console.log(error);
 		}
 	};
 };
