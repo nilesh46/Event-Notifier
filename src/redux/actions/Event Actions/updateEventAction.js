@@ -12,6 +12,11 @@ export const updateEvent = (event, eventId) => {
 		const eventAttendeeRef = firestore.collection("event_attendee");
 		let eventDate = event.date ? event.date : new Date();
 		let eventTime = event.time ? event.time : new Date();
+		if (typeof eventTime.toDate === "function")
+			eventTime = eventTime.toDate();
+		if (typeof eventDate.toDate === "function")
+			eventDate = eventDate.toDate();
+
 		let completeEventDate = new Date();
 		completeEventDate.setDate(eventDate.getDate());
 		completeEventDate.setMonth(eventDate.getMonth());
