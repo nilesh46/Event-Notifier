@@ -3,10 +3,10 @@ import { toastr } from "react-redux-toastr";
 import { asyncActionFinish, asyncActionStart, asyncActionError } from "..";
 
 export const cancelJoiningEvent = (event) => {
-	return async (dispatch) => {
+	return async (dispatch, getState) => {
 		const firebase = getFirebase();
 		const firestore = firebase.firestore();
-		const user = firebase.auth().currentUser;
+		const user = getState().firebase.profile;
 
 		try {
 			dispatch(asyncActionStart());

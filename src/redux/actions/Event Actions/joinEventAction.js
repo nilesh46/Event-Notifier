@@ -4,10 +4,10 @@ import { asyncActionFinish, asyncActionStart, asyncActionError } from "..";
 import userPNG from "../../../Assets/user.png";
 
 export const joinEvent = (event) => {
-	return async (dispatch) => {
+	return async (dispatch, getState) => {
 		const firebase = getFirebase();
 		const firestore = firebase.firestore();
-		const user = firebase.auth().currentUser;
+		const user = getState().firebase.profile;
 		const photoURL = user.photoURL;
 
 		const newAttendee = {
